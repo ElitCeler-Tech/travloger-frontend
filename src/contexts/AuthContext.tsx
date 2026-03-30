@@ -29,7 +29,7 @@ interface AuthProviderProps {
   children: ReactNode
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://travelogerapi.travloger.in'
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
