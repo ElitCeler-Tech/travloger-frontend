@@ -53,9 +53,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     <div className="relative h-screen w-full overflow-hidden bg-black font-sans" style={{ fontFamily: "'Poppins', sans-serif" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
         .font-bebas { font-family: 'Bebas Neue', sans-serif; }
-        .font-northwell { font-family: 'Northwell', cursive; }
+        .font-northwell { font-family: 'Dancing Script', cursive; font-style: italic; }
       `}</style>
 
       {/* Background Images Carousel */}

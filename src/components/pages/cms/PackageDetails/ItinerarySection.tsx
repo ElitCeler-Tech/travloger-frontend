@@ -34,10 +34,12 @@ export const ItinerarySection: React.FC<ItinerarySectionProps> = ({
   const gstPercent = pricingData.gst || 5
   const totalPrice = packageData.totalPrice || adultPrice * adults
 
-  // Get valid images from a day (filter out example.com placeholders)
+  // Get valid images from a day (swap example.com placeholders for real high-quality images so UI doesn't break)
   const getValidImages = (dayObj: any): string[] => {
     const imgs = dayObj.images || []
-    return imgs.filter((img: string) => img && !img.includes('example.com'))
+    return imgs.filter(Boolean).map((img: string, idx: number) => 
+      img.includes('example.com') ? FALLBACK_IMAGES[(dayObj.day || idx) % FALLBACK_IMAGES.length] : img
+    )
   }
 
   // Get fallback image for a destination
@@ -56,9 +58,9 @@ export const ItinerarySection: React.FC<ItinerarySectionProps> = ({
   return (
     <div className="w-full bg-[#fafafa] py-12 md:py-20" style={{ fontFamily: "'Poppins', sans-serif" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
         .font-bebas { font-family: 'Bebas Neue', sans-serif; }
-        .font-northwell { font-family: 'Northwell', cursive; }
+        .font-northwell { font-family: 'Dancing Script', cursive; font-style: italic; }
       `}</style>
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12">
@@ -66,7 +68,7 @@ export const ItinerarySection: React.FC<ItinerarySectionProps> = ({
         <div className="relative mb-12 md:mb-16 flex items-center justify-between">
           <div className="relative">
             <h2
-              className="text-5xl md:text-7xl text-[#f27a3a] font-northwell font-light italic absolute -top-8 left-0 whitespace-nowrap z-10"
+              className="text-5xl md:text-7xl text-[#f27a3a] font-northwell font-extralight italic absolute -top-8 left-0 whitespace-nowrap z-10"
               style={{ transform: 'rotate(-4deg)' }}
             >
               Itinerary
@@ -75,29 +77,12 @@ export const ItinerarySection: React.FC<ItinerarySectionProps> = ({
               YOU'LL LOVE
             </h1>
           </div>
-          {/* Temple decorative icon */}
-          <div className="hidden md:block text-[#f27a3a]">
-            <svg width="56" height="72" viewBox="0 0 56 72" fill="none">
-              <path d="M28 2L32 12H24L28 2Z" fill="#f27a3a"/>
-              <rect x="26" y="12" width="4" height="3" fill="#d4a574"/>
-              <path d="M28 15L36 25H20L28 15Z" fill="#f27a3a"/>
-              <rect x="24" y="25" width="8" height="3" fill="#d4a574"/>
-              <path d="M28 28L40 38H16L28 28Z" fill="#f27a3a"/>
-              <rect x="22" y="38" width="12" height="4" fill="#d4a574"/>
-              <path d="M28 42L46 54H10L28 42Z" fill="#f27a3a"/>
-              <rect x="18" y="54" width="20" height="8" fill="#d4a574"/>
-              <rect x="16" y="62" width="24" height="8" fill="#e8c5a0"/>
-            </svg>
-          </div>
         </div>
 
-        {/* Two-Column Layout */}
         <div className="w-full flex flex-col lg:flex-row gap-8 items-start relative">
 
-          {/* Left Column */}
           <div className="flex-1 w-full min-w-0">
 
-            {/* Trip Summary Header */}
             <div className="mb-8">
               <div className="text-gray-400 text-lg md:text-xl flex items-baseline gap-1.5">
                 <span className="text-gray-800 font-semibold">{packageData.partner_name || "OM's"}</span>
@@ -252,16 +237,62 @@ export const ItinerarySection: React.FC<ItinerarySectionProps> = ({
                                   </p>
                                 )}
 
-                                {/* Day Images (if any) */}
-                                {dayImages.length > 0 && (
-                                  <div className="relative rounded-xl overflow-hidden h-40 md:h-56 mt-3 mb-5 border border-gray-100/80">
-                                    <img
-                                      src={dayImages[0]}
-                                      alt={`Day ${dayNum}`}
-                                      className="w-full h-full object-cover"
-                                    />
-                                  </div>
-                                )}
+                                {/* Day Images + Video Preview */}
+                                {(() => {
+                                  const videoPreviewUrl = dayObj.videoPreviewUrl || null
+                                  const dayVideoUrl = dayObj.videoUrl || ''
+                                  const mediaItems: { type: 'image' | 'video'; src: string; href?: string }[] = [
+                                    ...dayImages.slice(0, 2).map((img: string) => ({ type: 'image' as const, src: img })),
+                                    ...(videoPreviewUrl ? [{ type: 'video' as const, src: videoPreviewUrl, href: dayVideoUrl || undefined }] : []),
+                                  ]
+                                  if (mediaItems.length === 0) return null
+                                  const cols = mediaItems.length === 1 ? 'grid-cols-1' : 'grid-cols-2'
+                                  const tileH = mediaItems.length === 1 ? 'h-48 md:h-64' : 'h-32 md:h-40'
+                                  return (
+                                    <div className={`grid gap-3 mt-4 mb-6 ${cols}`}>
+                                      {mediaItems.map((item, mIdx) => (
+                                        <div
+                                          key={mIdx}
+                                          className={`relative rounded-xl overflow-hidden border border-gray-100/80 shadow-sm ${tileH} group`}
+                                        >
+                                          <img
+                                            src={item.src}
+                                            alt={item.type === 'video' ? `Day ${dayNum} video preview` : `Day ${dayNum} highlight ${mIdx + 1}`}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                          />
+                                          {item.type === 'video' && (
+                                            <>
+                                              {/* Dark overlay */}
+                                              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-300" />
+                                              {/* Play button */}
+                                              {item.href ? (
+                                                <a
+                                                  href={item.href}
+                                                  target="_blank"
+                                                  rel="noreferrer"
+                                                  className="absolute inset-0 flex flex-col items-center justify-center gap-1.5"
+                                                  onClick={(e) => e.stopPropagation()}
+                                                >
+                                                  <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
+                                                    <Play className="w-4 h-4 text-[#f27a3a] fill-[#f27a3a] ml-0.5" />
+                                                  </div>
+                                                  <span className="text-white text-[11px] font-semibold tracking-wide drop-shadow">Watch Video</span>
+                                                </a>
+                                              ) : (
+                                                <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 pointer-events-none">
+                                                  <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
+                                                    <Play className="w-4 h-4 text-[#f27a3a] fill-[#f27a3a] ml-0.5" />
+                                                  </div>
+                                                  <span className="text-white text-[11px] font-semibold tracking-wide drop-shadow">Watch Video</span>
+                                                </div>
+                                              )}
+                                            </>
+                                          )}
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )
+                                })()}
 
                                 {/* Example Transfer & Stay Sections mapped from package (Mocked/Interpolated for visual match) */}
                                 <div className="mt-4 flex flex-col">
@@ -299,18 +330,7 @@ export const ItinerarySection: React.FC<ItinerarySectionProps> = ({
                                   </div>
                                 </div>
 
-                                {/* Video Link */}
-                                {videoUrl && (
-                                  <a
-                                    href={videoUrl}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="inline-flex items-center gap-2 mt-2 px-4 py-2 bg-[#fff5ef] border border-orange-200 text-[#f27a3a] rounded-full text-sm font-semibold hover:bg-orange-50 transition-colors"
-                                  >
-                                    <Play className="w-4 h-4" />
-                                    Watch Video
-                                  </a>
-                                )}
+
                               </div>
                             </motion.div>
                           )}

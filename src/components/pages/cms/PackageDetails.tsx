@@ -24,6 +24,10 @@ import {
 import { HeroSection } from './PackageDetails/HeroSection'
 import { AboutSection } from './PackageDetails/AboutSection'
 import { ItinerarySection } from './PackageDetails/ItinerarySection'
+import { ReviewsSection } from './PackageDetails/ReviewsSection'
+import { FAQSection } from './PackageDetails/FAQSection'
+import { PartnersSection } from './PackageDetails/PartnersSection'
+
 
 
 const PackageDetails: React.FC = () => {
@@ -176,6 +180,15 @@ const PackageDetails: React.FC = () => {
           packageItineraries={packageItineraries}
         />
       )}
+
+      {/* Reviews Section */}
+      <ReviewsSection packageData={packageData} />
+
+      {/* Partners Section */}
+      <PartnersSection packageData={packageData} />
+
+      {/* FAQ Section */}
+      <FAQSection packageData={packageData} />
 
       {/* Admin Section */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm mt-8">
