@@ -80,7 +80,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     handleLogout()
   }
 
-  if (location.pathname === '/login') {
+  const isPackageDetailsPage = location.pathname.match(/^\/packages\/[^\/]+$/) && !location.pathname.endsWith('/edit')
+
+  if (location.pathname === '/login' || isPackageDetailsPage) {
     return <>{children}</>
   }
 
@@ -176,7 +178,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                         )}
 
                         <item.icon
-                          className={`flex-shrink-0 ${
+                          className={`shrink-0 ${
                             sidebarCollapsed
                               ? 'h-5 w-5' + (isActive ? ' text-gray-700' : ' text-gray-300')
                               : 'h-4 w-4 mr-2' +
@@ -194,7 +196,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </nav>
 
         <div
-          className={`flex-shrink-0 border-t ${
+          className={`shrink-0 border-t ${
             sidebarCollapsed ? 'p-0.5 border-gray-600' : 'p-1 border-gray-600'
           }`}
         >
@@ -233,7 +235,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <div
         className={`flex-1 flex flex-col overflow-hidden transition-all duration-300 ease-in-out`}
       >
-        <header className="bg-white shadow-sm border-b border-gray-100 flex-shrink-0">
+        <header className="bg-white shadow-sm border-b border-gray-100 shrink-0">
           <div className="flex items-center justify-between px-6 py-3">
             <button
               className="lg:hidden p-1.5 text-gray-400 hover:text-gray-600"
@@ -248,7 +250,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 className="flex items-center hover:bg-gray-50 rounded-md p-1 transition-colors"
                 title="Click to logout"
               >
-                <div className="h-6 w-6 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="h-6 w-6 bg-gray-200 rounded-full flex items-center justify-center shrink-0">
                   <span className="text-gray-700 text-[10px] font-semibold">
                     {user?.name?.split(' ').map(n => n.charAt(0)).join('').slice(0, 2).toUpperCase() || 'AD'}
                   </span>

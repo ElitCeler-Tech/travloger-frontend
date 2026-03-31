@@ -45,7 +45,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
     }
 
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://travelogerapi.travloger.in'
       const response = await fetch(`${API_URL}/api/auth/change-password`, {
         method: 'POST',
         headers: {

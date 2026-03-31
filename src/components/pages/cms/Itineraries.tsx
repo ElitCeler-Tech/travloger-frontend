@@ -19,7 +19,7 @@ import {
 import { Badge } from '../../ui/badge'
 import { Loader2, Plus, MoreHorizontal, Copy, Pencil, Trash2, Search, MapPin, ArrowUp, ArrowDown, X } from 'lucide-react'
 import { fetchApi, handleApiError } from '../../../lib/api'
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://travelogerapi.travloger.in'
 
 interface Itinerary {
   id: number

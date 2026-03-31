@@ -1,5 +1,5 @@
 // API configuration
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '')
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'https://travelogerapi.travloger.in').replace(/\/$/, '')
 
 interface FetchOptions extends RequestInit {
   handleError?: boolean;

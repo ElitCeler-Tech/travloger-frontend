@@ -4,7 +4,7 @@ import PrintButtons from '../components/PrintButtons'
 const backendBase =
   process.env.NEXT_PUBLIC_API_URL ||
   process.env.BACKEND_API_URL ||
-  'http://localhost:3001'
+  'https://travelogerapi.travloger.in'
 
 async function fetchJSON(path: string) {
   const url = path.startsWith('http') ? path : `${backendBase}${path}`
