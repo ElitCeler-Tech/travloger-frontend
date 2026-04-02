@@ -785,6 +785,11 @@ const Itineraries: React.FC = () => {
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => {
+                                const safeParse = (val: any) => {
+                                  if (!val) return []
+                                  if (typeof val !== 'string') return val
+                                  try { return JSON.parse(val) } catch(e) { return val.split(',').map((s:string)=>s.trim()).filter(Boolean) }
+                                }
                                 setEditingId(r.id)
                                 setForm({
                                   name: r.name,
@@ -796,7 +801,7 @@ const Itineraries: React.FC = () => {
                                   notes: r.notes || '',
                                   state: r.state || '',
                                   primaryDestination: r.primary_destination || r.primaryDestination || '',
-                                  otherDestinations: (r.other_destinations ? (typeof r.other_destinations === 'string' ? JSON.parse(r.other_destinations) : r.other_destinations) : r.otherDestinations) || [],
+                                  otherDestinations: safeParse(r.other_destinations || r.otherDestinations),
                                   numDays: r.num_days || r.numDays || 1,
                                   numNights: r.num_nights || r.numNights || 0,
                                   packageType: r.package_type || r.packageType || '',
@@ -806,10 +811,10 @@ const Itineraries: React.FC = () => {
                                   dropPoint: r.drop_point || r.dropPoint || '',
                                   shortDescription: r.short_description || r.shortDescription || '',
                                   status: r.status || 'Active',
-                                  packageItineraries: (r.package_itineraries ? (typeof r.package_itineraries === 'string' ? JSON.parse(r.package_itineraries) : r.package_itineraries) : r.packageItineraries) || [],
-                                  packageVehicles: (r.package_vehicles ? (typeof r.package_vehicles === 'string' ? JSON.parse(r.package_vehicles) : r.package_vehicles) : r.packageVehicles) || [],
-                                  packageIncludes: (r.package_includes ? (typeof r.package_includes === 'string' ? JSON.parse(r.package_includes) : r.package_includes) : r.packageIncludes) || [],
-                                  packageExcludes: (r.package_excludes ? (typeof r.package_excludes === 'string' ? JSON.parse(r.package_excludes) : r.package_excludes) : r.packageExcludes) || []
+                                  packageItineraries: safeParse(r.package_itineraries || r.packageItineraries),
+                                  packageVehicles: safeParse(r.package_vehicles || r.packageVehicles),
+                                  packageIncludes: safeParse(r.package_includes || r.packageIncludes),
+                                  packageExcludes: safeParse(r.package_excludes || r.packageExcludes)
                                 })
                                 setDestinationInput('')
                                 setActiveTab('general')

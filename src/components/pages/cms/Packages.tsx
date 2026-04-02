@@ -687,26 +687,45 @@ const Packages: React.FC = () => {
       return
     }
 
-    // Map form data to packages table structure
+    // Map form data to packages table structure complying with the new API
     const enteredDestination = newPackage.destination?.trim() || ''
     const packageData = {
       name: enteredDestination,
-      destination: enteredDestination, // store the entered destination text
-      route: cityName, // persist the selected location for filtering
-      duration: 'Custom', // Default duration
-      price: 0, // Default price
-      original_price: 0, // Default original price
-      description: `Custom ${newPackage.plan} for ${cityName}`,
-      highlights: ['Customized experience', 'Professional service'],
-      includes: ['Accommodation', 'Transportation'],
-      category: 'Adventure', // Default category
-      status: 'Active' as const,
-      featured: false,
-      image: '', // Default empty image
-      nights: 0, // Default nights
-      days: 0, // Default days
-      trip_type: 'custom' as const,
-      // Additional fields for plan configuration
+      state: cityName || "",
+      primaryDestination: enteredDestination,
+      otherDestinations: "",
+      numDays: 0,
+      numNights: 0,
+      packageType: newPackage.plan === 'Fixed Plan' ? 'Fixed' : 'Custom',
+      packageCategory: "Adventure",
+      packageTheme: "Adventure",
+      pickupPoint: "",
+      dropPoint: "",
+      shortDescription: `Custom ${newPackage.plan} for ${cityName}`,
+      status: "Active",
+      price: 0,
+      packageTerms: "",
+      pricingData: { adultPrice: 0, childPrice: 0, gst: 0 },
+      packageItineraries: [],
+      packageVehicles: [],
+      packageIncludes: [],
+      packageExcludes: [],
+      partnerName: "",
+      partnerProfilePhoto: "",
+      heroVideoUrl: "",
+      summaryText: "",
+      summaryHighlights: [],
+      summaryImage: "",
+      packageInclusionsStructured: [],
+      reviews: [],
+      testimonials: [],
+      whyChooseUs: { title: "", items: [] },
+      ourPartners: [],
+      storiesHighlights: [],
+      visionAbout: { title: "", description: "" },
+      faqs: [],
+      
+      // Keep Original structure states
       plan_type: newPackage.plan,
       service_type: newPackage.serviceType || '',
       hotel_location_id: newPackage.hotelLocation || '',
