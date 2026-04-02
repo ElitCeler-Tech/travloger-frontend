@@ -742,22 +742,44 @@ const WebsiteEdit: React.FC = () => {
 
   const createItinerary = async (): Promise<void> => {
     try {
-      const payload = {
+      const payload: any = {
         name: newItinerary.name,
-        destination: newItinerary.destination,
-        duration: newItinerary.duration,
-        price: newItinerary.price,
-        originalPrice: newItinerary.originalPrice,
-        description: newItinerary.description,
-        highlights: newItinerary.highlights ? newItinerary.highlights.split(',').map(h => h.trim()) : [],
-        includes: newItinerary.includes ? newItinerary.includes.split(',').map(i => i.trim()) : [],
-        category: newItinerary.category,
-        featured: newItinerary.featured,
-        route: newItinerary.route,
-        nights: newItinerary.nights,
-        days: newItinerary.days,
-        tripType: newItinerary.tripType,
-        status: 'Active' as const
+        state: citySlug,
+        primaryDestination: newItinerary.destination,
+        otherDestinations: "",
+        numDays: newItinerary.days || 0,
+        numNights: newItinerary.nights || 0,
+        packageType: newItinerary.tripType === 'group' ? 'Fixed Departure' : 'Custom',
+        packageCategory: newItinerary.category,
+        packageTheme: "Adventure",
+        pickupPoint: "",
+        dropPoint: "",
+        shortDescription: newItinerary.description,
+        price: newItinerary.price || 0,
+        status: "Active",
+        marketplaceShared: newItinerary.featured,
+        startDate: "",
+        endDate: "",
+        adults: 2,
+        children: 0,
+        packageIncludes: newItinerary.includes ? newItinerary.includes.split(',').map(i => i.trim()) : [],
+        packageExcludes: [],
+        packageTerms: "",
+        notes: "",
+        packageItineraries: [],
+        siteContent: {
+           partnerName: "",
+           partnerProfilePhoto: "",
+           summaryText: newItinerary.description,
+           summaryHighlights: newItinerary.highlights ? newItinerary.highlights.split(',').map(h => h.trim()) : [],
+           summaryImage: "",
+           hero: { videoUrl: "" },
+           structuredInclusions: [],
+           reviews: [],
+           testimonials: [],
+           whyChooseUs: { title: "", points: [] },
+           faqs: []
+        }
       }
       let response: Response
       if (newItImageFile) {
@@ -815,21 +837,44 @@ const WebsiteEdit: React.FC = () => {
       let response: Response
       if (editItImageFile) {
         const form = new FormData()
-        const partial: Partial<ItineraryPackage> = {
+        const partial: any = {
           name: editItForm.name,
-          destination: editItForm.destination,
-          duration: editItForm.duration,
-          price: editItForm.price,
-          original_price: editItForm.originalPrice,
-          description: editItForm.description,
-          highlights: editItForm.highlights ? editItForm.highlights.split(',').map(h => h.trim()) : [],
-          includes: editItForm.includes ? editItForm.includes.split(',').map(i => i.trim()) : [],
-          category: editItForm.category,
-          featured: editItForm.featured,
-          route: editItForm.route,
-          nights: editItForm.nights,
-          days: editItForm.days,
-          trip_type: editItForm.tripType
+          state: citySlug,
+          primaryDestination: editItForm.destination,
+          otherDestinations: "",
+          numDays: editItForm.days || 0,
+          numNights: editItForm.nights || 0,
+          packageType: editItForm.tripType === 'group' ? 'Fixed Departure' : 'Custom',
+          packageCategory: editItForm.category,
+          packageTheme: "Adventure",
+          pickupPoint: "",
+          dropPoint: "",
+          shortDescription: editItForm.description,
+          price: editItForm.price || 0,
+          status: "Active",
+          marketplaceShared: editItForm.featured,
+          startDate: "",
+          endDate: "",
+          adults: 2,
+          children: 0,
+          packageIncludes: editItForm.includes ? editItForm.includes.split(',').map(i => i.trim()) : [],
+          packageExcludes: [],
+          packageTerms: "",
+          notes: "",
+          packageItineraries: [],
+          siteContent: {
+             partnerName: "",
+             partnerProfilePhoto: "",
+             summaryText: editItForm.description,
+             summaryHighlights: editItForm.highlights ? editItForm.highlights.split(',').map(h => h.trim()) : [],
+             summaryImage: "",
+             hero: { videoUrl: "" },
+             structuredInclusions: [],
+             reviews: [],
+             testimonials: [],
+             whyChooseUs: { title: "", points: [] },
+             faqs: []
+          }
         }
         Object.entries(partial).forEach(([key, value]) => {
           if (value === undefined || value === null) return
@@ -838,21 +883,44 @@ const WebsiteEdit: React.FC = () => {
         form.append('image', editItImageFile)
         response = await fetchApi(`/api/packages/${editItId}`, { method: 'PUT', body: form })
       } else {
-        const partial: Partial<ItineraryPackage> = {
+        const partial: any = {
           name: editItForm.name,
-          destination: editItForm.destination,
-          duration: editItForm.duration,
-          price: editItForm.price,
-          original_price: editItForm.originalPrice,
-          description: editItForm.description,
-          highlights: editItForm.highlights ? editItForm.highlights.split(',').map(h => h.trim()) : [],
-          includes: editItForm.includes ? editItForm.includes.split(',').map(i => i.trim()) : [],
-          category: editItForm.category,
-          featured: editItForm.featured,
-          route: editItForm.route,
-          nights: editItForm.nights,
-          days: editItForm.days,
-          trip_type: editItForm.tripType
+          state: citySlug,
+          primaryDestination: editItForm.destination,
+          otherDestinations: "",
+          numDays: editItForm.days || 0,
+          numNights: editItForm.nights || 0,
+          packageType: editItForm.tripType === 'group' ? 'Fixed Departure' : 'Custom',
+          packageCategory: editItForm.category,
+          packageTheme: "Adventure",
+          pickupPoint: "",
+          dropPoint: "",
+          shortDescription: editItForm.description,
+          price: editItForm.price || 0,
+          status: "Active",
+          marketplaceShared: editItForm.featured,
+          startDate: "",
+          endDate: "",
+          adults: 2,
+          children: 0,
+          packageIncludes: editItForm.includes ? editItForm.includes.split(',').map(i => i.trim()) : [],
+          packageExcludes: [],
+          packageTerms: "",
+          notes: "",
+          packageItineraries: [],
+          siteContent: {
+             partnerName: "",
+             partnerProfilePhoto: "",
+             summaryText: editItForm.description,
+             summaryHighlights: editItForm.highlights ? editItForm.highlights.split(',').map(h => h.trim()) : [],
+             summaryImage: "",
+             hero: { videoUrl: "" },
+             structuredInclusions: [],
+             reviews: [],
+             testimonials: [],
+             whyChooseUs: { title: "", points: [] },
+             faqs: []
+          }
         }
         response = await fetchApi(`/api/packages/${editItId}`, {
           method: 'PUT',
