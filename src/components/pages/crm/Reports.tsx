@@ -21,6 +21,7 @@ const Reports: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [generatingReport, setGeneratingReport] = useState<boolean>(false)
   const [analytics, setAnalytics] = useState<any>(null)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   // Fetch report data based on selections
   const fetchReportData = useCallback(async () => {
@@ -87,14 +88,19 @@ const Reports: React.FC = () => {
     }
   }, [selectedLocation, selectedSection, selectedMonth, selectedYear])
 
-  // Generate and download Excel report
+  // Generate and download report
   const downloadExcelReport = async () => {
     setGeneratingReport(true)
     try {
+      const isEngagement = selectedSection === 'engagement'
       const payload: any = {
-        section: selectedSection,
+        section: isEngagement ? 'landing_page' : selectedSection,
         destination: selectedLocation !== 'all' ? selectedLocation : undefined,
-        format: 'csv'
+        format: isEngagement ? 'pdf' : 'csv'
+      }
+      
+      if (isEngagement) {
+        payload.generate_link = true
       }
 
       // Convert month/year to date range if specified
@@ -111,29 +117,51 @@ const Reports: React.FC = () => {
         }
       }
 
-      const blob = await fetchApi('/api/reports/export', {
-        method: 'POST',
-        body: JSON.stringify(payload),
-        responseType: 'blob'
-      })
+      if (isEngagement) {
+        const data = await fetchApi('/api/reports/export', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        })
+        
+        const urlToOpen = data.link || data.url || data.file_url || data.download_url || (data.data && (data.data.link || data.data.url))
+        
+        if (urlToOpen) {
+          const link = document.createElement('a')
+          link.href = urlToOpen
+          link.target = '_blank'
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+          setSuccessMessage('Report opened successfully in a new tab.')
+        } else {
+          console.error("Link not found in response:", data)
+          alert('Report generated but no link was returned. Check console for details.')
+        }
+      } else {
+        const blob = await fetchApi('/api/reports/export', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+          responseType: 'blob'
+        })
 
-      const url = window.URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
+        const url = window.URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
 
-      // Generate filename based on selections
-      const locationStr = selectedLocation === 'all' ? 'All-Locations' : selectedLocation
-      const monthStr = selectedMonth === 'all' ? 'All-Months' : selectedMonth
-      const yearStr = selectedYear === 'all' ? 'All-Years' : selectedYear
-      const filename = `${selectedSection.toUpperCase()}-Report-${locationStr}-${monthStr}-${yearStr}-${new Date().toISOString().split('T')[0]}.csv`
+        // Generate filename based on selections
+        const locationStr = selectedLocation === 'all' ? 'All-Locations' : selectedLocation
+        const monthStr = selectedMonth === 'all' ? 'All-Months' : selectedMonth
+        const yearStr = selectedYear === 'all' ? 'All-Years' : selectedYear
+        const filename = `${selectedSection.toUpperCase()}-Report-${locationStr}-${monthStr}-${yearStr}-${new Date().toISOString().split('T')[0]}.csv`
 
-      link.setAttribute('download', filename)
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      window.URL.revokeObjectURL(url)
+        link.setAttribute('download', filename)
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(url)
 
-      alert(`Report downloaded successfully: ${filename}`)
+        setSuccessMessage(`Report downloaded successfully: ${filename}`)
+      }
     } catch (error) {
       console.error('Error generating report:', error)
       alert(handleApiError(error))
@@ -159,10 +187,9 @@ const Reports: React.FC = () => {
             <p className="text-gray-600">Generate detailed reports based on location, section, and time period</p>
           </div>
           <div className="flex items-center space-x-2">
-            {selectedSection !== 'engagement' && (
             <button
               onClick={downloadExcelReport}
-              disabled={generatingReport || reportData.length === 0}
+              disabled={generatingReport || ((selectedSection === 'engagement' && !engagementReport) || (selectedSection !== 'engagement' && reportData.length === 0))}
               className="bg-gray-600 text-white px-3 py-1.5 rounded-md hover:bg-gray-700 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
             >
               {generatingReport ? (
@@ -175,11 +202,10 @@ const Reports: React.FC = () => {
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
-                  <span>Download CSV</span>
+                  <span>{selectedSection === 'engagement' ? 'Download PDF' : 'Download CSV'}</span>
                 </>
               )}
             </button>
-            )}
           </div>
         </div>
 
@@ -576,6 +602,27 @@ const Reports: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Success Modal */}
+      {successMessage && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md bg-white/10 transition-opacity">
+          <div className="bg-white rounded-lg shadow-xl max-w-sm w-full mx-auto transform transition-all p-6">
+            <div className="flex items-center justify-center w-12 h-12 mx-auto bg-green-100 rounded-full mb-4">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-medium text-center text-gray-900 mb-2">Success</h3>
+            <p className="text-sm text-center text-gray-600 mb-6">{successMessage}</p>
+            <button
+              onClick={() => setSuccessMessage(null)}
+              className="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </ErrorBoundary>
   )
 }
