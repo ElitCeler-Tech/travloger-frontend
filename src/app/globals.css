@@ -41,25 +41,89 @@ body {
 
 /* Hide scrollbar but keep scrolling functionality */
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 .scrollbar-hide::-webkit-scrollbar { 
-  display: none;  /* Safari and Chrome */
+  display: none;
 }
 
 /* Slide in from right animation */
 @keyframes slideInFromRight {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
 }
-
 .animate-slide-in-right {
   animation: slideInFromRight 0.3s ease-out;
+}
+
+/* ===== ADMIN UI POLISH ===== */
+
+/* Smoother scrolling */
+main { scroll-behavior: smooth; }
+
+/* Better table styling across all pages */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+}
+tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+/* Cleaner input/select styling */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="password"],
+input[type="date"],
+input[type="search"],
+textarea,
+select {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+input:focus, textarea:focus, select:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Smoother buttons */
+button {
+  transition: all 0.2s ease;
+}
+
+/* Better card shadows */
+.shadow { box-shadow: 0 1px 3px 0 rgba(0,0,0,0.06), 0 1px 2px -1px rgba(0,0,0,0.06); }
+.shadow-sm { box-shadow: 0 1px 2px 0 rgba(0,0,0,0.04); }
+.shadow-lg { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05); }
+
+/* Rounded corners consistency */
+.rounded-lg { border-radius: 0.625rem; }
+.rounded-md { border-radius: 0.5rem; }
+
+/* Better modal backdrop */
+[class*="fixed inset-0"][class*="bg-black"],
+[class*="fixed inset-0"][class*="bg-gray"] {
+  backdrop-filter: blur(4px);
+}
+
+/* Page header consistency */
+h1 { letter-spacing: -0.025em; }
+h2 { letter-spacing: -0.015em; }
+
+/* Subtle animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.bg-white.shadow, .bg-white.shadow-sm, .bg-white.rounded-lg {
+  animation: fadeIn 0.2s ease-out;
 }
 
 
