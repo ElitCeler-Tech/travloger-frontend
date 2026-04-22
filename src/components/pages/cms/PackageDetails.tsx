@@ -60,8 +60,8 @@ const PackageDetails: React.FC = () => {
         setError(null)
 
         // Fetch package details
-        const data = await fetchApi(`/api/itineraries/${id}`)
-        const pkg = data.itinerary
+        const data = await fetchApi(`/api/packages/${id}`)
+        const pkg = data.package
 
         if (!pkg) {
           throw new Error('Package not found')
