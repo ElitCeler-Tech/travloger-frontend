@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { fetchApi, handleApiError } from '../../../lib/api'
 import ErrorBoundary from '../../ErrorBoundary'
+import TrafficTrendChart from '../../charts/TrafficTrendChart'
 
 type SectionType = 'website_analytics' | 'landing_page_analytics' | 'itinerary_analytics' | 'sales_analytics' | 'accounts_analytics'
 type LocationType = 'all' | 'Kashmir' | 'Ladakh' | 'Kerala' | 'Gokarna' | 'Meghalaya' | 'Mysore' | 'Singapore' | 'Hyderabad' | 'Bengaluru' | 'Manali'
@@ -478,6 +479,11 @@ const Reports: React.FC = () => {
                 <div className="px-6 py-4 border-b border-gray-200">
                   <h3 className="text-base font-semibold text-gray-900">{table.title}</h3>
                 </div>
+                {table.title === 'Traffic Trend (Day-wise)' && (table.rows || []).length > 0 && (
+                  <div className="px-6 py-4">
+                    <TrafficTrendChart rows={table.rows} />
+                  </div>
+                )}
                 <div className="overflow-x-auto">
                   <table className="min-w-full">
                     <thead>
