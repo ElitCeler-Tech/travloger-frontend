@@ -235,12 +235,14 @@ const Reports: React.FC = () => {
             {selectedSection === 'itinerary_analytics' && (
               <>
                 <div className="bg-white p-4 rounded-lg shadow">
-                  <div className="text-sm text-gray-600">Total Bookings</div>
+                  <div className="text-sm text-gray-600">Total Itineraries</div>
                   <div className="text-2xl font-bold text-green-600">{analytics.total || 0}</div>
                 </div>
                 <div className="bg-white p-4 rounded-lg shadow">
-                  <div className="text-sm text-gray-600">Total Revenue</div>
-                  <div className="text-2xl font-bold text-green-600">₹{analytics.totalRevenue || 0}</div>
+                  <div className="text-sm text-gray-600">By Status</div>
+                  <div className="text-sm font-semibold text-gray-900">
+                    {analytics.byStatus ? Object.entries(analytics.byStatus).map(([k, v]) => `${k}: ${v}`).join(', ') : 'N/A'}
+                  </div>
                 </div>
               </>
             )}
@@ -489,12 +491,12 @@ const Reports: React.FC = () => {
                     )}
                     {selectedSection === 'itinerary_analytics' && (
                       <>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Package</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Destination</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Days/Nights</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
                       </>
                     )}
 
@@ -536,12 +538,12 @@ const Reports: React.FC = () => {
                       )}
                       {selectedSection === 'itinerary_analytics' && (
                         <>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.customer || 'N/A'}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.package || 'N/A'}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.destination || 'N/A'}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₹{item.amount || 0}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.name || 'N/A'}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.primary_destination || item.destinations || 'N/A'}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.num_days || 0}D / {item.num_nights || 0}N</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₹{item.price || 0}</td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.status || 'N/A'}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(item.booking_date || item.created_at).toLocaleDateString()}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(item.created_at).toLocaleDateString()}</td>
                         </>
                       )}
 
