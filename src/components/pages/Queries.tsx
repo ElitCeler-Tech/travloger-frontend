@@ -130,7 +130,7 @@ const Queries: React.FC = () => {
   }
 
   // Handle query selection
-  const handleQuerySelect = (queryId: number) => {
+  const handleQuerySelect = (queryId: string) => {
     setSelectedQueries(prev => 
       prev.includes(queryId) 
         ? prev.filter(id => id !== queryId)
