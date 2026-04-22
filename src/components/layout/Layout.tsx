@@ -35,6 +35,7 @@ const navItems = [
   ]},
   { section: 'CONTENT', items: [
     { name: 'Website CMS', href: '/website-edit', icon: PhotoIcon },
+    { name: 'Main Website Edit', href: '/main-website-edit', icon: DocumentTextIcon },
     { name: 'Itinerary Builder', href: '/packages', icon: ClipboardDocumentListIcon },
   ]},
   { section: 'ANALYTICS', items: [
