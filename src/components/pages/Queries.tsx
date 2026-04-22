@@ -10,7 +10,7 @@ import { fetchApi, handleApiError } from '../../lib/api'
 
 // Type definitions
 interface Query {
-  id: number
+  id: string
   name: string
   email: string
   phone: string
@@ -49,7 +49,7 @@ const Queries: React.FC = () => {
   const navigate = useNavigate()
   const [queries, setQueries] = useState<Query[]>([])
   const [loading, setLoading] = useState<boolean>(true)
-  const [selectedQueries, setSelectedQueries] = useState<number[]>([])
+  const [selectedQueries, setSelectedQueries] = useState<string[]>([])
   const [filterStatus, setFilterStatus] = useState<string>('all')
   const [employees, setEmployees] = useState<Array<{ id: string; name: string; email: string }>>([])
   const [loadingEmployees, setLoadingEmployees] = useState<boolean>(false)
@@ -87,17 +87,8 @@ const Queries: React.FC = () => {
 
       if (data.leads) {
         const transformedQueries: Query[] = data.leads.map((lead: any, index: number) => {
-          let displayId: number
-          if (typeof lead.id === 'string' && lead.id.includes('-')) {
-            displayId = 1000 + index
-          } else if (typeof lead.id === 'number') {
-            displayId = lead.id
-          } else {
-            displayId = 1000 + index
-          }
-          
           return {
-            id: displayId,
+            id: String(lead.id),
             name: lead.name,
             email: lead.email,
             phone: lead.phone,
@@ -157,7 +148,7 @@ const Queries: React.FC = () => {
   }
 
   // Handle status update
-  const handleStatusUpdate = async (queryId: number, newStatus: string) => {
+  const handleStatusUpdate = async (queryId: string, newStatus: string) => {
     try {
       await fetchApi(`/api/leads?id=${queryId}`, {
         method: 'PATCH',
@@ -180,7 +171,7 @@ const Queries: React.FC = () => {
   }
 
   // Handle assignment update
-  const handleAssignmentUpdate = async (queryId: number, employeeName: string) => {
+  const handleAssignmentUpdate = async (queryId: string, employeeName: string) => {
     try {
       const employee = employees.find((emp) => emp.name === employeeName)
       if (!employee && employeeName) {
