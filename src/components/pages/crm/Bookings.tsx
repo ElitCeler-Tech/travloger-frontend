@@ -40,7 +40,7 @@ const Bookings: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
   const [bookingToDelete, setBookingToDelete] = useState<Booking | null>(null)
   const [deleting, setDeleting] = useState<boolean>(false)
-  const [selectedMonth, setSelectedMonth] = useState<string>((new Date().getMonth() + 1).toString())
+  const [selectedMonth, setSelectedMonth] = useState<string>('all')
   const [selectedYear, setSelectedYear] = useState<string>(new Date().getFullYear().toString())
   const [selectedDate, setSelectedDate] = useState<string>('all')
 
