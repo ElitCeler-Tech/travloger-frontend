@@ -387,6 +387,47 @@ const AdminDashboard: React.FC = () => {
         </Link>
       </div>
 
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <h3 className="text-sm font-semibold text-gray-900 mb-4">This Year — Leads vs Confirmed</h3>
+          <div className="h-56 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData.monthlyData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis dataKey="month" stroke="#6b7280" fontSize={11} />
+                <YAxis stroke="#6b7280" fontSize={11} />
+                <Tooltip contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '8px', fontSize: '12px' }} />
+                <Bar dataKey="queries" fill="#3b82f6" radius={[3, 3, 0, 0]} name="Leads" />
+                <Bar dataKey="confirmed" fill="#10b981" radius={[3, 3, 0, 0]} name="Confirmed" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+        <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <h3 className="text-sm font-semibold text-gray-900 mb-4">Leads by Status</h3>
+          <div className="h-44 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie data={chartData.leadStatusData} cx="50%" cy="50%" innerRadius={35} outerRadius={70} paddingAngle={4} dataKey="value">
+                  {chartData.leadStatusData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="grid grid-cols-2 gap-1.5 mt-3">
+            {chartData.leadStatusData.map((item, index) => (
+              <div key={index} className="flex items-center text-xs">
+                <div className="w-2.5 h-2.5 rounded-full mr-2 shrink-0" style={{ backgroundColor: item.color }}></div>
+                <span className="text-gray-600 truncate">{item.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-xl border border-gray-200">
           <div className="flex items-center p-5 border-b border-gray-100">
@@ -485,128 +526,6 @@ const AdminDashboard: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Link to="/leads" className="bg-slate-800 text-white rounded-lg shadow-sm p-6 text-center hover:bg-slate-700 transition-colors">
-          <p className="font-medium">View Leads</p>
-        </Link>
-        <Link to="/bookings" className="bg-slate-800 text-white rounded-lg shadow-sm p-6 text-center hover:bg-slate-700 transition-colors">
-          <p className="font-medium">View Bookings</p>
-        </Link>
-        <Link to="/packages" className="bg-slate-800 text-white rounded-lg shadow-sm p-6 text-center hover:bg-slate-700 transition-colors">
-          <p className="font-medium">View Packages</p>
-        </Link>
-        <Link to="/payments" className="bg-slate-800 text-white rounded-lg shadow-sm p-6 text-center hover:bg-slate-700 transition-colors">
-          <p className="font-medium">View Payments</p>
-        </Link>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex items-center mb-4">
-            <div className="w-1 h-6 bg-teal-500 rounded-full mr-3"></div>
-            <h3 className="text-lg font-semibold text-gray-900">
-              THIS YEAR LEADS / <span className="text-green-600">CONFIRMED</span>
-            </h3>
-          </div>
-          <div className="h-64 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData.monthlyData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="month" stroke="#6b7280" fontSize={12} />
-                <YAxis stroke="#6b7280" fontSize={12} domain={[0, 8]} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'white',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '8px'
-                  }}
-                />
-                <Bar dataKey="queries" fill="#1e40af" radius={[2, 2, 0, 0]} />
-                <Bar dataKey="confirmed" fill="#10b981" radius={[2, 2, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex items-center mb-4">
-            <div className="w-1 h-6 bg-teal-500 rounded-full mr-3"></div>
-            <h3 className="text-lg font-semibold text-gray-900">LEADS BY STATUS</h3>
-          </div>
-          <div className="h-64 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie data={chartData.leadStatusData} cx="50%" cy="50%" innerRadius={40} outerRadius={80} paddingAngle={5} dataKey="value">
-                  {chartData.leadStatusData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="grid grid-cols-2 gap-2 mt-4">
-            {chartData.leadStatusData.map((item, index) => (
-              <div key={index} className="flex items-center text-xs">
-                <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: item.color }}></div>
-                <span className="text-gray-600">{item.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm">
-          <div className="flex items-center p-6 border-b border-gray-100">
-            <div className="w-1 h-6 bg-teal-500 rounded-full mr-3"></div>
-            <h3 className="text-lg font-semibold text-gray-900">PENDING BOOKINGS</h3>
-          </div>
-          <div className="p-6">
-            {loadingBookings ? (
-              <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                <p className="text-sm text-gray-500 mt-2">Loading...</p>
-              </div>
-            ) : upcomingBookings.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-gray-400">No bookings found</p>
-              </div>
-            ) : upcomingBookings.filter((booking) => booking.status === 'Pending').length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-gray-400">No Pending Bookings</p>
-                <p className="text-xs text-gray-500 mt-1">
-                  Total: {upcomingBookings.length} (Completed: {upcomingBookings.filter((b) => b.status === 'Completed').length}, Cancelled:{' '}
-                  {upcomingBookings.filter((b) => b.status === 'Cancelled').length})
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {upcomingBookings
-                  .filter((booking) => booking.status === 'Pending')
-                  .slice(0, 3)
-                  .map((booking) => (
-                    <div key={booking.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
-                          <svg className="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-900">{booking.customer || booking.package_name}</p>
-                          <p className="text-sm text-gray-500">{booking.destination}</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">Pending</span>
-                        <p className="text-xs text-gray-500 mt-1">₹{booking.amount || '0'}</p>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
     </div>
   )
 }
