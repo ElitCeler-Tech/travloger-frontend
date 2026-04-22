@@ -39,7 +39,7 @@ const Leads: React.FC = () => {
   const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null)
   const [deleting, setDeleting] = useState<boolean>(false)
   const [selectedMonth, setSelectedMonth] = useState<string>('all')
-  const [selectedYear, setSelectedYear] = useState<string>(new Date().getFullYear().toString())
+  const [selectedYear, setSelectedYear] = useState<string>('all')
   const [selectedDate, setSelectedDate] = useState<string>('all')
   const [destinations, setDestinations] = useState<string[]>([])
   const [loadingDestinations, setLoadingDestinations] = useState<boolean>(false)

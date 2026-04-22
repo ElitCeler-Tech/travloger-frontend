@@ -41,7 +41,7 @@ const Bookings: React.FC = () => {
   const [bookingToDelete, setBookingToDelete] = useState<Booking | null>(null)
   const [deleting, setDeleting] = useState<boolean>(false)
   const [selectedMonth, setSelectedMonth] = useState<string>('all')
-  const [selectedYear, setSelectedYear] = useState<string>(new Date().getFullYear().toString())
+  const [selectedYear, setSelectedYear] = useState<string>('all')
   const [selectedDate, setSelectedDate] = useState<string>('all')
 
   // Function to automatically determine booking status
