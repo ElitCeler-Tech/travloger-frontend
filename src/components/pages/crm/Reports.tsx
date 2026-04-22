@@ -18,6 +18,7 @@ const Reports: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState<string>('all')
   const [reportData, setReportData] = useState<any[]>([])
   const [engagementReport, setEngagementReport] = useState<EngagementReport | null>(null)
+  const [lpTables, setLpTables] = useState<any[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [generatingReport, setGeneratingReport] = useState<boolean>(false)
   const [analytics, setAnalytics] = useState<any>(null)
@@ -47,6 +48,17 @@ const Reports: React.FC = () => {
         }
         const data = await fetchApi(`/api/engagement/report?${params.toString()}`)
         setEngagementReport(data || null)
+
+        // Also fetch the full landing page report tables (Overview Dashboard, Traffic Trend, etc.)
+        const lpParams = new URLSearchParams()
+        lpParams.set('section', 'landing_page_analytics')
+        if (selectedLocation !== 'all') lpParams.set('destination', selectedLocation)
+        if (params.get('start_date')) lpParams.set('start_date', params.get('start_date')!)
+        if (params.get('end_date')) lpParams.set('end_date', params.get('end_date')!)
+        try {
+          const lpData = await fetchApi(`/api/reports?${lpParams.toString()}`)
+          setLpTables(lpData?.landing_page_analytics || lpData?.landing_page || [])
+        } catch { setLpTables([]) }
         return
       }
 
@@ -455,6 +467,41 @@ const Reports: React.FC = () => {
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Full Landing Page Report Tables */}
+        {selectedSection === 'landing_page_analytics' && lpTables.length > 0 && (
+          <div className="space-y-6">
+            {lpTables.map((table: any, idx: number) => (
+              <div key={idx} className="bg-white shadow rounded-lg overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200">
+                  <h3 className="text-base font-semibold text-gray-900">{table.title}</h3>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full">
+                    <thead>
+                      <tr>
+                        {(table.headers || []).map((h: string, i: number) => (
+                          <th key={i} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-50">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {(table.rows || []).length === 0 ? (
+                        <tr><td colSpan={(table.headers || []).length} className="px-4 py-6 text-center text-sm text-gray-400">No data</td></tr>
+                      ) : (table.rows || []).map((row: string[], ri: number) => (
+                        <tr key={ri} className="hover:bg-gray-50">
+                          {row.map((cell: string, ci: number) => (
+                            <td key={ci} className={`px-4 py-3 text-sm ${ci === 0 ? 'font-medium text-gray-900' : 'text-gray-600'}`}>{cell}</td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ))}
           </div>
         )}
 
