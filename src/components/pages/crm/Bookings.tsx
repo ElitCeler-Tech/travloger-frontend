@@ -175,8 +175,8 @@ const Bookings: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Travel Bookings</h1>
-          <p className="text-gray-600">Manage travel packages, itineraries, and customer details</p>
+          <h1 className="text-xl font-bold text-gray-900">Bookings</h1>
+          <p className="text-sm text-gray-500">Manage travel packages, itineraries, and customer details</p>
         </div>
         <div className="flex items-center space-x-3">
           {/* Date Filter */}

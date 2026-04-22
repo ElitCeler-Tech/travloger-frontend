@@ -195,8 +195,8 @@ const Payments: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Payment Transactions</h1>
-          <p className="text-gray-600">Track payment methods, transaction details, and financial records</p>
+          <h1 className="text-xl font-bold text-gray-900">Payments</h1>
+          <p className="text-sm text-gray-500">Track payment methods, transaction details, and financial records</p>
         </div>
         <div className="flex items-center space-x-3">
           {/* Month Filter */}

@@ -329,67 +329,35 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-xl shadow-lg p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-white">{new Date().getHours() < 12 ? 'Good Morning' : new Date().getHours() < 17 ? 'Good Afternoon' : 'Good Evening'}</h1>
-            <p className="text-slate-300 mt-1">Welcome back to Travloger Admin</p>
-          </div>
-          <div className="text-right">
-            <div className="text-3xl font-bold text-white">{new Date().getDate()}</div>
-            <div className="text-sm text-slate-300">{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', year: 'numeric' })}</div>
-          </div>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-bold text-gray-900">{new Date().getHours() < 12 ? 'Good Morning' : new Date().getHours() < 17 ? 'Good Afternoon' : 'Good Evening'} 👋</h1>
+          <p className="text-sm text-gray-500">Here&apos;s what&apos;s happening with Travloger today</p>
+        </div>
+        <div className="text-right text-sm text-gray-500">
+          {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
         </div>
       </div>
 
-      <div className="flex gap-3 flex-wrap">
-        <Link to="/employees" className="flex items-center gap-2 bg-white rounded-lg shadow-sm px-4 py-2.5 hover:shadow-md transition-all hover:-translate-y-0.5 border border-gray-100">
-          <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-          </svg>
-          <span className="text-sm font-medium text-gray-700">Employees</span>
-        </Link>
-        <Link to="/leads" className="flex items-center gap-2 bg-white rounded-lg shadow-sm px-4 py-2.5 hover:shadow-md transition-all hover:-translate-y-0.5 border border-gray-100">
-          <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          <span className="text-sm font-medium text-gray-700">Leads</span>
-        </Link>
-        <Link to="/packages" className="flex items-center gap-2 bg-white rounded-lg shadow-sm px-4 py-2.5 hover:shadow-md transition-all hover:-translate-y-0.5 border border-gray-100">
-          <svg className="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <span className="text-sm font-medium text-gray-700">Packages</span>
-        </Link>
-        <Link to="/reports" className="flex items-center gap-2 bg-white rounded-lg shadow-sm px-4 py-2.5 hover:shadow-md transition-all hover:-translate-y-0.5 border border-gray-100">
-          <svg className="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-          </svg>
-          <span className="text-sm font-medium text-gray-700">Reports</span>
-        </Link>
-      </div>
-
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-        <div className="bg-white rounded-xl border border-gray-100 p-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-500">Total Leads</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">{loadingStats ? '...' : dashboardStats.totalLeads}</p>
-            </div>
-            <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
-              <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <Link to="/leads" className="bg-white rounded-xl border border-gray-200 p-4 hover:border-blue-200 hover:shadow-sm transition-all group">
+          <div className="flex items-center justify-between mb-2">
+            <div className="w-9 h-9 bg-blue-50 rounded-lg flex items-center justify-center">
+              <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
             </div>
           </div>
-        </div>
-
-        <div className="bg-white rounded-xl border border-gray-100 p-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-500">Active Packages</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">{loadingStats ? '...' : dashboardStats.activeItineraries}</p>
+          <p className="text-2xl font-bold text-gray-900">{loadingStats ? '—' : dashboardStats.totalLeads}</p>
+          <p className="text-xs text-gray-500 mt-0.5">Total Leads</p>
+        </Link>
+        <Link to="/packages" className="bg-white rounded-xl border border-gray-200 p-4 hover:border-purple-200 hover:shadow-sm transition-all group">
+          <div className="flex items-center justify-between mb-2">
+            <div className="w-9 h-9 bg-purple-50 rounded-lg flex items-center justify-center">
+              <svg className="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
             </div>
+          </div>
+          <p className="text-2xl font-bold text-gray-900">{loadingStats ? '—' : dashboardStats.activeItineraries}</p>
+          <p className="text-xs text-gray-500 mt-0.5">Active Packages</p>
+        </Link>
             <div className="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center">
               <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -399,40 +367,30 @@ const AdminDashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">Total Revenue</p>
-              <p className="text-2xl font-bold text-gray-900">{loadingStats ? '...' : `₹${(dashboardStats.totalRevenue / 1000).toFixed(0)}K`}</p>
-            </div>
-            <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-              <svg className="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+        <Link to="/bookings" className="bg-white rounded-xl border border-gray-200 p-4 hover:border-green-200 hover:shadow-sm transition-all group">
+          <div className="flex items-center justify-between mb-2">
+            <div className="w-9 h-9 bg-green-50 rounded-lg flex items-center justify-center">
+              <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
           </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-sm p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">Total Employees</p>
-              <p className="text-2xl font-bold text-gray-900">{loadingStats ? '...' : dashboardStats.totalEmployees}</p>
-            </div>
-            <div className="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center">
-              <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-              </svg>
+          <p className="text-2xl font-bold text-gray-900">{loadingStats ? '—' : `₹${(dashboardStats.totalRevenue / 1000).toFixed(0)}K`}</p>
+          <p className="text-xs text-gray-500 mt-0.5">Total Revenue</p>
+        </Link>
+        <Link to="/employees" className="bg-white rounded-xl border border-gray-200 p-4 hover:border-teal-200 hover:shadow-sm transition-all group">
+          <div className="flex items-center justify-between mb-2">
+            <div className="w-9 h-9 bg-teal-50 rounded-lg flex items-center justify-center">
+              <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
             </div>
           </div>
-        </div>
+          <p className="text-2xl font-bold text-gray-900">{loadingStats ? '—' : dashboardStats.totalEmployees}</p>
+          <p className="text-xs text-gray-500 mt-0.5">Employees</p>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow-sm">
-          <div className="flex items-center p-6 border-b border-gray-100">
-            <div className="w-1 h-6 bg-teal-500 rounded-full mr-3"></div>
-            <h3 className="text-lg font-semibold text-gray-900">Recent Leads</h3>
+        <div className="bg-white rounded-xl border border-gray-200">
+          <div className="flex items-center p-5 border-b border-gray-100">
+            <h3 className="text-sm font-semibold text-gray-900">Recent Leads</h3>
           </div>
           <div className="p-6">
             {loadingLeads ? (

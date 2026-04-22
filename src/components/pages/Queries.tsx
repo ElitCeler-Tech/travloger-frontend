@@ -242,7 +242,7 @@ const Queries: React.FC = () => {
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">Queries</h1>
+          <h1 className="text-xl font-bold text-gray-900">Queries</h1>
           <div className="flex items-center space-x-3">
             <Button className="bg-blue-600 hover:bg-blue-700 text-white">
               Add Query

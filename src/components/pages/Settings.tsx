@@ -60,7 +60,7 @@ const Settings: React.FC = () => {
   return (
     <div className='left-0'>
       <div className="bg-white shadow rounded-lg p-6 left-0">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Settings</h1>
+        <h1 className="text-xl font-bold text-gray-900 mb-6">Settings</h1>
         {isAdminSettings && (
           <div>
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Admin Settings</h2>

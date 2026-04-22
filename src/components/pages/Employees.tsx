@@ -379,8 +379,8 @@ const Employees: React.FC = () => {
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight text-gray-900">Employee Management</h1>
-              <p className="mt-2 text-sm text-gray-600">Manage your team members, roles, and performance</p>
+              <h1 className="text-xl font-bold text-gray-900">Employees</h1>
+              <p className="text-sm text-gray-500">Manage your team members, roles, and performance</p>
             </div>
 
             {/* Filters and Actions */}
