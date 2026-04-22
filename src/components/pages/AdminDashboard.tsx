@@ -358,15 +358,6 @@ const AdminDashboard: React.FC = () => {
           <p className="text-2xl font-bold text-gray-900">{loadingStats ? '—' : dashboardStats.activeItineraries}</p>
           <p className="text-xs text-gray-500 mt-0.5">Active Packages</p>
         </Link>
-            <div className="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center">
-              <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-            </div>
-          </div>
-        </div>
-
         <Link to="/bookings" className="bg-white rounded-xl border border-gray-200 p-4 hover:border-green-200 hover:shadow-sm transition-all group">
           <div className="flex items-center justify-between mb-2">
             <div className="w-9 h-9 bg-green-50 rounded-lg flex items-center justify-center">
