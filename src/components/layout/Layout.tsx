@@ -159,7 +159,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             {navigationSections.map((section, idx) => (
               <React.Fragment key={idx}>
                 {section.title && !sidebarCollapsed && (
-                  <div className="px-2 pb-1 text-[9px] font-semibold tracking-wide text-gray-400 uppercase">
+                  <div className="px-2 pb-1 pt-2 text-[10px] font-bold tracking-wider text-gray-400 uppercase">
                     {section.title}
                   </div>
                 )}
