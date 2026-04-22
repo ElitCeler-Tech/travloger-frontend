@@ -37,25 +37,38 @@ interface LayoutProps {
 
 const navigationSections: NavigationSection[] = [
   {
+    title: 'Overview',
     items: [
       { name: 'Dashboard', href: '/', icon: HomeIcon },
       { name: 'Employees', href: '/employees', icon: UserGroupIcon }
     ]
   },
   {
+    title: 'CRM',
     items: [
       { name: 'Leads', href: '/leads', icon: UserGroupIcon },
       { name: 'Bookings', href: '/bookings', icon: ClipboardDocumentListIcon },
       { name: 'Payments', href: '/payments', icon: CurrencyRupeeIcon },
+      { name: 'Queries', href: '/queries', icon: DocumentTextIcon },
       { name: 'Reports', href: '/reports', icon: ChartBarIcon }
     ]
   },
   {
+    title: 'Website & CMS',
     items: [
-      { name: 'Main Website Edit', href: '/main-website-edit', icon: DocumentTextIcon },
-      { name: 'Website Edit', href: '/website-edit', icon: DocumentTextIcon },
-      { name: 'Itinerary Builder', href: '/packages', icon: ClipboardDocumentListIcon },
-      { name: 'Queries', href: '/queries', icon: UserGroupIcon },
+      { name: 'Website Edit', href: '/website-edit', icon: PhotoIcon },
+      { name: 'Main Website Edit', href: '/main-website-edit', icon: DocumentTextIcon }
+    ]
+  },
+  {
+    title: 'Itinerary',
+    items: [
+      { name: 'Itinerary Builder', href: '/packages', icon: ClipboardDocumentListIcon }
+    ]
+  },
+  {
+    title: 'Admin',
+    items: [
       { name: 'Settings', href: '/settings', icon: CogIcon }
     ]
   }
