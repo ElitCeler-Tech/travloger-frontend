@@ -70,11 +70,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Sidebar */}
       <aside className={`fixed inset-y-0 left-0 z-50 w-60 bg-white border-r border-gray-200 flex flex-col transform transition-transform duration-200 lg:translate-x-0 lg:static ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         {/* Logo */}
-        <div className="h-16 flex items-center justify-between px-5 border-b border-gray-200">
-          <Link to="/">
-            <Image src={logo} alt="Travloger" width={130} height={30} priority />
+        <div className="h-16 flex items-center justify-between px-5 border-b border-gray-200 bg-slate-900">
+          <Link to="/" className="flex items-center gap-2">
+            <Image src={logo} alt="Travloger" width={120} height={28} priority className="brightness-0 invert" />
           </Link>
-          <button className="lg:hidden text-gray-400 hover:text-gray-600" onClick={() => setSidebarOpen(false)}>
+          <button className="lg:hidden text-gray-300 hover:text-white" onClick={() => setSidebarOpen(false)}>
             <XMarkIcon className="h-5 w-5" />
           </button>
         </div>
