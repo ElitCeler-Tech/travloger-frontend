@@ -17,6 +17,11 @@ const Reports: React.FC = () => {
   const [selectedSection, setSelectedSection] = useState<SectionType>('website_analytics')
   const [selectedMonth, setSelectedMonth] = useState<string>('all')
   const [selectedYear, setSelectedYear] = useState<string>('all')
+  const [startDate, setStartDate] = useState<string>('')
+  const [endDate, setEndDate] = useState<string>('')
+  const [selectedSource, setSelectedSource] = useState<string>('all')
+  const [selectedDevice, setSelectedDevice] = useState<string>('all')
+  const [selectedCampaign, setSelectedCampaign] = useState<string>('all')
   const [reportData, setReportData] = useState<any[]>([])
   const [engagementReport, setEngagementReport] = useState<EngagementReport | null>(null)
   const [lpTables, setLpTables] = useState<any[]>([])
@@ -36,16 +41,17 @@ const Reports: React.FC = () => {
         if (selectedLocation !== 'all') {
           params.set('landing_page', selectedLocation.toLowerCase())
         }
-        if (selectedMonth !== 'all' || selectedYear !== 'all') {
+        if (startDate) params.set('start_date', startDate)
+        if (endDate) params.set('end_date', endDate)
+        if (selectedMonth !== 'all' && !startDate && !endDate) {
           const year = selectedYear !== 'all' ? parseInt(selectedYear) : new Date().getFullYear()
-          const month = selectedMonth !== 'all' ? parseInt(selectedMonth) : 1
-          if (selectedMonth !== 'all') {
-            params.set('start_date', new Date(year, month - 1, 1).toISOString().split('T')[0])
-            params.set('end_date', new Date(year, month, 0).toISOString().split('T')[0])
-          } else {
-            params.set('start_date', new Date(year, 0, 1).toISOString().split('T')[0])
-            params.set('end_date', new Date(year, 11, 31).toISOString().split('T')[0])
-          }
+          const month = parseInt(selectedMonth)
+          params.set('start_date', new Date(year, month - 1, 1).toISOString().split('T')[0])
+          params.set('end_date', new Date(year, month, 0).toISOString().split('T')[0])
+        } else if (selectedYear !== 'all' && !startDate && !endDate) {
+          const year = parseInt(selectedYear)
+          params.set('start_date', new Date(year, 0, 1).toISOString().split('T')[0])
+          params.set('end_date', new Date(year, 11, 31).toISOString().split('T')[0])
         }
         const data = await fetchApi(`/api/engagement/report?${params.toString()}`)
         setEngagementReport(data || null)
@@ -56,6 +62,9 @@ const Reports: React.FC = () => {
         if (selectedLocation !== 'all') lpParams.set('destination', selectedLocation)
         if (params.get('start_date')) lpParams.set('start_date', params.get('start_date')!)
         if (params.get('end_date')) lpParams.set('end_date', params.get('end_date')!)
+        if (selectedSource !== 'all') lpParams.set('source', selectedSource)
+        if (selectedDevice !== 'all') lpParams.set('device', selectedDevice)
+        if (selectedCampaign !== 'all') lpParams.set('campaign', selectedCampaign)
         try {
           const lpData = await fetchApi(`/api/reports?${lpParams.toString()}`)
           setLpTables(lpData?.landing_page_analytics || lpData?.landing_page || [])
@@ -69,15 +78,23 @@ const Reports: React.FC = () => {
       if (selectedLocation !== 'all') {
         queryParams.append('destination', selectedLocation)
       }
-      if (selectedMonth !== 'all' || selectedYear !== 'all') {
-        const year = selectedYear !== 'all' ? parseInt(selectedYear) : new Date().getFullYear()
-        const month = selectedMonth !== 'all' ? parseInt(selectedMonth) : 1
-        if (selectedMonth !== 'all') {
-          queryParams.append('start_date', new Date(year, month - 1, 1).toISOString().split('T')[0])
-          queryParams.append('end_date', new Date(year, month, 0).toISOString().split('T')[0])
-        } else if (selectedYear !== 'all') {
-          queryParams.append('start_date', new Date(year, 0, 1).toISOString().split('T')[0])
-          queryParams.append('end_date', new Date(year, 11, 31).toISOString().split('T')[0])
+      if (startDate) {
+        queryParams.append('start_date', startDate)
+      }
+      if (endDate) {
+        queryParams.append('end_date', endDate)
+      }
+      if (!startDate && !endDate) {
+        if (selectedMonth !== 'all' || selectedYear !== 'all') {
+          const year = selectedYear !== 'all' ? parseInt(selectedYear) : new Date().getFullYear()
+          const month = selectedMonth !== 'all' ? parseInt(selectedMonth) : 1
+          if (selectedMonth !== 'all') {
+            queryParams.append('start_date', new Date(year, month - 1, 1).toISOString().split('T')[0])
+            queryParams.append('end_date', new Date(year, month, 0).toISOString().split('T')[0])
+          } else if (selectedYear !== 'all') {
+            queryParams.append('start_date', new Date(year, 0, 1).toISOString().split('T')[0])
+            queryParams.append('end_date', new Date(year, 11, 31).toISOString().split('T')[0])
+          }
         }
       }
 
@@ -99,7 +116,7 @@ const Reports: React.FC = () => {
     } finally {
       setLoading(false)
     }
-  }, [selectedLocation, selectedSection, selectedMonth, selectedYear])
+  }, [selectedLocation, selectedSection, selectedMonth, selectedYear, startDate, endDate, selectedSource, selectedDevice, selectedCampaign])
 
   // Generate and download report
   const downloadExcelReport = async () => {
@@ -116,11 +133,12 @@ const Reports: React.FC = () => {
         payload.generate_link = true
       }
 
-      // Convert month/year to date range if specified
-      if (selectedMonth !== 'all' || selectedYear !== 'all') {
+      // Convert date range or month/year to date range
+      if (startDate) payload.start_date = startDate
+      if (endDate) payload.end_date = endDate
+      if (!startDate && !endDate && (selectedMonth !== 'all' || selectedYear !== 'all')) {
         const year = selectedYear !== 'all' ? parseInt(selectedYear) : new Date().getFullYear()
         const month = selectedMonth !== 'all' ? parseInt(selectedMonth) : 1
-
         if (selectedMonth !== 'all') {
           payload.start_date = new Date(year, month - 1, 1).toISOString().split('T')[0]
           payload.end_date = new Date(year, month, 0).toISOString().split('T')[0]
@@ -328,49 +346,72 @@ const Reports: React.FC = () => {
               </select>
             </div>
 
-            {/* Month Filter */}
+            {/* Start Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Month</label>
-              <select
-                value={selectedMonth}
-                onChange={(e) => setSelectedMonth(e.target.value)}
+              <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => { setStartDate(e.target.value); setSelectedMonth('all'); setSelectedYear('all') }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-              >
-                <option value="all">All Months</option>
-                <option value="1">January</option>
-                <option value="2">February</option>
-                <option value="3">March</option>
-                <option value="4">April</option>
-                <option value="5">May</option>
-                <option value="6">June</option>
-                <option value="7">July</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-              </select>
+              />
             </div>
 
-            {/* Year Filter */}
+            {/* End Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Year</label>
-              <select
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
+              <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => { setEndDate(e.target.value); setSelectedMonth('all'); setSelectedYear('all') }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-              >
-                <option value="all">All Years</option>
-                <option value="2026">2026</option>
-                <option value="2025">2025</option>
-                <option value="2024">2024</option>
-                <option value="2023">2023</option>
-                <option value="2022">2022</option>
-                <option value="2021">2021</option>
-                <option value="2020">2020</option>
-              </select>
+              />
             </div>
           </div>
+
+          {/* Landing Page Specific Filters */}
+          {selectedSection === 'landing_page_analytics' && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Traffic Source</label>
+                <select
+                  value={selectedSource}
+                  onChange={(e) => setSelectedSource(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                >
+                  <option value="all">All Sources</option>
+                  <option value="meta">Meta Ads</option>
+                  <option value="google">Google</option>
+                  <option value="organic">Organic</option>
+                  <option value="direct">Direct</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Device</label>
+                <select
+                  value={selectedDevice}
+                  onChange={(e) => setSelectedDevice(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                >
+                  <option value="all">All Devices</option>
+                  <option value="mobile">Mobile</option>
+                  <option value="desktop">Desktop</option>
+                  <option value="tablet">Tablet</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Campaign</label>
+                <select
+                  value={selectedCampaign}
+                  onChange={(e) => setSelectedCampaign(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+                >
+                  <option value="all">All Campaigns</option>
+                  <option value="none">No Campaign</option>
+                </select>
+              </div>
+            </div>
+          )}
 
           {/* Report Summary */}
           <div className="mt-4 p-3 bg-gray-50 rounded-md">
@@ -380,8 +421,8 @@ const Reports: React.FC = () => {
                 {selectedSection === 'landing_page_analytics'
                   ? 'Engagement by landing page and section'
                   : `${selectedSection.toUpperCase()} data for ${selectedLocation === 'all' ? 'All Locations' : selectedLocation}`}
-                {selectedMonth !== 'all' && ` in ${new Date(0, parseInt(selectedMonth) - 1).toLocaleString('default', { month: 'long' })}`}
-                {selectedYear !== 'all' && ` ${selectedYear}`}
+                {startDate && ` from ${startDate}`}
+                {endDate && ` to ${endDate}`}
               </div>
               <div className="text-sm font-medium text-gray-900">
                 {loading ? 'Loading...' : selectedSection === 'landing_page_analytics'
@@ -391,7 +432,7 @@ const Reports: React.FC = () => {
             </div>
             {!loading && selectedSection !== 'landing_page_analytics' && reportData.length === 0 && (
               <div className="mt-2 text-sm text-amber-600">
-                ⚠️ No data found for the selected filters. Try adjusting your location, month, or year selection.
+                ⚠️ No data found for the selected filters. Try adjusting your location or date range.
               </div>
             )}
             {!loading && selectedSection === 'landing_page_analytics' && engagementReport && engagementReport.by_landing_page.length === 0 && engagementReport.by_section.length === 0 && (
@@ -480,6 +521,11 @@ const Reports: React.FC = () => {
                   <h3 className="text-base font-semibold text-gray-900">{table.title}</h3>
                 </div>
                 {table.title === 'Traffic Trend (Day-wise)' && (table.rows || []).length > 0 && (
+                  <div className="px-6 py-4">
+                    <TrafficTrendChart rows={table.rows} />
+                  </div>
+                )}
+                {table.title === 'Sessions vs Leads' && (table.rows || []).length > 0 && (
                   <div className="px-6 py-4">
                     <TrafficTrendChart rows={table.rows} />
                   </div>
