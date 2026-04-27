@@ -22,9 +22,12 @@ const Reports: React.FC = () => {
   const [selectedSource, setSelectedSource] = useState<string>('all')
   const [selectedDevice, setSelectedDevice] = useState<string>('all')
   const [selectedCampaign, setSelectedCampaign] = useState<string>('all')
+  const [selectedLandingPage, setSelectedLandingPage] = useState<string>('all')
+  const [selectedPackage, setSelectedPackage] = useState<string>('all')
   const [reportData, setReportData] = useState<any[]>([])
   const [engagementReport, setEngagementReport] = useState<EngagementReport | null>(null)
   const [lpTables, setLpTables] = useState<any[]>([])
+  const [lpOverview, setLpOverview] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState<boolean>(false)
   const [generatingReport, setGeneratingReport] = useState<boolean>(false)
   const [analytics, setAnalytics] = useState<any>(null)
@@ -37,38 +40,51 @@ const Reports: React.FC = () => {
       if (selectedSection === 'landing_page_analytics') {
         setReportData([])
         setAnalytics(null)
-        const params = new URLSearchParams()
-        if (selectedLocation !== 'all') {
-          params.set('landing_page', selectedLocation.toLowerCase())
-        }
-        if (startDate) params.set('start_date', startDate)
-        if (endDate) params.set('end_date', endDate)
-        if (selectedMonth !== 'all' && !startDate && !endDate) {
-          const year = selectedYear !== 'all' ? parseInt(selectedYear) : new Date().getFullYear()
-          const month = parseInt(selectedMonth)
-          params.set('start_date', new Date(year, month - 1, 1).toISOString().split('T')[0])
-          params.set('end_date', new Date(year, month, 0).toISOString().split('T')[0])
-        } else if (selectedYear !== 'all' && !startDate && !endDate) {
-          const year = parseInt(selectedYear)
-          params.set('start_date', new Date(year, 0, 1).toISOString().split('T')[0])
-          params.set('end_date', new Date(year, 11, 31).toISOString().split('T')[0])
-        }
-        const data = await fetchApi(`/api/engagement/report?${params.toString()}`)
-        setEngagementReport(data || null)
+        setLpOverview({})
 
-        // Also fetch the full landing page report tables (Overview Dashboard, Traffic Trend, etc.)
+        // Build params for the full landing page report (single API call)
         const lpParams = new URLSearchParams()
         lpParams.set('section', 'landing_page_analytics')
         if (selectedLocation !== 'all') lpParams.set('destination', selectedLocation)
-        if (params.get('start_date')) lpParams.set('start_date', params.get('start_date')!)
-        if (params.get('end_date')) lpParams.set('end_date', params.get('end_date')!)
+        if (selectedLandingPage !== 'all') lpParams.set('landing_page', selectedLandingPage)
+        if (selectedPackage !== 'all') lpParams.set('package_id', selectedPackage)
         if (selectedSource !== 'all') lpParams.set('source', selectedSource)
         if (selectedDevice !== 'all') lpParams.set('device', selectedDevice)
         if (selectedCampaign !== 'all') lpParams.set('campaign', selectedCampaign)
+
+        if (startDate) lpParams.set('start_date', startDate)
+        if (endDate) lpParams.set('end_date', endDate)
+        if (!startDate && !endDate) {
+          if (selectedMonth !== 'all' || selectedYear !== 'all') {
+            const year = selectedYear !== 'all' ? parseInt(selectedYear) : new Date().getFullYear()
+            const month = selectedMonth !== 'all' ? parseInt(selectedMonth) : 1
+            if (selectedMonth !== 'all') {
+              lpParams.set('start_date', new Date(year, month - 1, 1).toISOString().split('T')[0])
+              lpParams.set('end_date', new Date(year, month, 0).toISOString().split('T')[0])
+            } else {
+              lpParams.set('start_date', new Date(year, 0, 1).toISOString().split('T')[0])
+              lpParams.set('end_date', new Date(year, 11, 31).toISOString().split('T')[0])
+            }
+          }
+        }
+
         try {
           const lpData = await fetchApi(`/api/reports?${lpParams.toString()}`)
-          setLpTables(lpData?.landing_page_analytics || lpData?.landing_page || [])
-        } catch { setLpTables([]) }
+          const tables = lpData?.landing_page_analytics || lpData?.landing_page || []
+          // Extract overview dashboard into a key-value map for cards
+          const overviewTable = tables.find((t: any) => t.title === 'Overview Dashboard')
+          if (overviewTable) {
+            const map: Record<string, string> = {}
+            overviewTable.rows.forEach((r: string[]) => { map[r[0]] = r[1] })
+            setLpOverview(map)
+          }
+          // Set remaining tables (exclude Overview Dashboard — shown as cards)
+          setLpTables(tables.filter((t: any) => t.title !== 'Overview Dashboard'))
+          setEngagementReport(null)
+        } catch {
+          setLpTables([])
+          setEngagementReport(null)
+        }
         return
       }
 
@@ -116,21 +132,25 @@ const Reports: React.FC = () => {
     } finally {
       setLoading(false)
     }
-  }, [selectedLocation, selectedSection, selectedMonth, selectedYear, startDate, endDate, selectedSource, selectedDevice, selectedCampaign])
+  }, [selectedLocation, selectedSection, selectedMonth, selectedYear, startDate, endDate, selectedSource, selectedDevice, selectedCampaign, selectedLandingPage, selectedPackage])
 
   // Generate and download report
-  const downloadExcelReport = async () => {
+  const downloadReport = async (format: 'csv' | 'pdf' = 'csv') => {
     setGeneratingReport(true)
     try {
-      const isEngagement = selectedSection === 'landing_page_analytics'
+      const isLP = selectedSection === 'landing_page_analytics'
       const payload: any = {
-        section: isEngagement ? 'landing_page' : (selectedSection as string),
+        section: isLP ? 'landing_page' : (selectedSection as string),
         destination: selectedLocation !== 'all' ? selectedLocation : undefined,
-        format: isEngagement ? 'pdf' : 'csv'
+        format,
+        generate_link: format === 'pdf',
       }
-      
-      if (isEngagement) {
-        payload.generate_link = true
+      if (isLP) {
+        if (selectedLandingPage !== 'all') payload.landing_page = selectedLandingPage
+        if (selectedPackage !== 'all') payload.package_id = selectedPackage
+        if (selectedSource !== 'all') payload.source = selectedSource
+        if (selectedDevice !== 'all') payload.device = selectedDevice
+        if (selectedCampaign !== 'all') payload.campaign = selectedCampaign
       }
 
       // Convert date range or month/year to date range
@@ -148,25 +168,17 @@ const Reports: React.FC = () => {
         }
       }
 
-      if (isEngagement) {
+      if (format === 'pdf') {
         const data = await fetchApi('/api/reports/export', {
           method: 'POST',
           body: JSON.stringify(payload),
         })
-        
         const urlToOpen = data.link || data.url || data.file_url || data.download_url || (data.data && (data.data.link || data.data.url))
-        
         if (urlToOpen) {
-          const link = document.createElement('a')
-          link.href = urlToOpen
-          link.target = '_blank'
-          document.body.appendChild(link)
-          link.click()
-          document.body.removeChild(link)
-          setSuccessMessage('Report opened successfully in a new tab.')
+          window.open(urlToOpen, '_blank')
+          setSuccessMessage('Report opened in a new tab.')
         } else {
-          console.error("Link not found in response:", data)
-          alert('Report generated but no link was returned. Check console for details.')
+          alert('Report generated but no link was returned.')
         }
       } else {
         const blob = await fetchApi('/api/reports/export', {
@@ -218,9 +230,36 @@ const Reports: React.FC = () => {
             <p className="text-sm text-gray-500">Generate detailed reports based on location, section, and time period</p>
           </div>
           <div className="flex items-center space-x-2">
+            {selectedSection === 'landing_page_analytics' ? (
+              <>
+                <button
+                  onClick={() => downloadReport('csv')}
+                  disabled={generatingReport || lpTables.length === 0}
+                  className="bg-gray-600 text-white px-3 py-1.5 rounded-md hover:bg-gray-700 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-1"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                  <span>Export CSV</span>
+                </button>
+                <button
+                  onClick={() => downloadReport('pdf')}
+                  disabled={generatingReport || lpTables.length === 0}
+                  className="bg-gray-600 text-white px-3 py-1.5 rounded-md hover:bg-gray-700 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-1"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                  <span>Download PDF</span>
+                </button>
+                <button
+                  onClick={() => { navigator.clipboard.writeText(window.location.href); setSuccessMessage('Report link copied to clipboard.') }}
+                  className="bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded-md hover:bg-gray-50 transition-colors text-sm flex items-center space-x-1"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+                  <span>Share</span>
+                </button>
+              </>
+            ) : (
             <button
-              onClick={downloadExcelReport}
-              disabled={generatingReport || ((selectedSection === 'landing_page_analytics' && !engagementReport) || (selectedSection !== 'landing_page_analytics' && reportData.length === 0))}
+              onClick={() => downloadReport('csv')}
+              disabled={generatingReport || reportData.length === 0}
               className="bg-gray-600 text-white px-3 py-1.5 rounded-md hover:bg-gray-700 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
             >
               {generatingReport ? (
@@ -230,13 +269,12 @@ const Reports: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                  <span>{selectedSection === 'landing_page_analytics' ? 'Download PDF' : 'Download CSV'}</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                  <span>Download CSV</span>
                 </>
               )}
             </button>
+            )}
           </div>
         </div>
 
@@ -371,14 +409,49 @@ const Reports: React.FC = () => {
 
           {/* Landing Page Specific Filters */}
           {selectedSection === 'landing_page_analytics' && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Traffic Source</label>
-                <select
-                  value={selectedSource}
-                  onChange={(e) => setSelectedSource(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                >
+                <label className="block text-sm font-medium text-gray-700 mb-1">Landing Page</label>
+                <select value={selectedLandingPage} onChange={(e) => setSelectedLandingPage(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white">
+                  <option value="all">All Pages</option>
+                  <option value="kashmir">Kashmir</option>
+                  <option value="ladakh">Ladakh</option>
+                  <option value="kerala">Kerala</option>
+                  <option value="gokarna">Gokarna</option>
+                  <option value="meghalaya">Meghalaya</option>
+                  <option value="manali">Manali</option>
+                  <option value="singapore">Singapore</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Destination</label>
+                <select value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value as LocationType)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white">
+                  <option value="all">All Destinations</option>
+                  <option value="Kashmir">Kashmir</option>
+                  <option value="Ladakh">Ladakh</option>
+                  <option value="Kerala">Kerala</option>
+                  <option value="Gokarna">Gokarna</option>
+                  <option value="Meghalaya">Meghalaya</option>
+                  <option value="Mysore">Mysore</option>
+                  <option value="Singapore">Singapore</option>
+                  <option value="Hyderabad">Hyderabad</option>
+                  <option value="Bengaluru">Bengaluru</option>
+                  <option value="Manali">Manali</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Package</label>
+                <select value={selectedPackage} onChange={(e) => setSelectedPackage(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white">
+                  <option value="all">All Packages</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Source</label>
+                <select value={selectedSource} onChange={(e) => setSelectedSource(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white">
                   <option value="all">All Sources</option>
                   <option value="meta">Meta Ads</option>
                   <option value="google">Google</option>
@@ -388,11 +461,8 @@ const Reports: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Device</label>
-                <select
-                  value={selectedDevice}
-                  onChange={(e) => setSelectedDevice(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                >
+                <select value={selectedDevice} onChange={(e) => setSelectedDevice(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white">
                   <option value="all">All Devices</option>
                   <option value="mobile">Mobile</option>
                   <option value="desktop">Desktop</option>
@@ -401,13 +471,9 @@ const Reports: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Campaign</label>
-                <select
-                  value={selectedCampaign}
-                  onChange={(e) => setSelectedCampaign(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                >
+                <select value={selectedCampaign} onChange={(e) => setSelectedCampaign(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white">
                   <option value="all">All Campaigns</option>
-                  <option value="none">No Campaign</option>
                 </select>
               </div>
             </div>
@@ -426,7 +492,7 @@ const Reports: React.FC = () => {
               </div>
               <div className="text-sm font-medium text-gray-900">
                 {loading ? 'Loading...' : selectedSection === 'landing_page_analytics'
-                  ? (engagementReport ? `${engagementReport.by_landing_page.length} pages, ${engagementReport.by_section.length} section rows` : 'No data')
+                  ? (lpTables.length > 0 ? `${lpTables.length} report tables loaded` : 'No data')
                   : `${reportData.length} records found`}
               </div>
             </div>
@@ -435,80 +501,36 @@ const Reports: React.FC = () => {
                 ⚠️ No data found for the selected filters. Try adjusting your location or date range.
               </div>
             )}
-            {!loading && selectedSection === 'landing_page_analytics' && engagementReport && engagementReport.by_landing_page.length === 0 && engagementReport.by_section.length === 0 && (
+            {!loading && selectedSection === 'landing_page_analytics' && lpTables.length === 0 && Object.keys(lpOverview).length === 0 && (
               <div className="mt-2 text-sm text-amber-600">
-                ⚠️ No engagement data yet. Data appears when users view landing pages and sections on Travloger.
+                ⚠️ No engagement data yet. Data appears when users view landing pages on Travloger.
               </div>
             )}
           </div>
         </div>
 
-        {/* Engagement Report (by landing page & section) */}
-        {selectedSection === 'landing_page_analytics' && engagementReport && (
-          <div className="mt-4 space-y-4">
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded-md text-sm text-gray-700">
-              <strong>Note:</strong> Engagement is tracked by <strong>anonymous session</strong> (no username). Each visitor gets a session ID. To see which <strong>section</strong> gets the most attention, use the <strong>By section</strong> table below — rows are sorted by <strong>Total sec</strong> (highest first), so the section at the top is where users spend the most time.
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="bg-white shadow rounded-lg">
-                <div className="px-6 py-4 border-b border-gray-200">
-                  <h3 className="text-lg font-medium text-gray-900">By landing page</h3>
-                  <p className="text-sm text-gray-600">Total time and sessions per page</p>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Landing page</th>
-                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Total sec</th>
-                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Sessions</th>
-                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Events</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {engagementReport.by_landing_page.map((row, i) => (
-                        <tr key={i}>
-                          <td className="px-4 py-2 text-sm text-gray-900">{row.landing_page || '—'}</td>
-                          <td className="px-4 py-2 text-sm text-gray-900 text-right">{row.total_seconds}</td>
-                          <td className="px-4 py-2 text-sm text-gray-900 text-right">{row.unique_sessions}</td>
-                          <td className="px-4 py-2 text-sm text-gray-900 text-right">{row.event_count}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+        {/* Landing Page Analytics — Overview Cards */}
+        {selectedSection === 'landing_page_analytics' && Object.keys(lpOverview).length > 0 && (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {[
+              { key: 'Total Visitors', color: 'text-blue-600' },
+              { key: 'Unique Visitors', color: 'text-indigo-600' },
+              { key: 'Total Sessions', color: 'text-purple-600' },
+              { key: 'Total Leads', color: 'text-green-600' },
+              { key: 'Lead Conversion %', color: 'text-emerald-600' },
+              { key: 'Avg Time per Session', color: 'text-orange-600' },
+              { key: 'Avg Scroll Depth', color: 'text-cyan-600' },
+              { key: 'CTA Click Rate', color: 'text-red-600' },
+              { key: 'Top Landing Page', color: 'text-gray-900', isText: true },
+              { key: 'Top Campaign', color: 'text-gray-900', isText: true },
+            ].map(({ key, color, isText }) => (
+              <div key={key} className="bg-white p-4 rounded-lg shadow">
+                <div className="text-xs text-gray-500 mb-1">{key}</div>
+                <div className={`${isText ? 'text-sm font-semibold capitalize' : 'text-xl font-bold'} ${color}`}>
+                  {lpOverview[key] || '0'}
                 </div>
               </div>
-              <div className="bg-white shadow rounded-lg">
-                <div className="px-6 py-4 border-b border-gray-200">
-                  <h3 className="text-lg font-medium text-gray-900">By section</h3>
-                  <p className="text-sm text-gray-600">Sorted by total time (most engaged section first). Page:section e.g. ladakh:reviews</p>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Page : Section</th>
-                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Total sec</th>
-                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Sessions</th>
-                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase">Events</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {[...engagementReport.by_section]
-                        .sort((a, b) => (b.total_seconds || 0) - (a.total_seconds || 0))
-                        .map((row, i) => (
-                          <tr key={i}>
-                            <td className="px-4 py-2 text-sm text-gray-900">{row.landing_page_section || '—'}</td>
-                            <td className="px-4 py-2 text-sm text-gray-900 text-right font-medium">{row.total_seconds}</td>
-                            <td className="px-4 py-2 text-sm text-gray-900 text-right">{row.unique_sessions}</td>
-                            <td className="px-4 py-2 text-sm text-gray-900 text-right">{row.event_count}</td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         )}
 
