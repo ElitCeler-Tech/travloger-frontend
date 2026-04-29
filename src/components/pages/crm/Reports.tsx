@@ -58,15 +58,8 @@ const Reports: React.FC = () => {
   // Fetch packages for the selected landing page
   useEffect(() => {
     if (selectedSection !== 'landing_page_analytics') return
-    const page = selectedLandingPage !== 'all' ? selectedLandingPage : null
-    if (!page) { setPackageOptions([]); setSelectedPackage('all'); return }
-    fetchApi(`/api/packages/city/${encodeURIComponent(page)}`)
-      .then((data: any) => {
-        const pkgs = (data?.packages || data || []).map((p: any) => ({ id: p.id?.toString(), name: p.name || p.package_name || p.id }))
-        setPackageOptions(pkgs)
-        setSelectedPackage('all')
-      })
-      .catch(() => setPackageOptions([]))
+    // Reset package selection when landing page changes; options will be populated from report data
+    setSelectedPackage('all')
   }, [selectedLandingPage, selectedSection])
 
   // Fetch report data based on selections
@@ -120,12 +113,10 @@ const Reports: React.FC = () => {
           if (campTable?.rows) {
             setCampaignOptions(campTable.rows.map((r: string[]) => r[0]).filter((c: string) => c && c !== 'none'))
           }
-          // Extract package options from Package Performance table (when no specific landing page selected)
-          if (selectedLandingPage === 'all') {
-            const pkgTable = tables.find((t: any) => t.title === 'Package Performance')
-            if (pkgTable?.rows) {
-              setPackageOptions(pkgTable.rows.map((r: string[]) => ({ id: r[0], name: r[0] })))
-            }
+          // Extract package options from Package Performance table
+          const pkgTable = tables.find((t: any) => t.title === 'Package Performance')
+          if (pkgTable?.rows?.length) {
+            setPackageOptions(pkgTable.rows.map((r: string[]) => ({ id: r[0], name: r[0] })))
           }
           setEngagementReport(null)
         } catch {
