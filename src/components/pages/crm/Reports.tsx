@@ -481,7 +481,7 @@ const Reports: React.FC = () => {
 
           {/* Landing Page Specific Filters */}
           {selectedSection === 'landing_page_analytics' && (
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-4">
+            <div className={`grid grid-cols-1 md:grid-cols-3 ${campaignOptions.length > 0 ? 'lg:grid-cols-5' : 'lg:grid-cols-4'} gap-4 mt-4`}>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Landing Page</label>
                 <select value={selectedLandingPage} onChange={(e) => setSelectedLandingPage(e.target.value)}
@@ -525,6 +525,7 @@ const Reports: React.FC = () => {
                   <option value="tablet">Tablet</option>
                 </select>
               </div>
+              {campaignOptions.length > 0 && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Campaign</label>
                 <select value={selectedCampaign} onChange={(e) => setSelectedCampaign(e.target.value)}
@@ -533,6 +534,7 @@ const Reports: React.FC = () => {
                   {campaignOptions.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
+              )}
             </div>
           )}
 
