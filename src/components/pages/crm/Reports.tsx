@@ -120,6 +120,13 @@ const Reports: React.FC = () => {
           if (campTable?.rows) {
             setCampaignOptions(campTable.rows.map((r: string[]) => r[0]).filter((c: string) => c && c !== 'none'))
           }
+          // Extract package options from Package Performance table (when no specific landing page selected)
+          if (selectedLandingPage === 'all') {
+            const pkgTable = tables.find((t: any) => t.title === 'Package Performance')
+            if (pkgTable?.rows) {
+              setPackageOptions(pkgTable.rows.map((r: string[]) => ({ id: r[0], name: r[0] })))
+            }
+          }
           setEngagementReport(null)
         } catch {
           setLpTables([])
