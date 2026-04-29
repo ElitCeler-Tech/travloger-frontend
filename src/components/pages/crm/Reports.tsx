@@ -55,11 +55,25 @@ const Reports: React.FC = () => {
     }
   }
 
-  // Fetch packages for the selected landing page
+  // Fetch package & campaign options when landing page changes
   useEffect(() => {
     if (selectedSection !== 'landing_page_analytics') return
-    // Reset package selection when landing page changes; options will be populated from report data
     setSelectedPackage('all')
+    setSelectedCampaign('all')
+    // Fetch unfiltered report for this landing page to get available packages & campaigns
+    const params = new URLSearchParams({ section: 'landing_page_analytics' })
+    if (selectedLandingPage !== 'all') params.set('landing_page', selectedLandingPage)
+    fetchApi(`/api/reports?${params.toString()}`)
+      .then((data: any) => {
+        const tables = data?.landing_page_analytics || data?.landing_page || []
+        const pkgTable = tables.find((t: any) => t.title === 'Package Performance')
+        if (pkgTable?.rows?.length) setPackageOptions(pkgTable.rows.map((r: string[]) => ({ id: r[0], name: r[0] })))
+        else setPackageOptions([])
+        const campTable = tables.find((t: any) => t.title === 'Campaign Performance')
+        if (campTable?.rows) setCampaignOptions(campTable.rows.map((r: string[]) => r[0]).filter((c: string) => c && c !== 'none'))
+        else setCampaignOptions([])
+      })
+      .catch(() => { setPackageOptions([]); setCampaignOptions([]) })
   }, [selectedLandingPage, selectedSection])
 
   // Fetch report data based on selections
@@ -483,7 +497,7 @@ const Reports: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Package</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Package {packageOptions.length > 0 && <span className="text-gray-400 font-normal">({packageOptions.length})</span>}</label>
                 <select value={selectedPackage} onChange={(e) => setSelectedPackage(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white">
                   <option value="all">All Packages</option>
