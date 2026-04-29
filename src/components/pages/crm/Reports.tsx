@@ -435,7 +435,11 @@ const Reports: React.FC = () => {
 
             {/* Date Filter */}
             <div className={selectedSection === 'landing_page_analytics' ? 'col-span-1 md:col-span-2' : 'col-span-1 md:col-span-2'}>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Date Range
+                {startDate && <span className="ml-2 font-normal text-gray-500">
+                  ({startDate.split('-').reverse().join('/')}{endDate && endDate !== startDate ? ` — ${endDate.split('-').reverse().join('/')}` : ''})
+                </span>}
+              </label>
               <div className="flex flex-wrap gap-1.5">
                 {[
                   { key: 'all', label: 'All Time' },
@@ -451,11 +455,20 @@ const Reports: React.FC = () => {
                 ))}
               </div>
               {datePreset === 'custom' && (
-                <div className="flex gap-2 mt-2">
-                  <input type="date" value={startDate} onChange={(e) => { setStartDate(e.target.value); setSelectedMonth('all'); setSelectedYear('all') }}
-                    className="flex-1 px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white" />
-                  <input type="date" value={endDate} onChange={(e) => { setEndDate(e.target.value); setSelectedMonth('all'); setSelectedYear('all') }}
-                    className="flex-1 px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white" />
+                <div className="mt-2 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1">
+                      <label className="block text-xs text-gray-500 mb-0.5">Date</label>
+                      <input type="date" value={startDate} onChange={(e) => { setStartDate(e.target.value); if (!endDate) setEndDate(e.target.value); setSelectedMonth('all'); setSelectedYear('all') }}
+                        className="w-full px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white" />
+                    </div>
+                    <div className="flex-1">
+                      <label className="block text-xs text-gray-500 mb-0.5">To (optional, for range)</label>
+                      <input type="date" value={endDate} min={startDate} onChange={(e) => { setEndDate(e.target.value); setSelectedMonth('all'); setSelectedYear('all') }}
+                        className="w-full px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white" />
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-400">Pick one date for a single day, or two dates for a range</p>
                 </div>
               )}
             </div>
