@@ -4,11 +4,18 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContain
 type Props = { rows: string[][] }
 
 export default function TrafficTrendChart({ rows }: Props) {
-  const data = rows.map(r => ({
-    day: r[0]?.substring(0, 3) || '',
-    sessions: parseInt(r[1]) || 0,
-    leads: parseInt(r[2]) || 0,
-  }))
+  const data = rows.map(r => {
+    const raw = r[0] || ''
+    // Format: "2026-04-29" → "Apr 29", day name "Monday" → "Mon"
+    let label = raw
+    if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
+      const d = new Date(raw + 'T00:00:00')
+      label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+    } else if (raw.length > 3) {
+      label = raw.substring(0, 3)
+    }
+    return { day: label, sessions: parseInt(r[1]) || 0, leads: parseInt(r[2]) || 0 }
+  })
 
   return (
     <ResponsiveContainer width="100%" height={300}>
