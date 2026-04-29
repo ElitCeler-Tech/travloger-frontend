@@ -32,6 +32,21 @@ const Reports: React.FC = () => {
   const [generatingReport, setGeneratingReport] = useState<boolean>(false)
   const [analytics, setAnalytics] = useState<any>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [packageOptions, setPackageOptions] = useState<{id: string, name: string}[]>([])
+
+  // Fetch packages for the selected landing page
+  useEffect(() => {
+    if (selectedSection !== 'landing_page_analytics') return
+    const page = selectedLandingPage !== 'all' ? selectedLandingPage : null
+    if (!page) { setPackageOptions([]); setSelectedPackage('all'); return }
+    fetchApi(`/api/packages/city/${encodeURIComponent(page)}`)
+      .then((data: any) => {
+        const pkgs = (data?.packages || data || []).map((p: any) => ({ id: p.id?.toString(), name: p.name || p.package_name || p.id }))
+        setPackageOptions(pkgs)
+        setSelectedPackage('all')
+      })
+      .catch(() => setPackageOptions([]))
+  }, [selectedLandingPage, selectedSection])
 
   // Fetch report data based on selections
   const fetchReportData = useCallback(async () => {
@@ -45,7 +60,6 @@ const Reports: React.FC = () => {
         // Build params for the full landing page report (single API call)
         const lpParams = new URLSearchParams()
         lpParams.set('section', 'landing_page_analytics')
-        if (selectedLocation !== 'all') lpParams.set('destination', selectedLocation)
         if (selectedLandingPage !== 'all') lpParams.set('landing_page', selectedLandingPage)
         if (selectedPackage !== 'all') lpParams.set('package_id', selectedPackage)
         if (selectedSource !== 'all') lpParams.set('source', selectedSource)
@@ -141,7 +155,7 @@ const Reports: React.FC = () => {
       const isLP = selectedSection === 'landing_page_analytics'
       const payload: any = {
         section: isLP ? 'landing_page' : (selectedSection as string),
-        destination: selectedLocation !== 'all' ? selectedLocation : undefined,
+        destination: !isLP && selectedLocation !== 'all' ? selectedLocation : undefined,
         format,
         generate_link: format === 'pdf',
       }
@@ -409,7 +423,7 @@ const Reports: React.FC = () => {
 
           {/* Landing Page Specific Filters */}
           {selectedSection === 'landing_page_analytics' && (
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Landing Page</label>
                 <select value={selectedLandingPage} onChange={(e) => setSelectedLandingPage(e.target.value)}
@@ -425,27 +439,11 @@ const Reports: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Destination</label>
-                <select value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value as LocationType)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white">
-                  <option value="all">All Destinations</option>
-                  <option value="Kashmir">Kashmir</option>
-                  <option value="Ladakh">Ladakh</option>
-                  <option value="Kerala">Kerala</option>
-                  <option value="Gokarna">Gokarna</option>
-                  <option value="Meghalaya">Meghalaya</option>
-                  <option value="Mysore">Mysore</option>
-                  <option value="Singapore">Singapore</option>
-                  <option value="Hyderabad">Hyderabad</option>
-                  <option value="Bengaluru">Bengaluru</option>
-                  <option value="Manali">Manali</option>
-                </select>
-              </div>
-              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Package</label>
                 <select value={selectedPackage} onChange={(e) => setSelectedPackage(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white">
                   <option value="all">All Packages</option>
+                  {packageOptions.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                 </select>
               </div>
               <div>

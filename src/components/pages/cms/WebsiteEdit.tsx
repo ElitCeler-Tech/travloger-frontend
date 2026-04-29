@@ -214,9 +214,9 @@ interface NewItineraryForm {
   tripType?: 'custom' | 'group'
 }
 
-type CitySlug = 'kashmir' | 'ladakh' | 'gokarna' | 'kerala' | 'meghalaya' | 'mysore' | 'singapore' | 'hyderabad' | 'bengaluru' | 'manali'
+type CitySlug = string
 
-const LOCATIONS: { slug: CitySlug; name: string }[] = [
+const FALLBACK_LOCATIONS: { slug: string; name: string }[] = [
   { slug: 'kashmir', name: 'Kashmir' },
   { slug: 'ladakh', name: 'Ladakh' },
   { slug: 'gokarna', name: 'Gokarna' },
@@ -238,8 +238,29 @@ const WebsiteEdit: React.FC = () => {
   const [heroThumbs, setHeroThumbs] = useState<Record<string, string>>({})
   const thumbsLoadedRef = useRef<boolean>(false)
 
+  // Dynamic locations from API
+  const [locations, setLocations] = useState<{ slug: string; name: string }[]>(FALLBACK_LOCATIONS)
+
+  // Duplicate modal state
+  const [showDuplicateModal, setShowDuplicateModal] = useState(false)
+  const [duplicateSource, setDuplicateSource] = useState('')
+  const [duplicateName, setDuplicateName] = useState('')
+  const [duplicateSlug, setDuplicateSlug] = useState('')
+  const [duplicating, setDuplicating] = useState(false)
+  const [duplicateError, setDuplicateError] = useState('')
+
   // Selected city (none at first → show location cards)
   const [citySlug, setCitySlug] = useState<CitySlug | ''>('')
+
+  // Fetch city list from API
+  const loadCities = useCallback(async () => {
+    try {
+      const data = await fetchApi('/api/cms/cities')
+      if (data?.cities?.length) setLocations(data.cities)
+    } catch { /* use fallback */ }
+  }, [])
+
+  useEffect(() => { if (!citySlug) loadCities() }, [citySlug, loadCities])
 
   // Search functionality
   useEffect(() => {
@@ -508,7 +529,7 @@ const WebsiteEdit: React.FC = () => {
 
   // Advanced sections removed from WebsiteEdit UI
 
-  const cityName = useMemo(() => LOCATIONS.find(l => l.slug === citySlug)?.name || '', [citySlug])
+  const cityName = useMemo(() => locations.find(l => l.slug === citySlug)?.name || '', [citySlug, locations])
 
   // Itinerary state (scoped to selected city)
   const navigate = useNavigate()
@@ -1041,7 +1062,7 @@ const WebsiteEdit: React.FC = () => {
 
         // Load images with better error handling and concurrent loading
         const entries = await Promise.allSettled(
-          LOCATIONS.map(async (loc) => {
+          locations.map(async (loc: { slug: string; name: string }) => {
             try {
               const data = await fetchApi(`/api/cms/cities/${loc.slug}`).catch(() => ({}))
               const url = data?.hero?.backgroundImageUrl || ''
@@ -1065,7 +1086,7 @@ const WebsiteEdit: React.FC = () => {
         )
 
         const map: Record<string, string> = {}
-        entries.forEach((result) => {
+        entries.forEach((result: any) => {
           if (result.status === 'fulfilled') {
             const [slug, url] = result.value
             if (url) map[slug] = url
@@ -1078,55 +1099,90 @@ const WebsiteEdit: React.FC = () => {
       } catch (_) { /* ignore */ }
     }
     if (!citySlug) loadThumbs()
-  }, [citySlug])
+  }, [citySlug, locations])
 
   if (!citySlug) {
+    const handleDuplicate = async () => {
+      if (!duplicateName.trim()) { setDuplicateError('Name is required'); return }
+      const slug = duplicateSlug.trim() || duplicateName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+      if (!slug) { setDuplicateError('Invalid slug'); return }
+      setDuplicating(true); setDuplicateError('')
+      try {
+        const res = await fetchApi('/api/cms/cities/duplicate', { method: 'POST', body: JSON.stringify({ source_slug: duplicateSource, new_slug: slug, new_name: duplicateName.trim() }) })
+        if (res?.ok) { setShowDuplicateModal(false); setDuplicateName(''); setDuplicateSlug(''); loadCities() }
+        else setDuplicateError(res?.error || 'Failed to duplicate')
+      } catch (e: any) { setDuplicateError(e?.message || 'Failed to duplicate') }
+      finally { setDuplicating(false) }
+    }
+
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-xl font-semibold text-gray-900">Choose a Location</h1>
-            <p className="text-sm text-gray-600">Select a location to edit its website content</p>
+            <p className="text-sm text-gray-600">Select a location to edit, or duplicate an existing page</p>
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {LOCATIONS.map((loc, idx) => (
-            <button
-              key={loc.slug}
-              onClick={() => setCitySlug(loc.slug)}
-              className="group bg-white border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all rounded-lg p-4 text-left"
-            >
-              <div className="h-20 w-full rounded-md mb-3 flex items-center justify-center relative overflow-hidden border border-gray-100 bg-gradient-to-r from-gray-50 to-gray-100">
-                {heroThumbs[loc.slug] ? (
-                  <Image
-                    src={heroThumbs[loc.slug]}
-                    alt={`${loc.name} hero`}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width:1024px) 50vw, 33vw"
-                    priority={idx < 6} // Prioritize first 6 images
-                    fetchPriority={idx < 6 ? 'high' : 'low'}
-                    className="object-cover transition-opacity duration-200"
-                    placeholder="blur"
-                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-                    quality={85}
-                    unoptimized={true} // Force unoptimized for all dynamic CMS images
-                  />
-                ) : (
-                  <div className="flex items-center justify-center h-full">
-                    <span className="text-gray-500 font-medium text-sm animate-pulse">{loc.name}</span>
-                  </div>
-                )}
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-900">{loc.name}</h3>
-                  <p className="text-xs text-gray-500">Edit content & images</p>
+          {locations.map((loc, idx) => (
+            <div key={loc.slug} className="group bg-white border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all rounded-lg p-4">
+              <button onClick={() => setCitySlug(loc.slug)} className="w-full text-left">
+                <div className="h-20 w-full rounded-md mb-3 flex items-center justify-center relative overflow-hidden border border-gray-100 bg-gradient-to-r from-gray-50 to-gray-100">
+                  {heroThumbs[loc.slug] ? (
+                    <Image src={heroThumbs[loc.slug]} alt={`${loc.name} hero`} fill sizes="(max-width: 640px) 100vw, (max-width:1024px) 50vw, 33vw" priority={idx < 6} fetchPriority={idx < 6 ? 'high' : 'low'} className="object-cover transition-opacity duration-200" quality={85} unoptimized={true} />
+                  ) : (
+                    <div className="flex items-center justify-center h-full">
+                      <span className="text-gray-500 font-medium text-sm animate-pulse">{loc.name}</span>
+                    </div>
+                  )}
                 </div>
-                <span className="text-primary group-hover:translate-x-0.5 transition-transform text-sm">→</span>
-              </div>
-            </button>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-900">{loc.name}</h3>
+                    <p className="text-xs text-gray-500">Edit content & images</p>
+                  </div>
+                  <span className="text-primary group-hover:translate-x-0.5 transition-transform text-sm">→</span>
+                </div>
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); setDuplicateSource(loc.slug); setDuplicateName(''); setDuplicateSlug(''); setDuplicateError(''); setShowDuplicateModal(true) }}
+                className="mt-2 w-full text-xs text-gray-500 hover:text-blue-600 border border-dashed border-gray-300 hover:border-blue-400 rounded px-2 py-1 transition-colors"
+              >
+                ⧉ Duplicate this page
+              </button>
+            </div>
           ))}
         </div>
+
+        {/* Duplicate Modal */}
+        {showDuplicateModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm bg-black/30">
+            <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-1">Duplicate Landing Page</h3>
+              <p className="text-sm text-gray-500 mb-4">Creating a copy of <span className="font-medium text-gray-700">{duplicateSource}</span> with empty sections</p>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Page Name *</label>
+                  <input type="text" value={duplicateName} onChange={(e) => { setDuplicateName(e.target.value); setDuplicateSlug(e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')) }} placeholder="e.g. Shimla" className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900" autoFocus />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">URL Slug</label>
+                  <div className="flex items-center">
+                    <span className="text-sm text-gray-400 mr-1">travloger.in/</span>
+                    <input type="text" value={duplicateSlug} onChange={(e) => setDuplicateSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))} placeholder="shimla" className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900" />
+                  </div>
+                </div>
+                {duplicateError && <p className="text-sm text-red-600">{duplicateError}</p>}
+              </div>
+              <div className="flex justify-end gap-2 mt-5">
+                <button onClick={() => setShowDuplicateModal(false)} className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50">Cancel</button>
+                <button onClick={handleDuplicate} disabled={duplicating} className="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50">
+                  {duplicating ? 'Creating...' : 'Create Page'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     )
   }
