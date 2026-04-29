@@ -359,8 +359,9 @@ const Reports: React.FC = () => {
 
         {/* Report Filters */}
         <div className="bg-white shadow rounded-lg p-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Location Selection */}
+          <div className={`grid grid-cols-1 md:grid-cols-2 ${selectedSection === 'landing_page_analytics' ? 'lg:grid-cols-3' : 'lg:grid-cols-4'} gap-4`}>
+            {/* Location Selection — hidden for landing page analytics (uses Landing Page filter instead) */}
+            {selectedSection !== 'landing_page_analytics' && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
               <select
@@ -381,6 +382,7 @@ const Reports: React.FC = () => {
                 <option value="Manali">Manali</option>
               </select>
             </div>
+            )}
 
             {/* Section Selection */}
             <div>
