@@ -34,7 +34,7 @@ const Reports: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [packageOptions, setPackageOptions] = useState<{id: string, name: string}[]>([])
   const [campaignOptions, setCampaignOptions] = useState<string[]>([])
-  const [datePreset, setDatePreset] = useState<string>('all')
+  const [datePreset, setDatePreset] = useState<string>('month')
 
   // Date preset helper
   const applyDatePreset = (preset: string) => {
@@ -54,6 +54,12 @@ const Reports: React.FC = () => {
       setStartDate(''); setEndDate('')
     }
   }
+
+  // Apply default date preset on mount
+  useEffect(() => {
+    applyDatePreset('month')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Fetch package & campaign options when landing page changes
   useEffect(() => {
