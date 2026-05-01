@@ -239,7 +239,11 @@ const WebsiteEdit: React.FC = () => {
   const thumbsLoadedRef = useRef<boolean>(false)
 
   // Dynamic locations from API
-  const [locations, setLocations] = useState<{ slug: string; name: string }[]>(FALLBACK_LOCATIONS)
+  const [locations, setLocations] = useState<{ slug: string; name: string; updated_at?: string }[]>(FALLBACK_LOCATIONS)
+
+  // Search & date filter for location cards
+  const [cmsSearch, setCmsSearch] = useState('')
+  const [cmsDateFilter, setCmsDateFilter] = useState<'all' | '7d' | '30d' | '90d'>('all')
 
   // Duplicate modal state
   const [showDuplicateModal, setShowDuplicateModal] = useState(false)
@@ -248,6 +252,14 @@ const WebsiteEdit: React.FC = () => {
   const [duplicateSlug, setDuplicateSlug] = useState('')
   const [duplicating, setDuplicating] = useState(false)
   const [duplicateError, setDuplicateError] = useState('')
+
+  // Rename modal state
+  const [showRenameModal, setShowRenameModal] = useState(false)
+  const [renameSource, setRenameSource] = useState('')
+  const [renameName, setRenameName] = useState('')
+  const [renameSlug, setRenameSlug] = useState('')
+  const [renaming, setRenaming] = useState(false)
+  const [renameError, setRenameError] = useState('')
 
   // Selected city (none at first → show location cards)
   const [citySlug, setCitySlug] = useState<CitySlug | ''>('')
@@ -1062,7 +1074,7 @@ const WebsiteEdit: React.FC = () => {
 
         // Load images with better error handling and concurrent loading
         const entries = await Promise.allSettled(
-          locations.map(async (loc: { slug: string; name: string }) => {
+          locations.map(async (loc: { slug: string; name: string; updated_at?: string }) => {
             try {
               const data = await fetchApi(`/api/cms/cities/${loc.slug}`).catch(() => ({}))
               const url = data?.hero?.backgroundImageUrl || ''
@@ -1115,6 +1127,19 @@ const WebsiteEdit: React.FC = () => {
       finally { setDuplicating(false) }
     }
 
+    const handleRename = async () => {
+      if (!renameName.trim()) { setRenameError('Name is required'); return }
+      const slug = renameSlug.trim() || renameName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+      if (!slug) { setRenameError('Invalid slug'); return }
+      setRenaming(true); setRenameError('')
+      try {
+        const res = await fetchApi(`/api/cms/cities/${renameSource}/rename`, { method: 'PUT', body: JSON.stringify({ new_slug: slug, new_name: renameName.trim() }) })
+        if (res?.ok) { setShowRenameModal(false); setRenameName(''); setRenameSlug(''); loadCities() }
+        else setRenameError(res?.error || 'Failed to rename')
+      } catch (e: any) { setRenameError(e?.message || 'Failed to rename') }
+      finally { setRenaming(false) }
+    }
+
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-between">
@@ -1123,8 +1148,40 @@ const WebsiteEdit: React.FC = () => {
             <p className="text-sm text-gray-600">Select a location to edit, or duplicate an existing page</p>
           </div>
         </div>
+        {/* Search & Date Filter */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex-1">
+            <input
+              type="text"
+              value={cmsSearch}
+              onChange={(e) => setCmsSearch(e.target.value)}
+              placeholder="Search pages..."
+              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+            />
+          </div>
+          <div className="flex gap-1.5">
+            {([['all', 'All'], ['7d', '7 days'], ['30d', '30 days'], ['90d', '90 days']] as const).map(([key, label]) => (
+              <button key={key} onClick={() => setCmsDateFilter(key)}
+                className={`px-3 py-2 text-xs rounded-md border transition-colors ${cmsDateFilter === key ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`}>
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {locations.map((loc, idx) => (
+          {(() => {
+            let filtered = locations
+            if (cmsSearch.trim()) {
+              const q = cmsSearch.toLowerCase()
+              filtered = filtered.filter(l => l.name.toLowerCase().includes(q) || l.slug.toLowerCase().includes(q))
+            }
+            if (cmsDateFilter !== 'all') {
+              const days = cmsDateFilter === '7d' ? 7 : cmsDateFilter === '30d' ? 30 : 90
+              const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - days)
+              filtered = filtered.filter(l => l.updated_at && new Date(l.updated_at) >= cutoff)
+            }
+            if (filtered.length === 0) return <div className="col-span-full text-center py-8 text-sm text-gray-400">No pages match your filters</div>
+            return filtered.map((loc, idx) => (
             <div key={loc.slug} className="group bg-white border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all rounded-lg p-4">
               <button onClick={() => setCitySlug(loc.slug)} className="w-full text-left">
                 <div className="h-20 w-full rounded-md mb-3 flex items-center justify-center relative overflow-hidden border border-gray-100 bg-gradient-to-r from-gray-50 to-gray-100">
@@ -1139,7 +1196,7 @@ const WebsiteEdit: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-sm font-medium text-gray-900">{loc.name}</h3>
-                    <p className="text-xs text-gray-500">Edit content & images</p>
+                    <p className="text-xs text-gray-500">{loc.updated_at ? `Modified ${new Date(loc.updated_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}` : 'Edit content & images'}</p>
                   </div>
                   <span className="text-primary group-hover:translate-x-0.5 transition-transform text-sm">→</span>
                 </div>
@@ -1150,8 +1207,15 @@ const WebsiteEdit: React.FC = () => {
               >
                 ⧉ Duplicate this page
               </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); setRenameSource(loc.slug); setRenameName(loc.name); setRenameSlug(loc.slug); setRenameError(''); setShowRenameModal(true) }}
+                className="mt-1 w-full text-xs text-gray-500 hover:text-orange-600 border border-dashed border-gray-300 hover:border-orange-400 rounded px-2 py-1 transition-colors"
+              >
+                ✎ Rename this page
+              </button>
             </div>
-          ))}
+          ))
+          })()}
         </div>
 
         {/* Duplicate Modal */}
@@ -1178,6 +1242,36 @@ const WebsiteEdit: React.FC = () => {
                 <button onClick={() => setShowDuplicateModal(false)} className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50">Cancel</button>
                 <button onClick={handleDuplicate} disabled={duplicating} className="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50">
                   {duplicating ? 'Creating...' : 'Create Page'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Rename Modal */}
+        {showRenameModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm bg-black/30">
+            <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-1">Rename Landing Page</h3>
+              <p className="text-sm text-gray-500 mb-4">Renaming <span className="font-medium text-gray-700">{renameSource}</span> — this will change the URL slug</p>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">New Page Name *</label>
+                  <input type="text" value={renameName} onChange={(e) => { setRenameName(e.target.value); setRenameSlug(e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')) }} placeholder="e.g. Shimla" className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900" autoFocus />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">New URL Slug</label>
+                  <div className="flex items-center">
+                    <span className="text-sm text-gray-400 mr-1">travloger.in/</span>
+                    <input type="text" value={renameSlug} onChange={(e) => setRenameSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))} placeholder="shimla" className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900" />
+                  </div>
+                </div>
+                {renameError && <p className="text-sm text-red-600">{renameError}</p>}
+              </div>
+              <div className="flex justify-end gap-2 mt-5">
+                <button onClick={() => setShowRenameModal(false)} className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50">Cancel</button>
+                <button onClick={handleRename} disabled={renaming} className="px-4 py-2 text-sm text-white bg-orange-600 rounded-md hover:bg-orange-700 disabled:opacity-50">
+                  {renaming ? 'Renaming...' : 'Rename Page'}
                 </button>
               </div>
             </div>
