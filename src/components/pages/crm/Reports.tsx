@@ -66,20 +66,30 @@ const Reports: React.FC = () => {
     if (selectedSection !== 'landing_page_analytics') return
     setSelectedPackage('all')
     setSelectedCampaign('all')
-    // Fetch unfiltered report for this landing page to get available packages & campaigns
+
+    // Fetch packages from DB filtered by destination (so all packages show, not just ones with events)
+    const pkgUrl = selectedLandingPage !== 'all'
+      ? `/api/packages/city/${encodeURIComponent(selectedLandingPage)}`
+      : `/api/packages`
+    fetchApi(pkgUrl)
+      .then((data: any) => {
+        const pkgs = data?.packages || []
+        if (pkgs.length) setPackageOptions(pkgs.map((p: any) => ({ id: p.id, name: p.name || p.title })))
+        else setPackageOptions([])
+      })
+      .catch(() => setPackageOptions([]))
+
+    // Fetch campaign options from engagement events as before
     const params = new URLSearchParams({ section: 'landing_page_analytics' })
     if (selectedLandingPage !== 'all') params.set('landing_page', selectedLandingPage)
     fetchApi(`/api/reports?${params.toString()}`)
       .then((data: any) => {
         const tables = data?.landing_page_analytics || data?.landing_page || []
-        const pkgTable = tables.find((t: any) => t.title === 'Package Performance')
-        if (pkgTable?.rows?.length) setPackageOptions(pkgTable.rows.map((r: string[]) => ({ id: r[0], name: r[0] })))
-        else setPackageOptions([])
         const campTable = tables.find((t: any) => t.title === 'Campaign Performance')
         if (campTable?.rows) setCampaignOptions(campTable.rows.map((r: string[]) => r[0]).filter((c: string) => c && c !== 'none'))
         else setCampaignOptions([])
       })
-      .catch(() => { setPackageOptions([]); setCampaignOptions([]) })
+      .catch(() => setCampaignOptions([]))
   }, [selectedLandingPage, selectedSection])
 
   // Fetch report data based on selections
