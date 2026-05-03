@@ -437,94 +437,63 @@ const Leads: React.FC = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-3">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-6 h-6 bg-slate-800 rounded-md flex items-center justify-center">
-                  <span className="text-white text-xs font-medium">L</span>
-                </div>
-              </div>
-              <div className="ml-3 w-0 flex-1">
-                <dl>
-                  <dt className="text-xs font-medium text-slate-800 truncate">Total Leads</dt>
-                  <dd className="text-sm font-medium text-slate-800">{leads.length}</dd>
-                </dl>
-              </div>
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+        {[
+          {
+            label: 'Total Leads',
+            value: leads.length,
+            icon: '👥',
+            bg: 'bg-blue-50',
+            border: 'border-blue-200',
+            text: 'text-blue-700',
+            sub: 'All time'
+          },
+          {
+            label: 'Today',
+            value: leads.filter(l => new Date(l.created_at).toDateString() === new Date().toDateString()).length,
+            icon: '📅',
+            bg: 'bg-green-50',
+            border: 'border-green-200',
+            text: 'text-green-700',
+            sub: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
+          },
+          {
+            label: 'This Week',
+            value: leads.filter(l => { const d = new Date(); d.setDate(d.getDate()-7); return new Date(l.created_at) >= d }).length,
+            icon: '📈',
+            bg: 'bg-purple-50',
+            border: 'border-purple-200',
+            text: 'text-purple-700',
+            sub: 'Last 7 days'
+          },
+          {
+            label: 'Google Ads',
+            value: leads.filter(l => l.source === 'Google Ads' || l.utm_source?.toLowerCase().includes('google')).length,
+            icon: '🔍',
+            bg: 'bg-yellow-50',
+            border: 'border-yellow-200',
+            text: 'text-yellow-700',
+            sub: 'From Google'
+          },
+          {
+            label: 'Meta Ads',
+            value: leads.filter(l => l.source === 'Meta Ads' || l.utm_source?.toLowerCase().includes('meta') || l.utm_source?.toLowerCase().includes('facebook')).length,
+            icon: '📱',
+            bg: 'bg-pink-50',
+            border: 'border-pink-200',
+            text: 'text-pink-700',
+            sub: 'Facebook / Instagram'
+          },
+        ].map(stat => (
+          <div key={stat.label} className={`${stat.bg} border ${stat.border} rounded-xl p-4 flex flex-col gap-1`}>
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-gray-500">{stat.label}</span>
+              <span className="text-lg">{stat.icon}</span>
             </div>
+            <div className={`text-2xl font-bold ${stat.text}`}>{stat.value}</div>
+            <div className="text-xs text-gray-400">{stat.sub}</div>
           </div>
-        </div>
-
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-3">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-6 h-6 bg-slate-800 rounded-md flex items-center justify-center">
-                  <span className="text-white text-xs font-medium">E</span>
-                </div>
-              </div>
-              <div className="ml-3 w-0 flex-1">
-                <dl>
-                  <dt className="text-xs font-medium text-slate-800 truncate">Enquiries</dt>
-                  <dd className="text-sm font-medium text-slate-800">{leads.filter(l => l.source === 'enquiry').length}</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-3">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-6 h-6 bg-slate-800 rounded-md flex items-center justify-center">
-                  <span className="text-white text-xs font-medium">S</span>
-                </div>
-              </div>
-              <div className="ml-3 w-0 flex-1">
-                <dl>
-                  <dt className="text-xs font-medium text-slate-800 truncate">Social Leads</dt>
-                  <dd className="text-sm font-medium text-slate-800">
-                    {leads.filter(l => 
-                      l.source === 'Meta Ads' || 
-                      l.source === 'Whatsapp' || 
-                      l.source === 'google_ads' ||
-                      l.source === 'facebook' ||
-                      l.source === 'instagram' ||
-                      l.source === 'twitter' ||
-                      l.source === 'linkedin'
-                    ).length}
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="p-3">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-6 h-6 bg-slate-800 rounded-md flex items-center justify-center">
-                  <span className="text-white text-xs font-medium">T</span>
-                </div>
-              </div>
-              <div className="ml-3 w-0 flex-1">
-                <dl>
-                  <dt className="text-xs font-medium text-slate-800 truncate">Today</dt>
-                  <dd className="text-sm font-medium text-slate-800">
-                    {leads.filter(l => {
-                      const today = new Date().toDateString()
-                      const leadDate = new Date(l.created_at).toDateString()
-                      return today === leadDate
-                    }).length}
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
 
       {/* Filters */}
