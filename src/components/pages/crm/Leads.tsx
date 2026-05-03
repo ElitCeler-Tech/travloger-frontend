@@ -437,82 +437,32 @@ const Leads: React.FC = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-7 gap-3">
-        {[
-          {
-            label: 'Total Leads',
-            value: leads.length,
-            icon: '👥',
-            bg: 'bg-blue-50',
-            border: 'border-blue-200',
-            text: 'text-blue-700',
-            sub: 'All time'
-          },
-          {
-            label: 'Today',
-            value: leads.filter(l => new Date(l.created_at).toDateString() === new Date().toDateString()).length,
-            icon: '📅',
-            bg: 'bg-green-50',
-            border: 'border-green-200',
-            text: 'text-green-700',
-            sub: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
-          },
-          {
-            label: 'This Week',
-            value: leads.filter(l => { const d = new Date(); d.setDate(d.getDate()-7); return new Date(l.created_at) >= d }).length,
-            icon: '📈',
-            bg: 'bg-purple-50',
-            border: 'border-purple-200',
-            text: 'text-purple-700',
-            sub: 'Last 7 days'
-          },
-          {
-            label: 'This Month',
-            value: leads.filter(l => { const n = new Date(); return new Date(l.created_at) >= new Date(n.getFullYear(), n.getMonth(), 1) }).length,
-            icon: '🗓️',
-            bg: 'bg-indigo-50',
-            border: 'border-indigo-200',
-            text: 'text-indigo-700',
-            sub: new Date().toLocaleDateString('en-IN', { month: 'long' })
-          },
-          {
-            label: 'This Year',
-            value: leads.filter(l => new Date(l.created_at).getFullYear() === new Date().getFullYear()).length,
-            icon: '🏆',
-            bg: 'bg-orange-50',
-            border: 'border-orange-200',
-            text: 'text-orange-700',
-            sub: new Date().getFullYear().toString()
-          },
-          {
-            label: 'Google Ads',
-            value: leads.filter(l => l.source === 'Google Ads' || l.utm_source?.toLowerCase().includes('google')).length,
-            icon: '🔍',
-            bg: 'bg-yellow-50',
-            border: 'border-yellow-200',
-            text: 'text-yellow-700',
-            sub: 'From Google'
-          },
-          {
-            label: 'Meta Ads',
-            value: leads.filter(l => l.source === 'Meta Ads' || l.utm_source?.toLowerCase().includes('meta') || l.utm_source?.toLowerCase().includes('facebook')).length,
-            icon: '📱',
-            bg: 'bg-pink-50',
-            border: 'border-pink-200',
-            text: 'text-pink-700',
-            sub: 'Facebook / Instagram'
-          },
-        ].map(stat => (
-          <div key={stat.label} className={`${stat.bg} border ${stat.border} rounded-xl p-4 flex flex-col gap-1`}>
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-gray-500">{stat.label}</span>
-              <span className="text-lg">{stat.icon}</span>
-            </div>
-            <div className={`text-2xl font-bold ${stat.text}`}>{stat.value}</div>
-            <div className="text-xs text-gray-400">{stat.sub}</div>
+      {(() => {
+        const filtered = getFilteredLeads()
+        const periodLabel = dateFilter === 'all' ? 'All time' : dateFilter === 'today' ? 'Today' : dateFilter === 'week' ? 'This week' : dateFilter === 'month' ? 'This month' : 'Selected period'
+        return (
+          <div className="grid grid-cols-2 lg:grid-cols-7 gap-3">
+            {[
+              { label: 'Total Leads', value: leads.length, icon: '👥', bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', sub: 'All time' },
+              { label: 'This Period', value: filtered.length, icon: '📊', bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700', sub: periodLabel },
+              { label: 'Assigned', value: filtered.filter(l => l.assigned_employee_id).length, icon: '✅', bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', sub: periodLabel },
+              { label: 'Unassigned', value: filtered.filter(l => !l.assigned_employee_id).length, icon: '⏳', bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-700', sub: periodLabel },
+              { label: 'This Year', value: leads.filter(l => new Date(l.created_at).getFullYear() === new Date().getFullYear()).length, icon: '🏆', bg: 'bg-indigo-50', border: 'border-indigo-200', text: 'text-indigo-700', sub: new Date().getFullYear().toString() },
+              { label: 'Google Ads', value: filtered.filter(l => l.source === 'Google Ads' || l.utm_source?.toLowerCase().includes('google')).length, icon: '🔍', bg: 'bg-yellow-50', border: 'border-yellow-200', text: 'text-yellow-700', sub: periodLabel },
+              { label: 'Meta Ads', value: filtered.filter(l => l.source === 'Meta Ads' || l.utm_source?.toLowerCase().includes('meta') || l.utm_source?.toLowerCase().includes('facebook')).length, icon: '📱', bg: 'bg-pink-50', border: 'border-pink-200', text: 'text-pink-700', sub: periodLabel },
+            ].map(stat => (
+              <div key={stat.label} className={`${stat.bg} border ${stat.border} rounded-xl p-4 flex flex-col gap-1`}>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium text-gray-500">{stat.label}</span>
+                  <span className="text-lg">{stat.icon}</span>
+                </div>
+                <div className={`text-2xl font-bold ${stat.text}`}>{stat.value}</div>
+                <div className="text-xs text-gray-400">{stat.sub}</div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        )
+      })()}
 
       {/* Filters */}
       <div className="bg-white shadow rounded-lg p-4">
