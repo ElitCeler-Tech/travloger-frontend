@@ -437,7 +437,7 @@ const Leads: React.FC = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-7 gap-3">
         {[
           {
             label: 'Total Leads',
@@ -465,6 +465,24 @@ const Leads: React.FC = () => {
             border: 'border-purple-200',
             text: 'text-purple-700',
             sub: 'Last 7 days'
+          },
+          {
+            label: 'This Month',
+            value: leads.filter(l => { const n = new Date(); return new Date(l.created_at) >= new Date(n.getFullYear(), n.getMonth(), 1) }).length,
+            icon: '🗓️',
+            bg: 'bg-indigo-50',
+            border: 'border-indigo-200',
+            text: 'text-indigo-700',
+            sub: new Date().toLocaleDateString('en-IN', { month: 'long' })
+          },
+          {
+            label: 'This Year',
+            value: leads.filter(l => new Date(l.created_at).getFullYear() === new Date().getFullYear()).length,
+            icon: '🏆',
+            bg: 'bg-orange-50',
+            border: 'border-orange-200',
+            text: 'text-orange-700',
+            sub: new Date().getFullYear().toString()
           },
           {
             label: 'Google Ads',
