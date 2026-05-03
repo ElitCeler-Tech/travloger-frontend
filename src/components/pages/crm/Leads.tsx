@@ -38,9 +38,9 @@ const Leads: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
   const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null)
   const [deleting, setDeleting] = useState<boolean>(false)
-  const [selectedMonth, setSelectedMonth] = useState<string>('all')
-  const [selectedYear, setSelectedYear] = useState<string>('all')
-  const [selectedDate, setSelectedDate] = useState<string>('all')
+  const [dateFilter, setDateFilter] = useState<string>('all') // 'all' | 'today' | 'week' | 'month' | 'custom'
+  const [customDateFrom, setCustomDateFrom] = useState<string>('')
+  const [customDateTo, setCustomDateTo] = useState<string>('')
   const [destinations, setDestinations] = useState<string[]>([])
   const [loadingDestinations, setLoadingDestinations] = useState<boolean>(false)
 
@@ -112,22 +112,24 @@ const Leads: React.FC = () => {
 
   // Filter leads based on month, year, and date
   const getFilteredLeads = (): Lead[] => {
-    if (selectedMonth === 'all' && selectedYear === 'all' && selectedDate === 'all') return leads
+    const now = new Date()
+    const today = now.toISOString().split('T')[0]
+    const weekAgo = new Date(now); weekAgo.setDate(now.getDate() - 7)
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
 
-    const filteredLeads = leads.filter(lead => {
+    return leads.filter(lead => {
       const leadDate = new Date(lead.created_at)
-      const leadMonth = (leadDate.getMonth() + 1).toString() // getMonth() returns 0-11, so add 1
-      const leadYear = leadDate.getFullYear().toString()
-      const leadDateStr = leadDate.toISOString().split('T')[0] // YYYY-MM-DD format
-
-      const monthMatch = selectedMonth === 'all' || leadMonth === selectedMonth
-      const yearMatch = selectedYear === 'all' || leadYear === selectedYear
-      const dateMatch = selectedDate === 'all' || leadDateStr === selectedDate
-
-      return monthMatch && yearMatch && dateMatch
+      const leadDateStr = leadDate.toISOString().split('T')[0]
+      if (dateFilter === 'today') return leadDateStr === today
+      if (dateFilter === 'week') return leadDate >= weekAgo
+      if (dateFilter === 'month') return leadDate >= monthStart
+      if (dateFilter === 'custom') {
+        if (customDateFrom && customDateTo) return leadDateStr >= customDateFrom && leadDateStr <= customDateTo
+        if (customDateFrom) return leadDateStr >= customDateFrom
+        if (customDateTo) return leadDateStr <= customDateTo
+      }
+      return true
     })
-
-    return filteredLeads
   }
 
   const filteredLeads = getFilteredLeads().filter(lead => {
@@ -368,61 +370,26 @@ const Leads: React.FC = () => {
           {/* Date Filter */}
           <div className="flex items-center space-x-2">
             <label className="text-sm font-medium text-gray-700">Date:</label>
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="px-3 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button
-              onClick={() => setSelectedDate('all')}
-              className="px-2 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
-            >
-              All Dates
-            </button>
-          </div>
-
-          {/* Month Filter */}
-          <div className="flex items-center space-x-2">
-            <label className="text-sm font-medium text-gray-700">Month:</label>
-            <select
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-              className="px-3 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">All Months</option>
-              <option value="1">January</option>
-              <option value="2">February</option>
-              <option value="3">March</option>
-              <option value="4">April</option>
-              <option value="5">May</option>
-              <option value="6">June</option>
-              <option value="7">July</option>
-              <option value="8">August</option>
-              <option value="9">September</option>
-              <option value="10">October</option>
-              <option value="11">November</option>
-              <option value="12">December</option>
-            </select>
-          </div>
-          
-          {/* Year Filter */}
-          <div className="flex items-center space-x-2">
-            <label className="text-sm font-medium text-gray-700">Year:</label>
-            <select
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
-              className="px-3 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">All Years</option>
-              <option value="2026">2026</option>
-              <option value="2025">2025</option>
-              <option value="2024">2024</option>
-              <option value="2023">2023</option>
-              <option value="2022">2022</option>
-              <option value="2021">2021</option>
-              <option value="2020">2020</option>
-            </select>
+            <div className="flex rounded-md border border-gray-300 overflow-hidden text-sm">
+              {(['all','today','week','month','custom'] as const).map(opt => (
+                <button
+                  key={opt}
+                  onClick={() => setDateFilter(opt)}
+                  className={`px-3 py-1.5 transition-colors ${dateFilter === opt ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
+                >
+                  {opt === 'all' ? 'All' : opt === 'today' ? 'Today' : opt === 'week' ? 'This Week' : opt === 'month' ? 'This Month' : 'Custom'}
+                </button>
+              ))}
+            </div>
+            {dateFilter === 'custom' && (
+              <div className="flex items-center space-x-1">
+                <input type="date" value={customDateFrom} onChange={e => setCustomDateFrom(e.target.value)}
+                  className="px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <span className="text-gray-500 text-sm">to</span>
+                <input type="date" value={customDateTo} onChange={e => setCustomDateTo(e.target.value)}
+                  className="px-2 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+            )}
           </div>
           <div className="flex space-x-2">
             {getFilteredLeads().filter(lead => {
