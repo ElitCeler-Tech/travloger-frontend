@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Users, BarChart3, UserCheck, UserX, CalendarDays, Search, Share2 } from 'lucide-react'
+import { Users, BarChart3, UserCheck, UserX, CalendarDays, Search, Share2, ChevronDown, ChevronUp, MapPin, Phone, Mail, Clock, MousePointerClick, Eye, TrendingUp, IndianRupee, Package, Globe, Target, ArrowRightLeft } from 'lucide-react'
 import { fetchApi, handleApiError } from '../../../lib/api'
 
 interface Lead {
@@ -25,6 +25,38 @@ interface Lead {
   last_score_calculated?: string
 }
 
+interface TrackingJourney {
+  id: string
+  name: string
+  email: string
+  phone: string
+  destination: string
+  source: string
+  utm_source: string
+  utm_medium: string
+  utm_campaign: string
+  lead_score: number
+  lead_priority: string
+  assigned_employee_name: string | null
+  created_at: string
+  engagement: { total_time: number; max_scroll: number; cta_clicks: number; pages_viewed: number; device: string | null; events_count: number }
+  bookings: { id: string; package_name: string; destination: string; amount: number; travelers: number; status: string; payment_status: string; travel_date: string; created_at: string }[]
+  total_revenue: number
+  total_bookings: number
+  confirmed_bookings: number
+}
+
+interface TrackingStats {
+  total_revenue: number
+  total_bookings: number
+  avg_booking_value: number
+  top_destination: string
+  top_source: string
+  top_package: string
+  conversion_rate: number
+  avg_lead_score: number
+  total_leads: number
+}
 
 type FilterType = string
 
@@ -32,6 +64,11 @@ const Leads: React.FC = () => {
   const [leads, setLeads] = useState<Lead[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
+  const [activeView, setActiveView] = useState<'leads' | 'tracking'>('leads')
+  const [trackingData, setTrackingData] = useState<{ stats: TrackingStats; journeys: TrackingJourney[] } | null>(null)
+  const [trackingLoading, setTrackingLoading] = useState(false)
+  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set())
+  const [trackingSearch, setTrackingSearch] = useState('')
 
   const [showModal, setShowModal] = useState<boolean>(false)
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null)
@@ -110,6 +147,52 @@ const Leads: React.FC = () => {
     fetchLeads()
     fetchDestinations()
   }, [fetchDestinations])
+
+  // Fetch tracking data when switching to tracking view
+  const fetchTracking = useCallback(async () => {
+    try {
+      setTrackingLoading(true)
+      const data = await fetchApi('/api/leads/tracking')
+      setTrackingData(data)
+    } catch (err) {
+      console.error('Failed to fetch tracking:', err)
+    } finally {
+      setTrackingLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (activeView === 'tracking' && !trackingData) fetchTracking()
+  }, [activeView, trackingData, fetchTracking])
+
+  const toggleCard = (id: string) => {
+    setExpandedCards(prev => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      return next
+    })
+  }
+
+  const fmtTime = (secs: number) => {
+    if (secs <= 0) return '0s'
+    const h = Math.floor(secs / 3600)
+    const m = Math.floor((secs % 3600) / 60)
+    const s = Math.round(secs % 60)
+    if (h > 0) return m > 0 ? `${h}h ${m}m` : `${h}h`
+    if (m > 0) return s > 0 ? `${m}m ${s}s` : `${m}m`
+    return `${s}s`
+  }
+
+  const fmtCurrency = (n: number) => '₹' + n.toLocaleString('en-IN')
+
+  const priorityStyle = (p: string) =>
+    p === 'Hot' ? 'bg-red-100 text-red-700' : p === 'Warm' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'
+
+  const statusStyle = (s: string) =>
+    s === 'Confirmed' ? 'bg-emerald-100 text-emerald-700' : s === 'Cancelled' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'
+
+  const paymentStyle = (s: string) =>
+    s === 'Paid' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
 
   // Filter leads based on month, year, and date
   const getFilteredLeads = (): Lead[] => {
@@ -368,6 +451,15 @@ const Leads: React.FC = () => {
           <p className="text-sm text-gray-500">Manage and track customer inquiries</p>
         </div>
         <div className="flex items-center space-x-3">
+          {/* View Toggle */}
+          <div className="flex rounded-lg border border-gray-200 overflow-hidden text-sm">
+            <button onClick={() => setActiveView('leads')} className={`px-4 py-1.5 font-medium transition-colors ${activeView === 'leads' ? 'bg-slate-800 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}>
+              Leads
+            </button>
+            <button onClick={() => setActiveView('tracking')} className={`px-4 py-1.5 font-medium transition-colors ${activeView === 'tracking' ? 'bg-slate-800 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}>
+              User Tracking
+            </button>
+          </div>
           {/* Date Filter */}
           <div className="flex items-center space-x-2">
             <label className="text-sm font-medium text-gray-700">Date:</label>
@@ -438,7 +530,7 @@ const Leads: React.FC = () => {
       </div>
 
       {/* Stats */}
-      {(() => {
+      {activeView === 'leads' && (() => {
         const filtered = getFilteredLeads()
         const periodLabel = dateFilter === 'all' ? 'All time' : dateFilter === 'today' ? 'Today' : dateFilter === 'week' ? 'This week' : dateFilter === 'month' ? 'This month' : 'Selected period'
         return (
@@ -466,7 +558,7 @@ const Leads: React.FC = () => {
       })()}
 
       {/* Filters */}
-      <div className="bg-white shadow rounded-lg p-4">
+      {activeView === 'leads' && <div className="bg-white shadow rounded-lg p-4">
         <div className="flex flex-wrap gap-1.5">
           <button
             onClick={() => setFilter('all')}
@@ -498,10 +590,10 @@ const Leads: React.FC = () => {
             })
           )}
         </div>
-      </div>
+      </div>}
 
       {/* Leads Table */}
-      <div className="bg-white shadow overflow-hidden sm:rounded-md">
+      {activeView === 'leads' && <div className="bg-white shadow overflow-hidden sm:rounded-md">
         {loading ? (
           <div className="p-4 text-center">
             <div className="text-sm text-gray-500">Loading leads...</div>
@@ -619,7 +711,237 @@ const Leads: React.FC = () => {
             </table>
           </div>
         )}
-      </div>
+      </div>}
+
+      {/* User Tracking View */}
+      {activeView === 'tracking' && (
+        trackingLoading ? (
+          <div className="flex items-center justify-center py-20">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-800"></div>
+            <span className="ml-3 text-sm text-gray-500">Loading user tracking data...</span>
+          </div>
+        ) : trackingData ? (
+          <div className="space-y-4">
+            {/* Tracking Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+              {[
+                { label: 'Total Revenue', value: fmtCurrency(trackingData.stats.total_revenue), icon: <IndianRupee size={18} />, bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-700', iconColor: 'text-emerald-500' },
+                { label: 'Total Bookings', value: trackingData.stats.total_bookings, icon: <Package size={18} />, bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', iconColor: 'text-blue-500' },
+                { label: 'Avg Booking Value', value: fmtCurrency(trackingData.stats.avg_booking_value), icon: <TrendingUp size={18} />, bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', iconColor: 'text-purple-500' },
+                { label: 'Conversion Rate', value: trackingData.stats.conversion_rate + '%', icon: <ArrowRightLeft size={18} />, bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-700', iconColor: 'text-amber-500' },
+                { label: 'Avg Lead Score', value: trackingData.stats.avg_lead_score, icon: <Target size={18} />, bg: 'bg-sky-50', border: 'border-sky-200', text: 'text-sky-700', iconColor: 'text-sky-500' },
+              ].map(stat => (
+                <div key={stat.label} className={`${stat.bg} border ${stat.border} rounded-xl p-4 flex flex-col gap-1.5`}>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-medium text-gray-500">{stat.label}</span>
+                    <span className={stat.iconColor}>{stat.icon}</span>
+                  </div>
+                  <div className={`text-2xl font-bold ${stat.text}`}>{stat.value}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Top Insights Row */}
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-indigo-50 flex items-center justify-center"><MapPin size={16} className="text-indigo-500" /></div>
+                <div><div className="text-[11px] text-gray-400 uppercase tracking-wide">Top Destination</div><div className="text-sm font-semibold text-gray-800">{trackingData.stats.top_destination}</div></div>
+              </div>
+              <div className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-pink-50 flex items-center justify-center"><Globe size={16} className="text-pink-500" /></div>
+                <div><div className="text-[11px] text-gray-400 uppercase tracking-wide">Top Source</div><div className="text-sm font-semibold text-gray-800">{trackingData.stats.top_source}</div></div>
+              </div>
+              <div className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-teal-50 flex items-center justify-center"><Package size={16} className="text-teal-500" /></div>
+                <div><div className="text-[11px] text-gray-400 uppercase tracking-wide">Top Package</div><div className="text-sm font-semibold text-gray-800 truncate max-w-[180px]">{trackingData.stats.top_package}</div></div>
+              </div>
+            </div>
+
+            {/* Search + Count */}
+            <div className="flex items-center justify-between">
+              <div className="relative">
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search by name, email, phone, destination..."
+                  value={trackingSearch}
+                  onChange={e => setTrackingSearch(e.target.value)}
+                  className="pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm w-80 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                />
+              </div>
+              <span className="text-sm text-gray-500">{trackingData.journeys.length} leads tracked</span>
+            </div>
+
+            {/* Journey Cards */}
+            <div className="space-y-2">
+              {trackingData.journeys
+                .filter(j => {
+                  if (!trackingSearch) return true
+                  const q = trackingSearch.toLowerCase()
+                  return (j.name || '').toLowerCase().includes(q) || (j.email || '').toLowerCase().includes(q) || (j.phone || '').includes(q) || (j.destination || '').toLowerCase().includes(q)
+                })
+                .map(journey => {
+                  const isExpanded = expandedCards.has(journey.id)
+                  return (
+                    <div key={journey.id} className="bg-white border border-gray-200 rounded-xl overflow-hidden transition-shadow hover:shadow-sm">
+                      {/* Card Header */}
+                      <button onClick={() => toggleCard(journey.id)} className="w-full px-5 py-3.5 flex items-center gap-4 text-left">
+                        {/* Avatar */}
+                        <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-sm font-bold text-slate-600 shrink-0">
+                          {(journey.name || '?')[0].toUpperCase()}
+                        </div>
+                        {/* Info */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-sm text-gray-900 truncate">{journey.name || 'Unknown'}</span>
+                            <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${priorityStyle(journey.lead_priority)}`}>{journey.lead_priority}</span>
+                            {journey.lead_score > 0 && <span className="text-[10px] text-gray-400">Score: {journey.lead_score}</span>}
+                          </div>
+                          <div className="flex items-center gap-3 mt-0.5 text-xs text-gray-500">
+                            {journey.destination && <span className="flex items-center gap-1"><MapPin size={11} />{journey.destination}</span>}
+                            {journey.source && <span className="flex items-center gap-1"><Globe size={11} />{journey.source}</span>}
+                            <span>{new Date(journey.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+                          </div>
+                        </div>
+                        {/* Quick Stats */}
+                        <div className="flex items-center gap-5 shrink-0">
+                          {journey.total_bookings > 0 && (
+                            <div className="text-right">
+                              <div className="text-xs text-gray-400">Revenue</div>
+                              <div className="text-sm font-semibold text-emerald-600">{fmtCurrency(journey.total_revenue)}</div>
+                            </div>
+                          )}
+                          <div className="text-right">
+                            <div className="text-xs text-gray-400">Bookings</div>
+                            <div className="text-sm font-semibold text-gray-700">{journey.total_bookings}</div>
+                          </div>
+                          {journey.engagement.events_count > 0 && (
+                            <div className="text-right">
+                              <div className="text-xs text-gray-400">Engagement</div>
+                              <div className="text-sm font-semibold text-blue-600">{fmtTime(journey.engagement.total_time)}</div>
+                            </div>
+                          )}
+                          {isExpanded ? <ChevronUp size={18} className="text-gray-400" /> : <ChevronDown size={18} className="text-gray-400" />}
+                        </div>
+                      </button>
+
+                      {/* Expanded Content */}
+                      {isExpanded && (
+                        <div className="border-t border-gray-100 px-5 py-4 space-y-4">
+                          {/* Contact + Source Row */}
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Contact</h4>
+                              <div className="space-y-1.5 text-sm">
+                                {journey.email && <div className="flex items-center gap-2 text-gray-600"><Mail size={13} className="text-gray-400" />{journey.email}</div>}
+                                {journey.phone && <div className="flex items-center gap-2 text-gray-600"><Phone size={13} className="text-gray-400" />{journey.phone}</div>}
+                                {journey.assigned_employee_name && <div className="flex items-center gap-2 text-gray-600"><UserCheck size={13} className="text-gray-400" />Assigned: {journey.assigned_employee_name}</div>}
+                              </div>
+                            </div>
+                            <div className="space-y-2">
+                              <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Source Attribution</h4>
+                              <div className="space-y-1.5 text-sm text-gray-600">
+                                {journey.utm_source && <div><span className="text-gray-400">Source:</span> {journey.utm_source}</div>}
+                                {journey.utm_medium && <div><span className="text-gray-400">Medium:</span> {journey.utm_medium}</div>}
+                                {journey.utm_campaign && <div><span className="text-gray-400">Campaign:</span> {journey.utm_campaign}</div>}
+                                {!journey.utm_source && !journey.utm_medium && !journey.utm_campaign && <div className="text-gray-400 italic">No UTM data</div>}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Engagement Stats */}
+                          {journey.engagement.events_count > 0 && (
+                            <div className="space-y-2">
+                              <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Engagement</h4>
+                              <div className="grid grid-cols-5 gap-2">
+                                {[
+                                  { label: 'Time Spent', value: fmtTime(journey.engagement.total_time), icon: <Clock size={14} /> },
+                                  { label: 'Pages Viewed', value: journey.engagement.pages_viewed, icon: <Eye size={14} /> },
+                                  { label: 'CTA Clicks', value: journey.engagement.cta_clicks, icon: <MousePointerClick size={14} /> },
+                                  { label: 'Max Scroll', value: journey.engagement.max_scroll + '%', icon: <ChevronDown size={14} /> },
+                                  { label: 'Device', value: journey.engagement.device || 'N/A', icon: <Globe size={14} /> },
+                                ].map(e => (
+                                  <div key={e.label} className="bg-gray-50 rounded-lg p-2.5 text-center">
+                                    <div className="flex justify-center text-gray-400 mb-1">{e.icon}</div>
+                                    <div className="text-sm font-semibold text-gray-800">{e.value}</div>
+                                    <div className="text-[10px] text-gray-400">{e.label}</div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Bookings */}
+                          {journey.bookings.length > 0 && (
+                            <div className="space-y-2">
+                              <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Bookings ({journey.bookings.length})</h4>
+                              <div className="space-y-2">
+                                {journey.bookings.map(b => (
+                                  <div key={b.id} className="bg-gray-50 rounded-lg p-3 flex items-center justify-between">
+                                    <div>
+                                      <div className="text-sm font-medium text-gray-800">{b.package_name || 'Custom Package'}</div>
+                                      <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
+                                        {b.destination && <span className="flex items-center gap-1"><MapPin size={10} />{b.destination}</span>}
+                                        {b.travelers && <span>{b.travelers} travelers</span>}
+                                        {b.travel_date && <span>{new Date(b.travel_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>}
+                                      </div>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                      <span className={`px-2 py-0.5 rounded text-[10px] font-medium ${statusStyle(b.status)}`}>{b.status}</span>
+                                      <span className={`px-2 py-0.5 rounded text-[10px] font-medium ${paymentStyle(b.payment_status)}`}>{b.payment_status}</span>
+                                      <span className="text-sm font-semibold text-gray-800">{fmtCurrency(b.amount)}</span>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Journey Timeline */}
+                          <div className="space-y-2">
+                            <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Journey Timeline</h4>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <div className="flex items-center gap-1.5 bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full text-xs font-medium">
+                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+                                Lead Created — {new Date(journey.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
+                              </div>
+                              {journey.assigned_employee_name && (
+                                <div className="flex items-center gap-1.5 bg-purple-50 text-purple-700 px-2.5 py-1 rounded-full text-xs font-medium">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
+                                  Assigned to {journey.assigned_employee_name}
+                                </div>
+                              )}
+                              {journey.engagement.events_count > 0 && (
+                                <div className="flex items-center gap-1.5 bg-sky-50 text-sky-700 px-2.5 py-1 rounded-full text-xs font-medium">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-sky-500"></div>
+                                  {journey.engagement.events_count} engagement events
+                                </div>
+                              )}
+                              {journey.bookings.map((b, i) => (
+                                <div key={i} className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${b.payment_status === 'Paid' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
+                                  <div className={`w-1.5 h-1.5 rounded-full ${b.payment_status === 'Paid' ? 'bg-emerald-500' : 'bg-amber-500'}`}></div>
+                                  {b.status} — {fmtCurrency(b.amount)}
+                                </div>
+                              ))}
+                              {journey.total_bookings === 0 && journey.engagement.events_count === 0 && (
+                                <div className="flex items-center gap-1.5 bg-gray-50 text-gray-500 px-2.5 py-1 rounded-full text-xs font-medium">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-gray-400"></div>
+                                  No activity yet
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-20 text-gray-500">Failed to load tracking data. <button onClick={fetchTracking} className="text-blue-600 underline">Retry</button></div>
+        )
+      )}
 
       {/* Lead Details Modal */}
       {showModal && selectedLead && (
