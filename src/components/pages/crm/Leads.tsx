@@ -443,13 +443,13 @@ const Leads: React.FC = () => {
         return (
           <div className="grid grid-cols-2 lg:grid-cols-7 gap-3">
             {[
-              { label: 'Total Leads', value: leads.length, icon: '👥', bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', sub: 'All time' },
-              { label: 'This Period', value: filtered.length, icon: '📊', bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700', sub: periodLabel },
-              { label: 'Assigned', value: filtered.filter(l => l.assigned_employee_id).length, icon: '✅', bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', sub: periodLabel },
-              { label: 'Unassigned', value: filtered.filter(l => !l.assigned_employee_id).length, icon: '⏳', bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-700', sub: periodLabel },
-              { label: 'This Year', value: leads.filter(l => new Date(l.created_at).getFullYear() === new Date().getFullYear()).length, icon: '🏆', bg: 'bg-indigo-50', border: 'border-indigo-200', text: 'text-indigo-700', sub: new Date().getFullYear().toString() },
-              { label: 'Google Ads', value: filtered.filter(l => l.source === 'Google Ads' || l.utm_source?.toLowerCase().includes('google')).length, icon: '🔍', bg: 'bg-yellow-50', border: 'border-yellow-200', text: 'text-yellow-700', sub: periodLabel },
-              { label: 'Meta Ads', value: filtered.filter(l => l.source === 'Meta Ads' || l.utm_source?.toLowerCase().includes('meta') || l.utm_source?.toLowerCase().includes('facebook')).length, icon: '📱', bg: 'bg-pink-50', border: 'border-pink-200', text: 'text-pink-700', sub: periodLabel },
+              { label: 'Total Leads', value: leads.length, icon: '👥', bg: 'bg-slate-50', border: 'border-slate-200', text: 'text-slate-700', sub: 'All time' },
+              { label: 'This Period', value: filtered.length, icon: '📊', bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', sub: periodLabel },
+              { label: 'Assigned', value: filtered.filter(l => l.assigned_employee_id).length, icon: '✅', bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700', sub: periodLabel },
+              { label: 'Unassigned', value: filtered.filter(l => !l.assigned_employee_id).length, icon: '⏳', bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-700', sub: periodLabel },
+              { label: 'This Year', value: leads.filter(l => new Date(l.created_at).getFullYear() === new Date().getFullYear()).length, icon: '🗓️', bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', sub: new Date().getFullYear().toString() },
+              { label: 'Google Ads', value: filtered.filter(l => l.source === 'Google Ads' || l.utm_source?.toLowerCase().includes('google')).length, icon: '🔵', bg: 'bg-cyan-50', border: 'border-cyan-200', text: 'text-cyan-700', sub: periodLabel },
+              { label: 'Meta Ads', value: filtered.filter(l => l.source === 'Meta Ads' || l.utm_source?.toLowerCase().includes('meta') || l.utm_source?.toLowerCase().includes('facebook')).length, icon: '🟣', bg: 'bg-violet-50', border: 'border-violet-200', text: 'text-violet-700', sub: periodLabel },
             ].map(stat => (
               <div key={stat.label} className={`${stat.bg} border ${stat.border} rounded-xl p-4 flex flex-col gap-1`}>
                 <div className="flex items-center justify-between">
