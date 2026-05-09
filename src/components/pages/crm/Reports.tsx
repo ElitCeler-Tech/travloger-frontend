@@ -44,6 +44,9 @@ const Reports: React.FC = () => {
     const fmt = (d: Date) => d.toISOString().split('T')[0]
     if (preset === 'today') {
       setStartDate(fmt(today)); setEndDate(fmt(today))
+    } else if (preset === 'yesterday') {
+      const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1)
+      setStartDate(fmt(yesterday)); setEndDate(fmt(yesterday))
     } else if (preset === 'week') {
       const start = new Date(today); start.setDate(today.getDate() - today.getDay())
       setStartDate(fmt(start)); setEndDate(fmt(today))
@@ -74,8 +77,24 @@ const Reports: React.FC = () => {
     fetchApi(pkgUrl)
       .then((data: any) => {
         const pkgs = data?.packages || []
-        if (pkgs.length) setPackageOptions(pkgs.map((p: any) => ({ id: p.id, name: p.name || p.title })))
-        else setPackageOptions([])
+        if (pkgs.length) {
+          setPackageOptions(pkgs.map((p: any) => ({ id: p.id, name: p.name || p.title })))
+        } else if (selectedLandingPage !== 'all') {
+          // Fallback: fetch all packages and filter client-side
+          fetchApi('/api/packages').then((allData: any) => {
+            const all = allData?.packages || []
+            const filtered = all.filter((p: any) => {
+              const search = selectedLandingPage.toLowerCase()
+              return (p.name || '').toLowerCase().includes(search) ||
+                (p.primary_destination || '').toLowerCase().includes(search) ||
+                (p.destinations || '').toLowerCase().includes(search) ||
+                (p.state || '').toLowerCase().includes(search)
+            })
+            setPackageOptions((filtered.length ? filtered : all).map((p: any) => ({ id: p.id, name: p.name || p.title })))
+          }).catch(() => setPackageOptions([]))
+        } else {
+          setPackageOptions([])
+        }
       })
       .catch(() => setPackageOptions([]))
 
@@ -86,7 +105,7 @@ const Reports: React.FC = () => {
       .then((data: any) => {
         const tables = data?.landing_page_analytics || data?.landing_page || []
         const campTable = tables.find((t: any) => t.title === 'Campaign Performance')
-        if (campTable?.rows) setCampaignOptions(campTable.rows.map((r: string[]) => r[0]).filter((c: string) => c && c !== 'none'))
+        if (campTable?.rows) setCampaignOptions(campTable.rows.map((r: string[]) => r[0]).filter((c: string) => c && c !== 'none' && c !== 'Direct Visitor / Untracked Campaign'))
         else setCampaignOptions([])
       })
       .catch(() => setCampaignOptions([]))
@@ -141,11 +160,11 @@ const Reports: React.FC = () => {
           // Extract campaign options from Campaign Performance table
           const campTable = tables.find((t: any) => t.title === 'Campaign Performance')
           if (campTable?.rows) {
-            setCampaignOptions(campTable.rows.map((r: string[]) => r[0]).filter((c: string) => c && c !== 'none'))
+            setCampaignOptions(campTable.rows.map((r: string[]) => r[0]).filter((c: string) => c && c !== 'none' && c !== 'Direct Visitor / Untracked Campaign'))
           }
-          // Extract package options from Package Performance table
+          // Extract package options from Package Performance table (only add if initial fetch returned nothing)
           const pkgTable = tables.find((t: any) => t.title === 'Package Performance')
-          if (pkgTable?.rows?.length) {
+          if (pkgTable?.rows?.length && packageOptions.length === 0) {
             setPackageOptions(pkgTable.rows.map((r: string[]) => ({ id: r[0], name: r[0] })))
           }
           setEngagementReport(null)
@@ -464,6 +483,7 @@ const Reports: React.FC = () => {
               <div className="flex flex-wrap gap-1.5">
                 {[
                   { key: 'all', label: 'All Time' },
+                  { key: 'yesterday', label: 'Yesterday' },
                   { key: 'today', label: 'Today' },
                   { key: 'week', label: 'This Week' },
                   { key: 'month', label: 'This Month' },
