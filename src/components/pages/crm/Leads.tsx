@@ -632,8 +632,8 @@ const Leads: React.FC = () => {
                       <span className={`inline-flex px-1.5 py-0.5 text-xs font-semibold rounded-full ${getSourceColor(lead.source)}`}>
                         {lead.source}
                       </span>
-                      {(lead as any).whatsapp_clicked && <span className="ml-1 inline-flex px-1.5 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700">WA</span>}
-                      {(lead as any).call_clicked && <span className="ml-1 inline-flex px-1.5 py-0.5 text-xs font-medium rounded-full bg-orange-100 text-orange-700">Call</span>}
+                      {(lead as any).whatsapp_clicked && lead.source !== 'WhatsApp' && <span className="ml-1 inline-flex px-1.5 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700">WA</span>}
+                      {(lead as any).call_clicked && lead.source !== 'Call' && <span className="ml-1 inline-flex px-1.5 py-0.5 text-xs font-medium rounded-full bg-orange-100 text-orange-700">Call</span>}
                     </td>
                     <td className="px-3 py-2 whitespace-nowrap">
                       {lead.lead_priority ? (
