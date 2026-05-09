@@ -212,7 +212,7 @@ const Leads: React.FC = () => {
 
   const filteredLeads = getFilteredLeads().filter(lead => {
     if (filter === 'all') return true
-    return lead.destination === filter
+    return (lead.destination || '').toLowerCase() === filter.toLowerCase()
   })
 
   const getSourceColor = (source: string): string => {
@@ -569,8 +569,8 @@ const Leads: React.FC = () => {
               <span className="text-sm text-gray-500">Loading filters...</span>
             </div>
           ) : (
-            destinations.map((destination, index) => {
-              const count = leads.filter(l => l.destination === destination).length;
+            destinations.filter(destination => leads.some(l => (l.destination || '').toLowerCase() === destination.toLowerCase())).map((destination, index) => {
+              const count = leads.filter(l => (l.destination || '').toLowerCase() === destination.toLowerCase()).length;
               return (
                 <button
                   key={`${destination}-${index}`}
