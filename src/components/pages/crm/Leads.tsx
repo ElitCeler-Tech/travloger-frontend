@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Users, BarChart3, UserCheck, UserX, CalendarDays, Search, Share2, ChevronDown, ChevronUp, MapPin, Phone, Mail, Clock, MousePointerClick, Eye, TrendingUp, IndianRupee, Package, Globe, Target, ArrowRightLeft } from 'lucide-react'
+import { Users, BarChart3, UserCheck, UserX, CalendarDays, Search, Share2, ChevronDown, ChevronUp, MapPin, Phone, Mail, Clock, MousePointerClick, Eye, TrendingUp, IndianRupee, Package, Globe, Target, ArrowRightLeft, MessageCircle } from 'lucide-react'
 import { fetchApi, handleApiError } from '../../../lib/api'
 
 interface Lead {
@@ -197,13 +197,13 @@ const Leads: React.FC = () => {
   // Filter leads based on month, year, and date
   const getFilteredLeads = (): Lead[] => {
     const now = new Date()
-    const today = now.toISOString().split('T')[0]
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
     const weekAgo = new Date(now); weekAgo.setDate(now.getDate() - 7)
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
 
     return leads.filter(lead => {
       const leadDate = new Date(lead.created_at)
-      const leadDateStr = leadDate.toISOString().split('T')[0]
+      const leadDateStr = `${leadDate.getFullYear()}-${String(leadDate.getMonth() + 1).padStart(2, '0')}-${String(leadDate.getDate()).padStart(2, '0')}`
       if (dateFilter === 'today') return leadDateStr === today
       if (dateFilter === 'week') return leadDate >= weekAgo
       if (dateFilter === 'month') return leadDate >= monthStart
@@ -543,6 +543,7 @@ const Leads: React.FC = () => {
               { label: 'This Year', value: leads.filter(l => new Date(l.created_at).getFullYear() === new Date().getFullYear()).length, icon: <CalendarDays size={18} />, bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', iconColor: 'text-purple-500', sub: new Date().getFullYear().toString() },
               { label: 'Google Ads', value: filtered.filter(l => l.source === 'Google Ads' || l.utm_source?.toLowerCase().includes('google')).length, icon: <Search size={18} />, bg: 'bg-sky-50', border: 'border-sky-200', text: 'text-sky-700', iconColor: 'text-sky-500', sub: periodLabel },
               { label: 'Meta Ads', value: filtered.filter(l => l.source === 'Meta Ads' || l.utm_source?.toLowerCase().includes('meta') || l.utm_source?.toLowerCase().includes('facebook')).length, icon: <Share2 size={18} />, bg: 'bg-indigo-50', border: 'border-indigo-200', text: 'text-indigo-700', iconColor: 'text-indigo-500', sub: periodLabel },
+              { label: 'WhatsApp', value: filtered.filter(l => l.source === 'WhatsApp').length, icon: <MessageCircle size={18} />, bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700', iconColor: 'text-green-500', sub: periodLabel },
             ].map(stat => (
               <div key={stat.label} className={`${stat.bg} border ${stat.border} rounded-xl p-4 flex flex-col gap-1.5`}>
                 <div className="flex items-center justify-between">
@@ -1511,7 +1512,8 @@ const Leads: React.FC = () => {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent"
                   >
                     <option value="Meta Ads">Meta Ads</option>
-                    <option value="Whatsapp">Whatsapp</option>
+                    <option value="WhatsApp">WhatsApp</option>
+                    <option value="Call">Call</option>
                     <option value="Custom">Custom</option>
                   </select>
                 </div>
