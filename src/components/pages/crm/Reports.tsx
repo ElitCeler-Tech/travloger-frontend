@@ -71,20 +71,26 @@ const Reports: React.FC = () => {
     setSelectedCampaign('all')
 
     // Fetch packages from DB filtered by destination
+    const dedup = (pkgs: any[]) => {
+      const seen = new Set<string>()
+      return pkgs.filter((p: any) => {
+        const name = p.name || p.title || ''
+        if (name.length <= 2 || seen.has(name)) return false
+        seen.add(name)
+        return true
+      })
+    }
     if (selectedLandingPage !== 'all') {
-      // Try with slug first (matches state column), then capitalized (matches primary_destination)
       const capitalized = selectedLandingPage.charAt(0).toUpperCase() + selectedLandingPage.slice(1)
       fetchApi(`/api/packages/city/${encodeURIComponent(capitalized)}`)
         .then((data: any) => {
-          const pkgs = (data?.packages || []).filter((p: any) => (p.name || p.title || '').length > 2)
-          setPackageOptions(pkgs.map((p: any) => ({ id: p.id, name: p.name || p.title })))
+          setPackageOptions(dedup(data?.packages || []).map((p: any) => ({ id: p.id, name: p.name || p.title })))
         })
         .catch(() => setPackageOptions([]))
     } else {
       fetchApi('/api/packages')
         .then((data: any) => {
-          const pkgs = (data?.packages || []).filter((p: any) => (p.name || p.title || '').length > 2)
-          setPackageOptions(pkgs.map((p: any) => ({ id: p.id, name: p.name || p.title })))
+          setPackageOptions(dedup(data?.packages || []).map((p: any) => ({ id: p.id, name: p.name || p.title })))
         })
         .catch(() => setPackageOptions([]))
     }
