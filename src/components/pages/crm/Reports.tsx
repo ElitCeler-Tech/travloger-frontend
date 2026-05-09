@@ -70,14 +70,25 @@ const Reports: React.FC = () => {
     setSelectedPackage('all')
     setSelectedCampaign('all')
 
-    // Fetch packages from DB filtered by destination (so all packages show, not just ones with events)
+    // Fetch packages from DB filtered by destination
     const pkgUrl = selectedLandingPage !== 'all'
       ? `/api/packages/city/${encodeURIComponent(selectedLandingPage)}`
       : `/api/packages`
     fetchApi(pkgUrl)
       .then((data: any) => {
         const pkgs = (data?.packages || []).filter((p: any) => (p.name || p.title || '').length > 2)
-        setPackageOptions(pkgs.map((p: any) => ({ id: p.id, name: p.name || p.title })))
+        if (pkgs.length) {
+          setPackageOptions(pkgs.map((p: any) => ({ id: p.id, name: p.name || p.title })))
+        } else if (selectedLandingPage !== 'all') {
+          // Retry with capitalized name
+          const capitalized = selectedLandingPage.charAt(0).toUpperCase() + selectedLandingPage.slice(1)
+          fetchApi(`/api/packages/city/${encodeURIComponent(capitalized)}`).then((data2: any) => {
+            const pkgs2 = (data2?.packages || []).filter((p: any) => (p.name || p.title || '').length > 2)
+            setPackageOptions(pkgs2.map((p: any) => ({ id: p.id, name: p.name || p.title })))
+          }).catch(() => setPackageOptions([]))
+        } else {
+          setPackageOptions([])
+        }
       })
       .catch(() => setPackageOptions([]))
 
