@@ -76,25 +76,8 @@ const Reports: React.FC = () => {
       : `/api/packages`
     fetchApi(pkgUrl)
       .then((data: any) => {
-        const pkgs = data?.packages || []
-        if (pkgs.length) {
-          setPackageOptions(pkgs.map((p: any) => ({ id: p.id, name: p.name || p.title })))
-        } else if (selectedLandingPage !== 'all') {
-          // Fallback: fetch all packages and filter client-side
-          fetchApi('/api/packages').then((allData: any) => {
-            const all = allData?.packages || []
-            const filtered = all.filter((p: any) => {
-              const search = selectedLandingPage.toLowerCase()
-              return (p.name || '').toLowerCase().includes(search) ||
-                (p.primary_destination || '').toLowerCase().includes(search) ||
-                (p.destinations || '').toLowerCase().includes(search) ||
-                (p.state || '').toLowerCase().includes(search)
-            })
-            setPackageOptions((filtered.length ? filtered : all).map((p: any) => ({ id: p.id, name: p.name || p.title })))
-          }).catch(() => setPackageOptions([]))
-        } else {
-          setPackageOptions([])
-        }
+        const pkgs = (data?.packages || []).filter((p: any) => (p.name || p.title || '').length > 2)
+        setPackageOptions(pkgs.map((p: any) => ({ id: p.id, name: p.name || p.title })))
       })
       .catch(() => setPackageOptions([]))
 
