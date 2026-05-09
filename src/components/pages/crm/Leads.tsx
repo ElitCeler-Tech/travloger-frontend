@@ -534,7 +534,7 @@ const Leads: React.FC = () => {
         const filtered = getFilteredLeads()
         const periodLabel = dateFilter === 'all' ? 'All time' : dateFilter === 'today' ? 'Today' : dateFilter === 'week' ? 'This week' : dateFilter === 'month' ? 'This month' : 'Selected period'
         return (
-          <div className="grid grid-cols-2 lg:grid-cols-7 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
             {[
               { label: 'Total Leads', value: leads.length, icon: <Users size={18} />, bg: 'bg-slate-50', border: 'border-slate-200', text: 'text-slate-800', iconColor: 'text-slate-500', sub: 'All time' },
               { label: 'This Period', value: filtered.length, icon: <BarChart3 size={18} />, bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', iconColor: 'text-blue-500', sub: periodLabel },
@@ -542,7 +542,7 @@ const Leads: React.FC = () => {
               { label: 'Unassigned', value: filtered.filter(l => !l.assigned_employee_id).length, icon: <UserX size={18} />, bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-700', iconColor: 'text-amber-500', sub: periodLabel },
               { label: 'This Year', value: leads.filter(l => new Date(l.created_at).getFullYear() === new Date().getFullYear()).length, icon: <CalendarDays size={18} />, bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', iconColor: 'text-purple-500', sub: new Date().getFullYear().toString() },
               { label: 'Google Ads', value: filtered.filter(l => l.source === 'Google Ads' || l.utm_source?.toLowerCase().includes('google')).length, icon: <Search size={18} />, bg: 'bg-sky-50', border: 'border-sky-200', text: 'text-sky-700', iconColor: 'text-sky-500', sub: periodLabel },
-              { label: 'Meta Ads', value: filtered.filter(l => l.source === 'Meta Ads' || l.utm_source?.toLowerCase().includes('meta') || l.utm_source?.toLowerCase().includes('facebook')).length, icon: <Share2 size={18} />, bg: 'bg-indigo-50', border: 'border-indigo-200', text: 'text-indigo-700', iconColor: 'text-indigo-500', sub: periodLabel },
+              { label: 'Meta Ads', value: filtered.filter(l => l.source === 'Meta Ads' || l.utm_source?.toLowerCase().includes('meta') || l.utm_source?.toLowerCase().includes('facebook')).length, icon: <Share2 size={18} />, bg: 'bg-violet-50', border: 'border-violet-200', text: 'text-violet-700', iconColor: 'text-violet-500', sub: periodLabel },
               { label: 'WhatsApp', value: filtered.filter(l => l.source === 'WhatsApp').length, icon: <MessageCircle size={18} />, bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700', iconColor: 'text-green-500', sub: periodLabel },
             ].map(stat => (
               <div key={stat.label} className={`${stat.bg} border ${stat.border} rounded-xl p-4 flex flex-col gap-1.5`}>
