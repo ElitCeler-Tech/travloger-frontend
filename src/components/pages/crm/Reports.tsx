@@ -71,26 +71,23 @@ const Reports: React.FC = () => {
     setSelectedCampaign('all')
 
     // Fetch packages from DB filtered by destination
-    const pkgUrl = selectedLandingPage !== 'all'
-      ? `/api/packages/city/${encodeURIComponent(selectedLandingPage)}`
-      : `/api/packages`
-    fetchApi(pkgUrl)
-      .then((data: any) => {
-        const pkgs = (data?.packages || []).filter((p: any) => (p.name || p.title || '').length > 2)
-        if (pkgs.length) {
+    if (selectedLandingPage !== 'all') {
+      // Try with slug first (matches state column), then capitalized (matches primary_destination)
+      const capitalized = selectedLandingPage.charAt(0).toUpperCase() + selectedLandingPage.slice(1)
+      fetchApi(`/api/packages/city/${encodeURIComponent(capitalized)}`)
+        .then((data: any) => {
+          const pkgs = (data?.packages || []).filter((p: any) => (p.name || p.title || '').length > 2)
           setPackageOptions(pkgs.map((p: any) => ({ id: p.id, name: p.name || p.title })))
-        } else if (selectedLandingPage !== 'all') {
-          // Retry with capitalized name
-          const capitalized = selectedLandingPage.charAt(0).toUpperCase() + selectedLandingPage.slice(1)
-          fetchApi(`/api/packages/city/${encodeURIComponent(capitalized)}`).then((data2: any) => {
-            const pkgs2 = (data2?.packages || []).filter((p: any) => (p.name || p.title || '').length > 2)
-            setPackageOptions(pkgs2.map((p: any) => ({ id: p.id, name: p.name || p.title })))
-          }).catch(() => setPackageOptions([]))
-        } else {
-          setPackageOptions([])
-        }
-      })
-      .catch(() => setPackageOptions([]))
+        })
+        .catch(() => setPackageOptions([]))
+    } else {
+      fetchApi('/api/packages')
+        .then((data: any) => {
+          const pkgs = (data?.packages || []).filter((p: any) => (p.name || p.title || '').length > 2)
+          setPackageOptions(pkgs.map((p: any) => ({ id: p.id, name: p.name || p.title })))
+        })
+        .catch(() => setPackageOptions([]))
+    }
 
     // Fetch campaign options from engagement events as before
     const params = new URLSearchParams({ section: 'landing_page_analytics' })
@@ -157,10 +154,7 @@ const Reports: React.FC = () => {
             setCampaignOptions(campTable.rows.map((r: string[]) => r[0]).filter((c: string) => c && c !== 'none' && c !== 'Direct Visitor / Untracked Campaign'))
           }
           // Extract package options from Package Performance table (only add if initial fetch returned nothing)
-          const pkgTable = tables.find((t: any) => t.title === 'Package Performance')
-          if (pkgTable?.rows?.length && packageOptions.length === 0) {
-            setPackageOptions(pkgTable.rows.map((r: string[]) => ({ id: r[0], name: r[0] })))
-          }
+          // Package options are loaded separately via useEffect — don't overwrite from report data
           setEngagementReport(null)
         } catch {
           setLpTables([])
