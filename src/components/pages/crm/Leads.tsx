@@ -86,15 +86,8 @@ const Leads: React.FC = () => {
   const fetchDestinations = useCallback(async () => {
     try {
       setLoadingDestinations(true)
-      const data = await fetchApi('/api/destinations')
-      const uniqueDestinations = [
-        ...new Set(
-          (data.destinations || [])
-            .map((dest: any) => dest?.name || dest)
-            .filter(Boolean)
-        )
-      ] as string[]
-      setDestinations(uniqueDestinations)
+      const validDestinations = ['Ladakh', 'Kashmir', 'Kerala', 'Gokarna', 'Meghalaya', 'Manali', 'Singapore', 'Hyderabad', 'Bengaluru', 'Mysore']
+      setDestinations(validDestinations)
     } catch (error) {
       console.error('Error fetching destinations:', error)
     } finally {
