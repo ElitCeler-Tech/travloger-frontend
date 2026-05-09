@@ -625,8 +625,8 @@ const Leads: React.FC = () => {
                       <div className="text-xs font-medium text-gray-900">{lead.name || 'N/A'}</div>
                     </td>
                     <td className="px-3 py-2 whitespace-nowrap">
-                      <div className="text-xs text-gray-900">{lead.email || 'N/A'}</div>
-                      <div className="text-xs text-gray-500">{lead.phone || 'N/A'}</div>
+                      <div className="text-xs text-gray-900">{lead.email || (lead.source === 'WhatsApp' || lead.source === 'Call' ? '' : 'N/A')}</div>
+                      <div className="text-xs text-gray-500">{lead.phone || (lead.source === 'WhatsApp' ? 'Via WhatsApp' : lead.source === 'Call' ? 'Via Call' : 'N/A')}</div>
                     </td>
                     <td className="px-3 py-2 whitespace-nowrap">
                       <span className={`inline-flex px-1.5 py-0.5 text-xs font-semibold rounded-full ${getSourceColor(lead.source)}`}>
