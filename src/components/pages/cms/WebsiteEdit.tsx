@@ -1232,7 +1232,7 @@ const WebsiteEdit: React.FC = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">URL Slug</label>
                   <div className="flex items-center">
-                    <span className="text-sm text-gray-400 mr-1">travloger.in/</span>
+                    <span className="text-sm text-gray-400 mr-1">campaign.travloger.in/</span>
                     <input type="text" value={duplicateSlug} onChange={(e) => setDuplicateSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))} placeholder="shimla" className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900" />
                   </div>
                 </div>
@@ -1262,7 +1262,7 @@ const WebsiteEdit: React.FC = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">New URL Slug</label>
                   <div className="flex items-center">
-                    <span className="text-sm text-gray-400 mr-1">travloger.in/</span>
+                    <span className="text-sm text-gray-400 mr-1">campaign.travloger.in/</span>
                     <input type="text" value={renameSlug} onChange={(e) => setRenameSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))} placeholder="shimla" className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900" />
                   </div>
                 </div>
@@ -1297,6 +1297,7 @@ const WebsiteEdit: React.FC = () => {
             <h1 className="text-2xl font-bold text-gray-900">Website Editor</h1>
             <p className="text-sm text-gray-600 mt-1">
               Editing content for: <span className="font-semibold text-blue-600">{cityName}</span>
+              <a href={`https://campaign.travloger.in/${citySlug}`} target="_blank" rel="noopener noreferrer" className="ml-2 text-xs text-blue-500 hover:underline">campaign.travloger.in/{citySlug} ↗</a>
             </p>
           </div>
           <button
