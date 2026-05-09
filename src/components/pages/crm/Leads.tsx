@@ -654,7 +654,7 @@ const Leads: React.FC = () => {
                       {lead.number_of_travelers || 'N/A'}
                     </td>
                     <td className="px-3 py-2 whitespace-nowrap text-xs text-gray-900">
-                      {lead.travel_dates || 'N/A'}
+                      {lead.travel_dates ? lead.travel_dates.split('-').reverse().join('/') : 'N/A'}
                     </td>
                     <td className="px-3 py-2 whitespace-nowrap">
                       <span className={`inline-flex px-1.5 py-0.5 text-xs font-semibold rounded-full ${getDestinationColor(lead.destination)}`}>
