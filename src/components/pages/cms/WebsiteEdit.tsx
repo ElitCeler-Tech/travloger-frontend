@@ -4973,6 +4973,50 @@ const WebsiteEdit: React.FC = () => {
         </div>
       </div>
     </div>
+
+    {/* Footer Links Section */}
+    <div className="mt-8 bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+        <div>
+          <h2 className="text-lg font-bold text-gray-900">11. Footer Links</h2>
+          <p className="text-xs text-gray-500">Edit footer section links (About, Collab, Specials, etc.)</p>
+        </div>
+        <button onClick={() => saveSection('FooterLinks', { footerLinks: contact })} disabled={saving} className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50">{saving ? 'Saving...' : 'Save'}</button>
+      </div>
+      <div className="p-4 space-y-4">
+        <p className="text-xs text-gray-500">Contact details and social links are editable in the Header section above. Footer link sections (About Travloger, Collab With Us, Specials, Creators, Gift a Trip) are managed here:</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Phone Number</label>
+            <input type="text" value={contact.phone} onChange={(e) => setContact(prev => ({ ...prev, phone: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" placeholder="+91-62813-92007" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+            <input type="text" value={contact.email} onChange={(e) => setContact(prev => ({ ...prev, email: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" placeholder="hello@travloger.in" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Address</label>
+            <input type="text" value={contact.address} onChange={(e) => setContact(prev => ({ ...prev, address: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" placeholder="ABC road, Hyderabad, Telangana" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">WhatsApp Number</label>
+            <input type="text" value={contact.whatsapp || ''} onChange={(e) => setContact(prev => ({ ...prev, whatsapp: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" placeholder="+919876543210" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Twitter URL</label>
+            <input type="url" value={contact.twitterUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, twitterUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" placeholder="https://twitter.com/travloger" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Facebook URL</label>
+            <input type="url" value={contact.facebookUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, facebookUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" placeholder="https://facebook.com/travloger" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Instagram URL</label>
+            <input type="url" value={contact.instagramUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, instagramUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" placeholder="https://instagram.com/travloger" />
+          </div>
+        </div>
+      </div>
+    </div>
     </div >
   )
 }
