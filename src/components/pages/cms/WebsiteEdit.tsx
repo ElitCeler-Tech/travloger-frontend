@@ -4919,7 +4919,6 @@ const WebsiteEdit: React.FC = () => {
           </div>
         )
       }
-    </div >
 
     {/* Footer Locations Section */}
     <div className="mt-8 bg-white rounded-xl border border-gray-200 overflow-hidden">
