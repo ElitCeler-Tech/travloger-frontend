@@ -4948,6 +4948,10 @@ const WebsiteEdit: React.FC = () => {
                 <button onClick={() => { const u = [...footerLocations.indian]; u[i].enabled = !u[i].enabled; setFooterLocations(p => ({ ...p, indian: u })); }} className={`w-8 h-5 rounded-full shrink-0 ${loc.enabled ? 'bg-green-500' : 'bg-gray-300'}`}><span className={`block w-3.5 h-3.5 rounded-full bg-white shadow mx-0.5 transition-transform ${loc.enabled ? 'translate-x-3' : ''}`} /></button>
                 <input type="text" value={loc.name} onChange={e => { const u = [...footerLocations.indian]; u[i].name = e.target.value; setFooterLocations(p => ({ ...p, indian: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-black" placeholder="Location name" />
                 <input type="text" value={loc.image} onChange={e => { const u = [...footerLocations.indian]; u[i].image = e.target.value; setFooterLocations(p => ({ ...p, indian: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-black" placeholder="Image URL" />
+                <label className="shrink-0 px-2 py-1.5 text-xs bg-blue-50 text-blue-600 rounded cursor-pointer hover:bg-blue-100 font-medium">
+                  Upload
+                  <input type="file" accept="image/*" className="hidden" onChange={async (e) => { const file = e.target.files?.[0]; if (!file) return; const fd = new FormData(); fd.append('file', file); fd.append('folder', 'footer'); try { const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://travelogerapi.travloger.in'}/api/upload`, { method: 'POST', body: fd }); const data = await res.json(); if (data.url) { const u = [...footerLocations.indian]; u[i].image = data.url; setFooterLocations(p => ({ ...p, indian: u })); } } catch {} }} />
+                </label>
                 <button onClick={() => setFooterLocations(p => ({ ...p, indian: p.indian.filter((_, idx) => idx !== i) }))} className="text-red-400 hover:text-red-600 text-xs px-2">✕</button>
               </div>
             ))}
@@ -4966,6 +4970,10 @@ const WebsiteEdit: React.FC = () => {
                 <button onClick={() => { const u = [...footerLocations.international]; u[i].enabled = !u[i].enabled; setFooterLocations(p => ({ ...p, international: u })); }} className={`w-8 h-5 rounded-full shrink-0 ${loc.enabled ? 'bg-green-500' : 'bg-gray-300'}`}><span className={`block w-3.5 h-3.5 rounded-full bg-white shadow mx-0.5 transition-transform ${loc.enabled ? 'translate-x-3' : ''}`} /></button>
                 <input type="text" value={loc.name} onChange={e => { const u = [...footerLocations.international]; u[i].name = e.target.value; setFooterLocations(p => ({ ...p, international: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-black" placeholder="Location name" />
                 <input type="text" value={loc.image} onChange={e => { const u = [...footerLocations.international]; u[i].image = e.target.value; setFooterLocations(p => ({ ...p, international: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-black" placeholder="Image URL" />
+                <label className="shrink-0 px-2 py-1.5 text-xs bg-blue-50 text-blue-600 rounded cursor-pointer hover:bg-blue-100 font-medium">
+                  Upload
+                  <input type="file" accept="image/*" className="hidden" onChange={async (e) => { const file = e.target.files?.[0]; if (!file) return; const fd = new FormData(); fd.append('file', file); fd.append('folder', 'footer'); try { const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://travelogerapi.travloger.in'}/api/upload`, { method: 'POST', body: fd }); const data = await res.json(); if (data.url) { const u = [...footerLocations.international]; u[i].image = data.url; setFooterLocations(p => ({ ...p, international: u })); } } catch {} }} />
+                </label>
                 <button onClick={() => setFooterLocations(p => ({ ...p, international: p.international.filter((_, idx) => idx !== i) }))} className="text-red-400 hover:text-red-600 text-xs px-2">✕</button>
               </div>
             ))}
