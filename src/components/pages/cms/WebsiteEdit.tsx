@@ -327,6 +327,28 @@ const WebsiteEdit: React.FC = () => {
     formBackgroundImageUrlMobile: ''
   })
 
+  const [footerLocations, setFooterLocations] = useState<{ enabled: boolean; indian: { name: string; image: string; enabled: boolean }[]; international: { name: string; image: string; enabled: boolean }[] }>({
+    enabled: true,
+    indian: [
+      { name: 'HAMPI', image: '/footerImages/hampi.png', enabled: true },
+      { name: 'MANALI', image: '/footerImages/manali.png', enabled: true },
+      { name: 'GOA', image: '/footerImages/goa.png', enabled: true },
+      { name: 'KASHMIR', image: '/footerImages/kashmir.png', enabled: true },
+      { name: 'RAJASTHAN', image: '/footerImages/rajasthan.png', enabled: true },
+      { name: 'SIKKIM', image: '/footerImages/sikkim.png', enabled: true },
+      { name: 'GUJRAT', image: '/footerImages/gujrat.png', enabled: true },
+    ],
+    international: [
+      { name: 'THAILAND', image: '/footerImages/thailand.png', enabled: true },
+      { name: 'JAPAN', image: '/footerImages/japan.png', enabled: true },
+      { name: 'CHINA', image: '/footerImages/china.png', enabled: true },
+      { name: 'BAKU', image: '/footerImages/baku.png', enabled: true },
+      { name: 'PERU', image: '/footerImages/peru.png', enabled: true },
+      { name: 'KOREA', image: '/footerImages/korea.png', enabled: true },
+      { name: 'VIETNAM', image: '/footerImages/vietnam.png', enabled: true },
+    ],
+  })
+
   const [accommodation, setAccommodation] = useState<AccommodationContent>({
     heading: "What You See Is Where You'll Stay. Literally.",
     stockImage: '',
@@ -4883,6 +4905,60 @@ const WebsiteEdit: React.FC = () => {
           </div>
         )
       }
+    </div >
+
+    {/* Footer Locations Section */}
+    <div className="mt-8 bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+        <div>
+          <h2 className="text-lg font-bold text-gray-900">10. Footer Locations</h2>
+          <p className="text-xs text-gray-500">Manage Indian & International trip cards in footer</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button onClick={() => setFooterLocations(p => ({ ...p, enabled: !p.enabled }))} className={`relative w-12 h-7 rounded-full transition-colors ${footerLocations.enabled ? 'bg-blue-500' : 'bg-gray-300'}`}>
+            <span className={`absolute top-1 w-5 h-5 rounded-full bg-white shadow transition-transform ${footerLocations.enabled ? 'left-6' : 'left-1'}`} />
+          </button>
+          <button onClick={() => saveSection('FooterLocations', { footerLocations })} disabled={saving} className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50">{saving ? 'Saving...' : 'Save'}</button>
+        </div>
+      </div>
+      <div className="p-4 space-y-6">
+        {/* Indian Trips */}
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-gray-800">Indian Trips</h3>
+            <button onClick={() => setFooterLocations(p => ({ ...p, indian: [...p.indian, { name: '', image: '', enabled: true }] }))} className="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-lg font-medium">+ Add</button>
+          </div>
+          <div className="space-y-2">
+            {footerLocations.indian.map((loc, i) => (
+              <div key={i} className="flex items-center gap-2 p-2 border border-gray-100 rounded-lg">
+                <button onClick={() => { const u = [...footerLocations.indian]; u[i].enabled = !u[i].enabled; setFooterLocations(p => ({ ...p, indian: u })); }} className={`w-8 h-5 rounded-full shrink-0 ${loc.enabled ? 'bg-green-500' : 'bg-gray-300'}`}><span className={`block w-3.5 h-3.5 rounded-full bg-white shadow mx-0.5 transition-transform ${loc.enabled ? 'translate-x-3' : ''}`} /></button>
+                <input type="text" value={loc.name} onChange={e => { const u = [...footerLocations.indian]; u[i].name = e.target.value; setFooterLocations(p => ({ ...p, indian: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-black" placeholder="Location name" />
+                <input type="text" value={loc.image} onChange={e => { const u = [...footerLocations.indian]; u[i].image = e.target.value; setFooterLocations(p => ({ ...p, indian: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-black" placeholder="Image URL" />
+                <button onClick={() => setFooterLocations(p => ({ ...p, indian: p.indian.filter((_, idx) => idx !== i) }))} className="text-red-400 hover:text-red-600 text-xs px-2">✕</button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* International Trips */}
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-gray-800">International Trips</h3>
+            <button onClick={() => setFooterLocations(p => ({ ...p, international: [...p.international, { name: '', image: '', enabled: true }] }))} className="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-lg font-medium">+ Add</button>
+          </div>
+          <div className="space-y-2">
+            {footerLocations.international.map((loc, i) => (
+              <div key={i} className="flex items-center gap-2 p-2 border border-gray-100 rounded-lg">
+                <button onClick={() => { const u = [...footerLocations.international]; u[i].enabled = !u[i].enabled; setFooterLocations(p => ({ ...p, international: u })); }} className={`w-8 h-5 rounded-full shrink-0 ${loc.enabled ? 'bg-green-500' : 'bg-gray-300'}`}><span className={`block w-3.5 h-3.5 rounded-full bg-white shadow mx-0.5 transition-transform ${loc.enabled ? 'translate-x-3' : ''}`} /></button>
+                <input type="text" value={loc.name} onChange={e => { const u = [...footerLocations.international]; u[i].name = e.target.value; setFooterLocations(p => ({ ...p, international: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-black" placeholder="Location name" />
+                <input type="text" value={loc.image} onChange={e => { const u = [...footerLocations.international]; u[i].image = e.target.value; setFooterLocations(p => ({ ...p, international: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-black" placeholder="Image URL" />
+                <button onClick={() => setFooterLocations(p => ({ ...p, international: p.international.filter((_, idx) => idx !== i) }))} className="text-red-400 hover:text-red-600 text-xs px-2">✕</button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
     </div >
   )
 }
