@@ -2203,6 +2203,18 @@ const WebsiteEdit: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Highlight Text <span className="text-xs text-gray-400">(words from heading to show in teal)</span>
+                </label>
+                <input
+                  type="text"
+                  value={tripOptions.highlightText || ''}
+                  onChange={(e) => setTripOptions(prev => ({ ...prev, highlightText: e.target.value }))}
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  placeholder="e.g. Explore Ladakh?"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
                   Subheading
                 </label>
                 <input
