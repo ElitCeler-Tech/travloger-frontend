@@ -176,6 +176,7 @@ interface ContactContent {
   twitterUrl?: string
   facebookUrl?: string
   instagramUrl?: string
+  youtubeUrl?: string
 }
 
 // Itinerary (Packages) types reused here in a simplified way
@@ -5012,6 +5013,10 @@ const WebsiteEdit: React.FC = () => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Instagram URL</label>
             <input type="url" value={contact.instagramUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, instagramUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" placeholder="https://instagram.com/travloger" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">YouTube URL</label>
+            <input type="url" value={contact.youtubeUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, youtubeUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" placeholder="https://youtube.com/@travloger" />
           </div>
         </div>
       </div>
