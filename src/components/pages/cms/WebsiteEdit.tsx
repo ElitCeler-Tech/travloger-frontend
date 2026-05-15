@@ -172,6 +172,9 @@ interface ContactContent {
   formBackgroundImageUrlMobile?: string
   whatsapp?: string
   expertButtonText?: string
+  twitterUrl?: string
+  facebookUrl?: string
+  instagramUrl?: string
 }
 
 // Itinerary (Packages) types reused here in a simplified way
@@ -1761,6 +1764,21 @@ const WebsiteEdit: React.FC = () => {
                   className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
                   placeholder="Talk to an Expert"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Twitter URL</label>
+                <input type="url" value={contact.twitterUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, twitterUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white" placeholder="https://twitter.com/travloger" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Facebook URL</label>
+                <input type="url" value={contact.facebookUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, facebookUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white" placeholder="https://facebook.com/travloger" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Instagram URL</label>
+                <input type="url" value={contact.instagramUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, instagramUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white" placeholder="https://instagram.com/travloger" />
               </div>
 
               <div className="md:col-span-2 space-y-4">
