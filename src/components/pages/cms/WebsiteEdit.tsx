@@ -14,6 +14,7 @@ interface TrustIndicator {
 interface HeroContent {
   title: string
   subtitle: string
+  highlightText?: string
   backgroundImageUrl: string
   mobileBackgroundImageUrl?: string
   mobileVideoUrl: string
@@ -1481,6 +1482,19 @@ const WebsiteEdit: React.FC = () => {
                   onChange={(e) => setHero(prev => ({ ...prev, title: e.target.value }))}
                   className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
                   placeholder="How Do You Want To Experience Ladakh?"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Highlight Text <span className="text-xs text-gray-400">(words to highlight in teal color)</span>
+                </label>
+                <input
+                  type="text"
+                  value={hero.highlightText || ''}
+                  onChange={(e) => setHero(prev => ({ ...prev, highlightText: e.target.value }))}
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  placeholder="Explore Kashmir"
                 />
               </div>
 
