@@ -1448,6 +1448,32 @@ const WebsiteEdit: React.FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Hero Headline
+                </label>
+                <input
+                  type="text"
+                  value={hero.title}
+                  onChange={(e) => setHero(prev => ({ ...prev, title: e.target.value }))}
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  placeholder="How Do You Want To Experience Ladakh?"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Hero Sub-heading
+                </label>
+                <input
+                  type="text"
+                  value={hero.subtitle}
+                  onChange={(e) => setHero(prev => ({ ...prev, subtitle: e.target.value }))}
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  placeholder="Group departures or custom all-inclusive journeys"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
                   Background Image URL
                 </label>
                 <input
