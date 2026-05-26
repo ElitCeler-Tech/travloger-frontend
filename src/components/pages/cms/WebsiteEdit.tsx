@@ -1504,7 +1504,7 @@ const WebsiteEdit: React.FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                  Highlight Text <span className="text-xs text-gray-400">(words to highlight in teal color)</span>
+                  Highlight Text <span className="text-xs text-gray-400">(words highlighted in teal with brush underline)</span>
                 </label>
                 <input
                   type="text"
