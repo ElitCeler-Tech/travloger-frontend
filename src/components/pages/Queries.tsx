@@ -272,16 +272,16 @@ const Queries: React.FC = () => {
               getFilteredQueries().map((query) => (
                 <div key={query.id} className="bg-white border border-gray-200 rounded overflow-hidden">
                   {/* Main Card Content */}
-                  <div className="p-1.5">
+                  <div className="p-3">
                     {/* Single Row Layout */}
-                    <div className="flex items-center justify-between">
-                      {/* Left Section - Checkbox, ID, Status, HOT badge, Requirement */}
-                      <div className="flex items-center space-x-2 w-48">
+                    <div className="flex items-center gap-4">
+                      {/* Left Section - Checkbox, ID, Status, Requirement */}
+                      <div className="flex items-center gap-2 min-w-[180px]">
                         <input
                           type="checkbox"
                           checked={selectedQueries.includes(query.id)}
                           onChange={() => handleQuerySelect(query.id)}
-                          className="h-3 w-3 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          className="h-3.5 w-3.5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                         />
                         <button 
                           className="text-blue-600 font-bold text-sm hover:underline"
@@ -289,7 +289,7 @@ const Queries: React.FC = () => {
                         >
                           {query.id}
                         </button>
-                        <Badge className={`text-white text-xs px-1 py-0.5 ${
+                        <Badge className={`text-white text-xs px-1.5 py-0.5 ${
                           query.status === 'New' ? 'bg-blue-500' :
                           query.status === 'Hot Lead' ? 'bg-red-600' :
                           query.status === 'Proposal Sent' ? 'bg-purple-500' :
@@ -303,12 +303,12 @@ const Queries: React.FC = () => {
                           {safeString(query.status, 'New')}
                         </Badge>
                         {query.status === 'Hot Lead' && (
-                          <Badge className="bg-red-500 text-white text-xs px-1 py-0.5">
+                          <Badge className="bg-red-500 text-white text-xs px-1.5 py-0.5">
                             HOT
                           </Badge>
                         )}
                         <div className="text-xs">
-                          <div className="text-gray-500">Requirement</div>
+                          <div className="text-gray-400 text-[10px]">Requirement</div>
                           <div className="font-medium text-gray-900">
                             {safeString(query.requirement, 'Full package')}
                           </div>
@@ -316,43 +316,43 @@ const Queries: React.FC = () => {
                       </div>
 
                       {/* Client Information */}
-                      <div className="w-40">
-                        <div className="font-bold text-gray-900 text-xs">
+                      <div className="min-w-[150px]">
+                        <div className="font-semibold text-gray-900 text-xs">
                           Mr. {safeString(query.name, 'Unknown')} (Client)
                         </div>
-                        <div className="text-xs text-gray-600">
+                        <div className="text-xs text-gray-500">
                           {safeString(query.phone, 'No phone')}
                         </div>
-                        <div className="text-xs text-gray-600">
+                        <div className="text-xs text-gray-500 truncate max-w-[150px]">
                           {safeString(query.email, 'No email')}
                         </div>
-                        <div className="text-xs text-gray-600">
+                        <div className="text-xs text-gray-400">
                           {safeString(query.source, 'Unknown')}
                         </div>
                       </div>
 
                       {/* Destination & Travelers */}
-                      <div className="w-32">
-                        <div className="text-xs text-gray-500">Destination</div>
-                        <Badge className="bg-slate-100 text-slate-800 text-xs px-2 py-0.5 mb-1 font-medium">
+                      <div className="min-w-[120px]">
+                        <div className="text-[10px] text-gray-400 mb-0.5">Destination</div>
+                        <Badge className="bg-teal-600 text-white text-xs px-2 py-0.5 mb-1.5 font-medium">
                           {safeString(query.destination, 'Unknown')}
                         </Badge>
-                        <div className="text-xs text-gray-500">Travellers</div>
-                        <div className="text-xs text-gray-900">
+                        <div className="text-[10px] text-gray-400 mb-0.5">Travellers</div>
+                        <div className="text-xs text-gray-800 font-medium">
                           {query.travelers?.adults || 2} Adult {query.travelers?.children || 0} Child {query.travelers?.infants || 0} Infant
                         </div>
                       </div>
 
                       {/* Dates & Assignment */}
-                      <div className="w-32">
-                        <div className="flex items-center text-xs text-gray-900 mb-1">
-                          <Calendar className="h-3 w-3 mr-1 text-gray-500" />
+                      <div className="min-w-[130px]">
+                        <div className="flex items-center text-xs text-gray-800 mb-1">
+                          <Calendar className="h-3 w-3 mr-1 text-gray-400" />
                           10-11-2025
                         </div>
-                        <div className="text-xs text-gray-500 ml-4 mb-1">Till 14-11-2025</div>
-                        <div className="text-xs text-gray-500">Assigned to</div>
+                        <div className="text-xs text-gray-400 ml-4 mb-1">Till 14-11-2025</div>
+                        <div className="text-[10px] text-gray-400">Assigned to</div>
                         {loadingEmployees ? (
-                          <div className="flex items-center space-x-1 h-4">
+                          <div className="flex items-center space-x-1 h-5">
                             <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></div>
                             <span className="text-xs text-gray-500">Loading...</span>
                           </div>
@@ -360,7 +360,7 @@ const Queries: React.FC = () => {
                           <Select 
                             value={query.assigned_employee_name || ''}
                             onChange={(e) => handleAssignmentUpdate(query.id, (e.target as HTMLSelectElement).value)}
-                            className="h-4 px-1 text-xs font-medium text-blue-700 bg-white border border-gray-300 rounded"
+                            className="h-6 px-2 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-md mt-0.5"
                           >
                             <option value="">Assign to...</option>
                             {employees.map(emp => (
@@ -373,23 +373,23 @@ const Queries: React.FC = () => {
                       </div>
 
                       {/* Tasks & Notes */}
-                      <div className="w-24">
-                        <div className="text-xs text-gray-900 mb-1">
+                      <div className="min-w-[100px]">
+                        <div className="text-xs text-gray-800 mb-1">
                           {safeString(query.tasks, 'No Task')}
                         </div>
                         <div className="flex items-center text-xs text-orange-600 mb-1">
-                          <div className="w-2 h-2 bg-orange-500 rounded mr-1"></div>
+                          <div className="w-2 h-2 bg-orange-500 rounded-full mr-1"></div>
                           No Notes
                         </div>
-                        <div className="flex items-center text-xs text-gray-500">
-                          <Clock className="h-3 w-3 mr-1 text-gray-400" />
+                        <div className="flex items-center text-xs text-gray-400">
+                          <Clock className="h-3 w-3 mr-1" />
                           Created
                         </div>
-                        <div className="text-xs text-gray-900 ml-4">{new Date(query.created_at).toLocaleDateString()}</div>
+                        <div className="text-xs text-gray-700 ml-4">{new Date(query.created_at).toLocaleDateString()}</div>
                       </div>
 
                       {/* Action Icons & Last Updated */}
-                      <div className="w-32">
+                      <div className="min-w-[130px]">
                         <div className="flex items-center space-x-1 bg-gray-50 border border-gray-200 rounded-lg p-1 mb-1">
                           <button className="p-0.5 hover:bg-gray-100 rounded">
                             <Eye className="h-3 w-3 text-gray-600" />
@@ -414,7 +414,7 @@ const Queries: React.FC = () => {
                       </div>
 
                       {/* VIEW PROPOSAL */}
-                      <div className="w-32">
+                      <div className="min-w-[140px]">
                         <button className="w-full bg-slate-800 text-white text-xs font-semibold py-2 px-3 rounded-lg hover:bg-slate-700 flex items-center justify-center">
                           <Eye className="h-3 w-3 mr-1" />
                           VIEW PROPOSAL ({query.proposals})
