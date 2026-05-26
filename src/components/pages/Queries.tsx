@@ -270,7 +270,7 @@ const Queries: React.FC = () => {
           <div className="space-y-3">
             {getFilteredQueries().length > 0 ? (
               getFilteredQueries().map((query) => (
-                <div key={query.id} className="bg-white border border-gray-200 rounded overflow-hidden">
+                <div key={query.id} className="bg-white border border-gray-200 rounded-lg overflow-x-auto">
                   {/* Main Card Content */}
                   <div className="px-4 py-3">
                     <div className="flex items-center justify-between">
@@ -315,45 +315,38 @@ const Queries: React.FC = () => {
                       </div>
 
                       {/* Right: Destination + Date + Actions */}
-                      <div className="flex items-center gap-6">
+                      <div className="flex items-center gap-5 shrink-0">
                         {/* Destination */}
-                        <div className="text-center">
+                        <div className="text-center whitespace-nowrap">
                           <Badge className="bg-teal-600 text-white text-xs px-2.5 py-1 font-medium">
                             {safeString(query.destination, 'Unknown')}
                           </Badge>
-                          <div className="text-[10px] text-gray-400 mt-1">{query.travelers?.adults || 2}A · {query.travelers?.children || 0}C · {query.travelers?.infants || 0}I</div>
+                          <div className="text-[10px] text-gray-400 mt-0.5">{query.travelers?.adults || 2}A · {query.travelers?.children || 0}C · {query.travelers?.infants || 0}I</div>
                         </div>
 
                         {/* Date */}
-                        <div className="text-xs text-gray-600">
+                        <div className="text-xs text-gray-600 whitespace-nowrap">
                           <div className="flex items-center gap-1"><Calendar className="h-3 w-3 text-gray-400" />10-11-2025</div>
                           <div className="text-gray-400 mt-0.5">Till 14-11-2025</div>
                         </div>
 
                         {/* Assign */}
-                        <div>
-                          {loadingEmployees ? (
-                            <span className="text-xs text-gray-400">Loading...</span>
-                          ) : (
-                            <Select 
-                              value={query.assigned_employee_name || ''}
-                              onChange={(e) => handleAssignmentUpdate(query.id, (e.target as HTMLSelectElement).value)}
-                              className="h-7 px-2 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-md"
-                            >
-                              <option value="">Assign to...</option>
-                              {employees.map(emp => (
-                                <option key={emp.id} value={emp.name}>{emp.name}</option>
-                              ))}
-                            </Select>
-                          )}
-                        </div>
+                        <Select 
+                          value={query.assigned_employee_name || ''}
+                          onChange={(e) => handleAssignmentUpdate(query.id, (e.target as HTMLSelectElement).value)}
+                          className="h-8 w-28 px-2 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-md"
+                        >
+                          <option value="">Assign to...</option>
+                          {employees.map(emp => (
+                            <option key={emp.id} value={emp.name}>{emp.name}</option>
+                          ))}
+                        </Select>
 
                         {/* Notes */}
-                        <div className="text-xs">
+                        <div className="text-xs whitespace-nowrap">
                           <div className="text-gray-700">{safeString(query.tasks, 'No Task')}</div>
                           <div className="flex items-center text-orange-500 mt-0.5">
-                            <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mr-1"></div>
-                            No Notes
+                            <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mr-1"></div>No Notes
                           </div>
                         </div>
 
@@ -374,7 +367,7 @@ const Queries: React.FC = () => {
                         </div>
 
                         {/* VIEW PROPOSAL */}
-                        <button className="bg-slate-800 text-white text-xs font-semibold py-2 px-4 rounded-lg hover:bg-slate-700 flex items-center">
+                        <button className="bg-slate-800 text-white text-xs font-semibold py-2 px-3 rounded-lg hover:bg-slate-700 flex items-center whitespace-nowrap">
                           <Eye className="h-3 w-3 mr-1.5" />
                           VIEW PROPOSAL ({query.proposals})
                         </button>
