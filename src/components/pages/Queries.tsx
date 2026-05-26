@@ -334,7 +334,7 @@ const Queries: React.FC = () => {
                       {/* Destination & Travelers */}
                       <div className="w-32">
                         <div className="text-xs text-gray-500">Destination</div>
-                        <Badge className="bg-gray-800 text-white text-xs px-1 py-0.5 mb-1">
+                        <Badge className="bg-slate-100 text-slate-800 text-xs px-2 py-0.5 mb-1 font-medium">
                           {safeString(query.destination, 'Unknown')}
                         </Badge>
                         <div className="text-xs text-gray-500">Travellers</div>
@@ -390,7 +390,7 @@ const Queries: React.FC = () => {
 
                       {/* Action Icons & Last Updated */}
                       <div className="w-32">
-                        <div className="flex items-center space-x-0.5 bg-white border border-gray-300 rounded p-0.5 mb-1">
+                        <div className="flex items-center space-x-1 bg-gray-50 border border-gray-200 rounded-lg p-1 mb-1">
                           <button className="p-0.5 hover:bg-gray-100 rounded">
                             <Eye className="h-3 w-3 text-gray-600" />
                           </button>
@@ -415,7 +415,7 @@ const Queries: React.FC = () => {
 
                       {/* VIEW PROPOSAL */}
                       <div className="w-32">
-                        <button className="w-full bg-blue-600 text-white text-xs font-bold py-1 px-2 rounded hover:bg-blue-700 flex items-center justify-center">
+                        <button className="w-full bg-slate-800 text-white text-xs font-semibold py-2 px-3 rounded-lg hover:bg-slate-700 flex items-center justify-center">
                           <Eye className="h-3 w-3 mr-1" />
                           VIEW PROPOSAL ({query.proposals})
                         </button>
