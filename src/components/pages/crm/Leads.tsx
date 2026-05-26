@@ -216,10 +216,25 @@ const Leads: React.FC = () => {
   })
 
   const getSourceColor = (source: string): string => {
+    const s = (source || '').toLowerCase()
+    if (s.includes('google')) return 'bg-blue-100 text-blue-800'
+    if (s.includes('meta') || s.includes('facebook') || s.includes('instagram')) return 'bg-purple-100 text-purple-800'
+    if (s.includes('whatsapp')) return 'bg-green-100 text-green-800'
+    if (s.includes('call')) return 'bg-orange-100 text-orange-800'
+    if (s.includes('landing')) return 'bg-teal-100 text-teal-800'
+    if (s.includes('referral')) return 'bg-pink-100 text-pink-800'
     return 'bg-slate-100 text-slate-800'
   }
 
   const getDestinationColor = (destination: string): string => {
+    const d = (destination || '').toLowerCase()
+    if (d.includes('kashmir')) return 'bg-emerald-100 text-emerald-800'
+    if (d.includes('ladakh')) return 'bg-sky-100 text-sky-800'
+    if (d.includes('kerala')) return 'bg-green-100 text-green-800'
+    if (d.includes('goa')) return 'bg-amber-100 text-amber-800'
+    if (d.includes('manali') || d.includes('himachal')) return 'bg-cyan-100 text-cyan-800'
+    if (d.includes('rajasthan')) return 'bg-orange-100 text-orange-800'
+    if (d.includes('meghalaya')) return 'bg-lime-100 text-lime-800'
     return 'bg-slate-100 text-slate-800'
   }
 
