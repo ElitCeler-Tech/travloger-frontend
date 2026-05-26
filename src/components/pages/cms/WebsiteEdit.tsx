@@ -71,6 +71,7 @@ interface TripOption {
 interface TripOptionsContent {
   heading: string
   subheading: string
+  highlightText?: string
   customLabel: string
   groupLabel: string
   customTrips: TripOption[]
