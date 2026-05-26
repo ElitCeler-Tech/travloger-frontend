@@ -1536,10 +1536,10 @@ const WebsiteEdit: React.FC = () => {
                   type="url"
                   value={hero.backgroundImageUrl}
                   onChange={(e) => setHero(prev => ({ ...prev, backgroundImageUrl: e.target.value }))}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-800 focus:border-slate-800 text-black bg-white"
                   placeholder="https://example.com/image.jpg"
                 />
-                <div className="mt-2">
+                <div className="mt-3">
                   <label className="block text-sm font-medium text-gray-700 mb-1.5">
                     Or upload image
                   </label>
@@ -1569,14 +1569,14 @@ const WebsiteEdit: React.FC = () => {
                         setError(err?.message || 'Failed to upload image')
                       }
                     }}
-                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                    className="w-full text-sm text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-slate-100 file:text-slate-700 file:font-medium hover:file:bg-slate-200 file:cursor-pointer cursor-pointer"
                   />
                 </div>
 
                 {hero.backgroundImageUrl && (
-                  <div className="mt-2">
+                  <div className="mt-3">
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">Preview</label>
-                    <div className="relative w-full h-32 rounded-md overflow-hidden border border-gray-200">
+                    <div className="relative w-full h-40 rounded-lg overflow-hidden border border-gray-200 shadow-sm">
                       <Image
                         src={hero.backgroundImageUrl}
                         alt="Hero background preview"
@@ -1585,13 +1585,14 @@ const WebsiteEdit: React.FC = () => {
                         unoptimized={true}
                       />
                     </div>
-                    <div className="mt-1.5">
+                    <div className="mt-2 flex items-center justify-between">
+                      <span className="text-[11px] text-gray-400 truncate max-w-[80%]">{hero.backgroundImageUrl}</span>
                       <button
                         type="button"
                         onClick={() => setHero(prev => ({ ...prev, backgroundImageUrl: '' }))}
-                        className="text-xs text-red-600 hover:text-red-800"
+                        className="text-xs text-red-500 hover:text-red-700 font-medium"
                       >
-                        Remove Image
+                        Remove
                       </button>
                     </div>
                   </div>
