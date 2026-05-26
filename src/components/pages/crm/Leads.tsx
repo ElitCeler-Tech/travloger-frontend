@@ -737,11 +737,11 @@ const Leads: React.FC = () => {
             {/* Tracking Stats */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
               {[
-                { label: 'Total Revenue', value: fmtCurrency(trackingData.stats.total_revenue), icon: <IndianRupee size={18} />, bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-700', iconColor: 'text-emerald-500' },
-                { label: 'Total Bookings', value: trackingData.stats.total_bookings, icon: <Package size={18} />, bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', iconColor: 'text-blue-500' },
-                { label: 'Avg Booking Value', value: fmtCurrency(trackingData.stats.avg_booking_value), icon: <TrendingUp size={18} />, bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', iconColor: 'text-purple-500' },
-                { label: 'Conversion Rate', value: trackingData.stats.conversion_rate + '%', icon: <ArrowRightLeft size={18} />, bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-700', iconColor: 'text-amber-500' },
-                { label: 'Avg Lead Score', value: trackingData.stats.avg_lead_score, icon: <Target size={18} />, bg: 'bg-sky-50', border: 'border-sky-200', text: 'text-sky-700', iconColor: 'text-sky-500' },
+                { label: 'Total Revenue', value: fmtCurrency(trackingData.stats.total_revenue), icon: <IndianRupee size={18} />, bg: 'bg-white border-l-4 border-l-emerald-500', border: 'border-gray-200', text: 'text-emerald-700', iconColor: 'text-emerald-500' },
+                { label: 'Total Bookings', value: trackingData.stats.total_bookings, icon: <Package size={18} />, bg: 'bg-white border-l-4 border-l-blue-500', border: 'border-gray-200', text: 'text-blue-700', iconColor: 'text-blue-500' },
+                { label: 'Avg Booking Value', value: fmtCurrency(trackingData.stats.avg_booking_value), icon: <TrendingUp size={18} />, bg: 'bg-white border-l-4 border-l-purple-500', border: 'border-gray-200', text: 'text-purple-700', iconColor: 'text-purple-500' },
+                { label: 'Conversion Rate', value: trackingData.stats.conversion_rate + '%', icon: <ArrowRightLeft size={18} />, bg: 'bg-white border-l-4 border-l-amber-500', border: 'border-gray-200', text: 'text-amber-700', iconColor: 'text-amber-500' },
+                { label: 'Avg Lead Score', value: trackingData.stats.avg_lead_score, icon: <Target size={18} />, bg: 'bg-white border-l-4 border-l-sky-500', border: 'border-gray-200', text: 'text-sky-700', iconColor: 'text-sky-500' },
               ].map(stat => (
                 <div key={stat.label} className={`${stat.bg} border ${stat.border} rounded-xl p-4 flex flex-col gap-1.5`}>
                   <div className="flex items-center justify-between">
