@@ -618,7 +618,7 @@ const Leads: React.FC = () => {
           </div>
         ) : (
           <div className="overflow-x-auto scrollbar-hide">
-            <table className="min-w-[1100px] w-full divide-y divide-gray-200">
+            <table className="min-w-[1200px] w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>

@@ -138,7 +138,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </button>
           <div className="ml-auto flex items-center gap-3">
             <span className="hidden sm:block text-sm text-gray-600">{user?.name || 'Admin'}</span>
-            <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center cursor-pointer" onClick={() => setShowLogoutModal(true)}>
+            <div className="h-8 w-8 rounded-full bg-teal-600 flex items-center justify-center cursor-pointer" onClick={() => setShowLogoutModal(true)}>
               <span className="text-white text-xs font-semibold">{user?.name?.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase() || 'AD'}</span>
             </div>
           </div>
@@ -146,7 +146,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
         {/* Content */}
         <main className="flex-1 overflow-y-auto">
-          <div className="max-w-7xl mx-auto p-6">
+          <div className="p-6">
             {children}
           </div>
         </main>
