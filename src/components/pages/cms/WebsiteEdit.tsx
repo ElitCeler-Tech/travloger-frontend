@@ -1905,17 +1905,18 @@ const WebsiteEdit: React.FC = () => {
 
             {/* Trust Indicators Section */}
             <div className="mt-6 pt-6 border-t border-gray-100">
-              <h3 className="text-sm font-bold text-gray-900 mb-4">Trust Indicators</h3>
+              <h3 className="text-sm font-bold text-gray-900 mb-1">Trust Indicators</h3>
+              <p className="text-xs text-gray-400 mb-4">Shown on the hero section below the background image (★ star auto-shows for Google)</p>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Google Ratings */}
-                <div className="space-y-3">
+                <div className="space-y-3 bg-gray-50 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-1">
-                    <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
-                    <span className="text-xs font-bold uppercase tracking-wider text-gray-500">Google</span>
+                    <span className="text-yellow-400 text-sm">★</span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-gray-600">Google</span>
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Rating/Value</label>
+                    <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Rating (e.g. 4.9)</label>
                     <input
                       type="text"
                       value={hero.trustIndicators?.google?.rating || DEFAULT_TRUST_INDICATORS.google.rating}
