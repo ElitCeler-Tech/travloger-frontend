@@ -289,7 +289,17 @@ const Queries: React.FC = () => {
                         >
                           {query.id}
                         </button>
-                        <Badge className="bg-purple-500 text-white text-xs px-1 py-0.5">
+                        <Badge className={`text-white text-xs px-1 py-0.5 ${
+                          query.status === 'New' ? 'bg-blue-500' :
+                          query.status === 'Hot Lead' ? 'bg-red-600' :
+                          query.status === 'Proposal Sent' ? 'bg-purple-500' :
+                          query.status === 'Follow Up' ? 'bg-yellow-500' :
+                          query.status === 'Confirmed' ? 'bg-green-600' :
+                          query.status === 'No Connect' ? 'bg-gray-500' :
+                          query.status === 'Lost' ? 'bg-red-400' :
+                          query.status === 'Invalid' ? 'bg-gray-400' :
+                          'bg-blue-500'
+                        }`}>
                           {safeString(query.status, 'New')}
                         </Badge>
                         {query.status === 'Hot Lead' && (
