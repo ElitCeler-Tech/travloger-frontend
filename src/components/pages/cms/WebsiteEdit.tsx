@@ -1270,13 +1270,13 @@ const WebsiteEdit: React.FC = () => {
               <div className="space-y-3">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Page Name *</label>
-                  <input type="text" value={duplicateName} onChange={(e) => { setDuplicateName(e.target.value); setDuplicateSlug(e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')) }} placeholder="e.g. Shimla" className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900" autoFocus />
+                  <input type="text" value={duplicateName} onChange={(e) => { setDuplicateName(e.target.value); setDuplicateSlug(e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')) }} placeholder="e.g. Shimla" className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-slate-800 text-gray-900" autoFocus />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">URL Slug</label>
                   <div className="flex items-center">
                     <span className="text-sm text-gray-400 mr-1">campaign.travloger.in/</span>
-                    <input type="text" value={duplicateSlug} onChange={(e) => setDuplicateSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))} placeholder="shimla" className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900" />
+                    <input type="text" value={duplicateSlug} onChange={(e) => setDuplicateSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))} placeholder="shimla" className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-slate-800 text-gray-900" />
                   </div>
                 </div>
                 {duplicateError && <p className="text-sm text-red-600">{duplicateError}</p>}
@@ -1411,7 +1411,7 @@ const WebsiteEdit: React.FC = () => {
                           newNavItems[index] = { ...item, label: e.target.value }
                           setHeader({ ...header, navItems: newNavItems })
                         }}
-                        className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                        className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                         placeholder="Label"
                       />
                       <input
@@ -1422,7 +1422,7 @@ const WebsiteEdit: React.FC = () => {
                           newNavItems[index] = { ...item, href: e.target.value }
                           setHeader({ ...header, navItems: newNavItems })
                         }}
-                        className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                        className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                         placeholder="Link"
                       />
                     </div>
@@ -1437,7 +1437,7 @@ const WebsiteEdit: React.FC = () => {
                   type="text"
                   value={header.enquireLabel}
                   onChange={(e) => setHeader({ ...header, enquireLabel: e.target.value })}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                   placeholder="Enquire now"
                 />
               </div>
@@ -1449,7 +1449,7 @@ const WebsiteEdit: React.FC = () => {
                   type="text"
                   value={header.callNumber}
                   onChange={(e) => setHeader({ ...header, callNumber: e.target.value })}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                   placeholder="+919876543210"
                 />
               </div>
@@ -1497,7 +1497,7 @@ const WebsiteEdit: React.FC = () => {
                   type="text"
                   value={hero.title}
                   onChange={(e) => setHero(prev => ({ ...prev, title: e.target.value }))}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                   placeholder="How Do You Want To Experience Ladakh?"
                 />
               </div>
@@ -1510,7 +1510,7 @@ const WebsiteEdit: React.FC = () => {
                   type="text"
                   value={hero.highlightText || ''}
                   onChange={(e) => setHero(prev => ({ ...prev, highlightText: e.target.value }))}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                   placeholder="Explore Kashmir"
                 />
               </div>
@@ -1523,7 +1523,7 @@ const WebsiteEdit: React.FC = () => {
                   type="text"
                   value={hero.subtitle}
                   onChange={(e) => setHero(prev => ({ ...prev, subtitle: e.target.value }))}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                   placeholder="Group departures or custom all-inclusive journeys"
                 />
               </div>
@@ -1606,7 +1606,7 @@ const WebsiteEdit: React.FC = () => {
                   type="url"
                   value={hero.mobileBackgroundImageUrl || ''}
                   onChange={(e) => setHero(prev => ({ ...prev, mobileBackgroundImageUrl: e.target.value }))}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                   placeholder="https://example.com/mobile-image.jpg"
                 />
                 <div className="mt-2">
@@ -1639,7 +1639,7 @@ const WebsiteEdit: React.FC = () => {
                         setError(err?.message || 'Failed to upload image')
                       }
                     }}
-                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                   />
                 </div>
 
@@ -1677,19 +1677,16 @@ const WebsiteEdit: React.FC = () => {
                   onChange={async (e) => {
                     const file = e.target.files?.[0]
                     if (file) {
-                      // Check file size (50MB limit for videos)
-                      const maxSize = 50 * 1024 * 1024 // 50MB
+                      const maxSize = 50 * 1024 * 1024
                       if (file.size > maxSize) {
                         alert(`File too large. Maximum size is 50MB. Your file is ${(file.size / (1024 * 1024)).toFixed(2)}MB. Please compress the video and try again.`)
                         return
                       }
-
                       try {
                         const form = new FormData()
                         form.append('file', file)
                         form.append('slug', citySlug || 'common')
                         form.append('folder', 'hero')
-
                         const data = await fetchApi<{ url: string }>('/api/upload', { method: 'POST', body: form })
                         setHero(prev => ({ ...prev, mobileVideoUrl: data.url }))
                       } catch (err: any) {
@@ -1697,14 +1694,15 @@ const WebsiteEdit: React.FC = () => {
                       }
                     }
                   }}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full text-sm text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-slate-100 file:text-slate-700 file:font-medium hover:file:bg-slate-200 file:cursor-pointer cursor-pointer"
                 />
+                <p className="text-[11px] text-gray-400 mt-1">Max 50MB · Plays as hero background on mobile</p>
               </div>
 
               {hero.mobileVideoUrl && (
-                <div className="mt-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Video Preview</label>
-                  <div className="relative w-full h-32 rounded-md overflow-hidden border border-gray-200">
+                <div className="mt-3">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Mobile Video Preview</label>
+                  <div className="relative w-full h-40 rounded-lg overflow-hidden border border-gray-200 shadow-sm bg-black">
                     <video
                       src={hero.mobileVideoUrl}
                       className="w-full h-full object-cover"
@@ -1712,14 +1710,9 @@ const WebsiteEdit: React.FC = () => {
                       muted
                     />
                   </div>
-                  <div className="mt-1.5">
-                    <button
-                      type="button"
-                      onClick={() => setHero(prev => ({ ...prev, mobileVideoUrl: '' }))}
-                      className="text-xs text-red-600 hover:text-red-800"
-                    >
-                      Remove Video
-                    </button>
+                  <div className="mt-2 flex items-center justify-between">
+                    <span className="text-[11px] text-gray-400 truncate max-w-[80%]">{hero.mobileVideoUrl}</span>
+                    <button type="button" onClick={() => setHero(prev => ({ ...prev, mobileVideoUrl: '' }))} className="text-xs text-red-500 hover:text-red-700 font-medium">Remove</button>
                   </div>
                 </div>
               )}
@@ -1734,19 +1727,16 @@ const WebsiteEdit: React.FC = () => {
                   onChange={async (e) => {
                     const file = e.target.files?.[0]
                     if (file) {
-                      // Check file size (50MB limit for videos)
-                      const maxSize = 50 * 1024 * 1024 // 50MB
+                      const maxSize = 50 * 1024 * 1024
                       if (file.size > maxSize) {
                         alert(`File too large. Maximum size is 50MB. Your file is ${(file.size / (1024 * 1024)).toFixed(2)}MB. Please compress the video and try again.`)
                         return
                       }
-
                       try {
                         const form = new FormData()
                         form.append('file', file)
                         form.append('slug', citySlug || 'common')
                         form.append('folder', 'hero')
-
                         const data = await fetchApi<{ url: string }>('/api/upload', { method: 'POST', body: form })
                         setHero(prev => ({ ...prev, desktopVideoUrl: data.url }))
                       } catch (err: any) {
@@ -1754,8 +1744,9 @@ const WebsiteEdit: React.FC = () => {
                       }
                     }
                   }}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full text-sm text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-slate-100 file:text-slate-700 file:font-medium hover:file:bg-slate-200 file:cursor-pointer cursor-pointer"
                 />
+                <p className="text-[11px] text-gray-400 mt-1">Max 50MB · Plays as hero background on desktop</p>
               </div>
 
               {hero.desktopVideoUrl && (
@@ -1788,7 +1779,7 @@ const WebsiteEdit: React.FC = () => {
                   type="text"
                   value={hero.whatsappPhone}
                   onChange={(e) => setHero(prev => ({ ...prev, whatsappPhone: e.target.value }))}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                   placeholder="+919876543210"
                 />
               </div>
@@ -1802,7 +1793,7 @@ const WebsiteEdit: React.FC = () => {
                   type="text"
                   value={contact.whatsapp || ''}
                   onChange={(e) => setContact(prev => ({ ...prev, whatsapp: e.target.value }))}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                   placeholder="+919876543210"
                 />
               </div>
@@ -1815,24 +1806,24 @@ const WebsiteEdit: React.FC = () => {
                   type="text"
                   value={contact.expertButtonText || ''}
                   onChange={(e) => setContact(prev => ({ ...prev, expertButtonText: e.target.value }))}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                   placeholder="Talk to an Expert"
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Twitter URL</label>
-                <input type="url" value={contact.twitterUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, twitterUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white" placeholder="https://twitter.com/travloger" />
+                <input type="url" value={contact.twitterUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, twitterUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white" placeholder="https://twitter.com/travloger" />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Facebook URL</label>
-                <input type="url" value={contact.facebookUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, facebookUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white" placeholder="https://facebook.com/travloger" />
+                <input type="url" value={contact.facebookUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, facebookUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white" placeholder="https://facebook.com/travloger" />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Instagram URL</label>
-                <input type="url" value={contact.instagramUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, instagramUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white" placeholder="https://instagram.com/travloger" />
+                <input type="url" value={contact.instagramUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, instagramUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white" placeholder="https://instagram.com/travloger" />
               </div>
 
               <div className="md:col-span-2 space-y-4">
@@ -1840,15 +1831,15 @@ const WebsiteEdit: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div>
                     <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Form Title</label>
-                    <input type="text" value={contact.formTitle || ''} onChange={(e) => setContact(prev => ({ ...prev, formTitle: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white" placeholder="Let's Make It Happen!" />
+                    <input type="text" value={contact.formTitle || ''} onChange={(e) => setContact(prev => ({ ...prev, formTitle: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white" placeholder="Let's Make It Happen!" />
                   </div>
                   <div>
                     <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Form Subtitle</label>
-                    <input type="text" value={contact.formSubtitle || ''} onChange={(e) => setContact(prev => ({ ...prev, formSubtitle: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white" placeholder="We'll call you with a perfect plan." />
+                    <input type="text" value={contact.formSubtitle || ''} onChange={(e) => setContact(prev => ({ ...prev, formSubtitle: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white" placeholder="We'll call you with a perfect plan." />
                   </div>
                   <div>
                     <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Form Button Text</label>
-                    <input type="text" value={contact.formButtonText || ''} onChange={(e) => setContact(prev => ({ ...prev, formButtonText: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white" placeholder="Get My Custom Plan" />
+                    <input type="text" value={contact.formButtonText || ''} onChange={(e) => setContact(prev => ({ ...prev, formButtonText: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white" placeholder="Get My Custom Plan" />
                   </div>
                 </div>
               </div>
@@ -1878,7 +1869,7 @@ const WebsiteEdit: React.FC = () => {
                           })
                         }
                       }}
-                      className="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 bg-white text-black"
+                      className="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 bg-white text-black"
                     />
                   </div>
                 </div>
@@ -1905,7 +1896,7 @@ const WebsiteEdit: React.FC = () => {
                           })
                         }
                       }}
-                      className="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 bg-white text-black"
+                      className="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 bg-white text-black"
                     />
                   </div>
                 </div>
@@ -1938,7 +1929,7 @@ const WebsiteEdit: React.FC = () => {
                           }
                         }
                       })}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-black bg-white"
                       placeholder="4.9"
                     />
                   </div>
@@ -1957,7 +1948,7 @@ const WebsiteEdit: React.FC = () => {
                           }
                         }
                       })}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-black bg-white"
                       placeholder="Ratings"
                     />
                   </div>
@@ -1984,7 +1975,7 @@ const WebsiteEdit: React.FC = () => {
                           }
                         }
                       })}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-black bg-white"
                       placeholder="Pay Later"
                     />
                   </div>
@@ -2003,7 +1994,7 @@ const WebsiteEdit: React.FC = () => {
                           }
                         }
                       })}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-black bg-white"
                       placeholder="Flexible"
                     />
                   </div>
@@ -2030,7 +2021,7 @@ const WebsiteEdit: React.FC = () => {
                           }
                         }
                       })}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-black bg-white"
                       placeholder="5K+"
                     />
                   </div>
@@ -2049,7 +2040,7 @@ const WebsiteEdit: React.FC = () => {
                           }
                         }
                       })}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-black bg-white"
                       placeholder="Followers"
                     />
                   </div>
@@ -2068,7 +2059,7 @@ const WebsiteEdit: React.FC = () => {
                           }
                         }
                       })}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-black bg-white"
                       placeholder="https://instagram.com/yourpage"
                     />
                   </div>
@@ -2160,7 +2151,7 @@ const WebsiteEdit: React.FC = () => {
                             })
                           }
                         }}
-                        className="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                        className="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200"
                       />
                     </div>
                   </div>
@@ -2183,7 +2174,7 @@ const WebsiteEdit: React.FC = () => {
                             })
                           }
                         }}
-                        className="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                        className="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200"
                       />
                     </div>
                   </div>
@@ -2232,7 +2223,7 @@ const WebsiteEdit: React.FC = () => {
                   type="text"
                   value={tripOptions.heading}
                   onChange={(e) => setTripOptions(prev => ({ ...prev, heading: e.target.value }))}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                   placeholder="Trip options heading"
                 />
               </div>
@@ -2244,7 +2235,7 @@ const WebsiteEdit: React.FC = () => {
                   type="text"
                   value={tripOptions.highlightText || ''}
                   onChange={(e) => setTripOptions(prev => ({ ...prev, highlightText: e.target.value }))}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                   placeholder="e.g. Explore Ladakh?"
                 />
               </div>
@@ -2256,7 +2247,7 @@ const WebsiteEdit: React.FC = () => {
                   type="text"
                   value={tripOptions.subheading}
                   onChange={(e) => setTripOptions(prev => ({ ...prev, subheading: e.target.value }))}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                   placeholder="Trip options subheading"
                 />
               </div>
@@ -2268,7 +2259,7 @@ const WebsiteEdit: React.FC = () => {
                   type="text"
                   value={tripOptions.customLabel}
                   onChange={(e) => setTripOptions(prev => ({ ...prev, customLabel: e.target.value }))}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                   placeholder="Custom trips label"
                 />
               </div>
@@ -2280,7 +2271,7 @@ const WebsiteEdit: React.FC = () => {
                   type="text"
                   value={tripOptions.groupLabel}
                   onChange={(e) => setTripOptions(prev => ({ ...prev, groupLabel: e.target.value }))}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                   placeholder="Group trips label"
                 />
               </div>
@@ -2289,8 +2280,8 @@ const WebsiteEdit: React.FC = () => {
             {/* Custom Trips Section */}
             <div className="mt-6 pt-6 border-t-2 border-gray-200">
               <div className="flex items-center space-x-2 mb-4">
-                <div className="h-8 w-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <svg className="h-4 w-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="h-8 w-8 bg-slate-100 rounded-lg flex items-center justify-center">
+                  <svg className="h-4 w-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
                 </div>
@@ -2302,7 +2293,7 @@ const WebsiteEdit: React.FC = () => {
                 <select
                   value={selectedCustomTrip}
                   onChange={(e) => setSelectedCustomTrip(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                 >
                   <option value="">Select a custom trip to edit</option>
                   {(tripOptions.customTrips || []).map((trip, index) => (
@@ -2378,7 +2369,7 @@ const WebsiteEdit: React.FC = () => {
                                   }
                                 }}
                                 disabled={tripIndex === 0}
-                                className="p-1 text-gray-400 hover:text-blue-600 disabled:opacity-30"
+                                className="p-1 text-gray-400 hover:text-slate-700 disabled:opacity-30"
                                 title="Move Up"
                               >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
@@ -2392,7 +2383,7 @@ const WebsiteEdit: React.FC = () => {
                                   }
                                 }}
                                 disabled={tripIndex === (tripOptions.customTrips?.length || 0) - 1}
-                                className="p-1 text-gray-400 hover:text-blue-600 disabled:opacity-30"
+                                className="p-1 text-gray-400 hover:text-slate-700 disabled:opacity-30"
                                 title="Move Down"
                               >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
@@ -3055,8 +3046,8 @@ const WebsiteEdit: React.FC = () => {
             {/* Group Trips Section */}
             <div className="mt-6 pt-6 border-t-2 border-gray-200">
               <div className="flex items-center space-x-2 mb-4">
-                <div className="h-8 w-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <svg className="h-4 w-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="h-8 w-8 bg-slate-100 rounded-lg flex items-center justify-center">
+                  <svg className="h-4 w-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
                 </div>
@@ -3068,7 +3059,7 @@ const WebsiteEdit: React.FC = () => {
                 <select
                   value={selectedGroupTrip}
                   onChange={(e) => setSelectedGroupTrip(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
                 >
                   <option value="">Select a group trip to edit</option>
                   {(tripOptions.groupTrips || []).map((trip, index) => (
@@ -3144,7 +3135,7 @@ const WebsiteEdit: React.FC = () => {
                                   }
                                 }}
                                 disabled={tripIndex === 0}
-                                className="p-1 text-gray-400 hover:text-blue-600 disabled:opacity-30"
+                                className="p-1 text-gray-400 hover:text-slate-700 disabled:opacity-30"
                                 title="Move Up"
                               >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
@@ -3158,7 +3149,7 @@ const WebsiteEdit: React.FC = () => {
                                   }
                                 }}
                                 disabled={tripIndex === (tripOptions.groupTrips?.length || 0) - 1}
-                                className="p-1 text-gray-400 hover:text-blue-600 disabled:opacity-30"
+                                className="p-1 text-gray-400 hover:text-slate-700 disabled:opacity-30"
                                 title="Move Down"
                               >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
@@ -3858,7 +3849,7 @@ const WebsiteEdit: React.FC = () => {
                     type="text"
                     value={reviews.heading}
                     onChange={(e) => setReviews(prev => ({ ...prev, heading: e.target.value }))}
-                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white text-black"
+                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 bg-white text-black"
                     placeholder="Reviews heading"
                   />
                 </div>
@@ -3870,7 +3861,7 @@ const WebsiteEdit: React.FC = () => {
                     type="text"
                     value={reviews.subheading}
                     onChange={(e) => setReviews(prev => ({ ...prev, subheading: e.target.value }))}
-                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white text-black"
+                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 bg-white text-black"
                     placeholder="Reviews subheading"
                   />
                 </div>
@@ -3884,7 +3875,7 @@ const WebsiteEdit: React.FC = () => {
                     <select
                       value={selectedReview}
                       onChange={(e) => setSelectedReview(e.target.value)}
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white text-black"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 bg-white text-black"
                     >
                       <option value="">Select a review to edit</option>
                       {reviews.reviews.map((review, index) => (
@@ -3955,7 +3946,7 @@ const WebsiteEdit: React.FC = () => {
                                       r.id === review.id ? { ...r, name: e.target.value } : r
                                     )
                                   }))}
-                                  className="w-full px-2 py-1.5 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white text-black"
+                                  className="w-full px-2 py-1.5 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 bg-white text-black"
                                   placeholder="Reviewer name"
                                 />
                               </div>
@@ -3971,7 +3962,7 @@ const WebsiteEdit: React.FC = () => {
                                       r.id === review.id ? { ...r, review: e.target.value } : r
                                     )
                                   }))}
-                                  className="w-full px-2 py-1.5 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white text-black"
+                                  className="w-full px-2 py-1.5 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 bg-white text-black"
                                   rows={2}
                                   placeholder="Review text"
                                 />
@@ -4039,7 +4030,7 @@ const WebsiteEdit: React.FC = () => {
                                           })
                                         }
                                       }}
-                                      className="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                      className="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200"
                                     />
                                   </div>
                                 </div>
@@ -4105,7 +4096,7 @@ const WebsiteEdit: React.FC = () => {
                                           })
                                         }
                                       }}
-                                      className="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 bg-white text-black"
+                                      className="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 bg-white text-black"
                                     />
                                   </div>
                                 </div>
@@ -4162,7 +4153,7 @@ const WebsiteEdit: React.FC = () => {
                     type="text"
                     value={usp.heading}
                     onChange={(e) => setUsp(prev => ({ ...prev, heading: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 bg-white text-black"
                     placeholder="USP heading"
                   />
                 </div>
@@ -4174,7 +4165,7 @@ const WebsiteEdit: React.FC = () => {
                     type="text"
                     value={usp.subheading || ''}
                     onChange={(e) => setUsp(prev => ({ ...prev, subheading: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 bg-white text-black"
                     placeholder="USP subheading"
                   />
                 </div>
@@ -4186,7 +4177,7 @@ const WebsiteEdit: React.FC = () => {
                     type="text"
                     value={usp.ctaText || ''}
                     onChange={(e) => setUsp(prev => ({ ...prev, ctaText: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 bg-white text-black"
                     placeholder="Ready to experience Kashmir like never before?"
                   />
                   <p className="text-xs text-gray-500 mt-1">This text appears at the bottom of the USP section</p>
@@ -4198,7 +4189,7 @@ const WebsiteEdit: React.FC = () => {
                   <select
                     value={selectedUspItem}
                     onChange={(e) => setSelectedUspItem(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 bg-white text-black"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 mb-4 bg-white text-black"
                   >
                     {usp.items.map((item, index) => (
                       <option key={item.id} value={item.id}>
@@ -4242,7 +4233,7 @@ const WebsiteEdit: React.FC = () => {
                                   i.id === selectedUspItem ? { ...i, title: e.target.value } : i
                                 )
                               }))}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 bg-white text-black"
                               placeholder="Item title"
                             />
                           </div>
@@ -4258,7 +4249,7 @@ const WebsiteEdit: React.FC = () => {
                                   i.id === selectedUspItem ? { ...i, description: e.target.value } : i
                                 )
                               }))}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 bg-white text-black"
                               rows={3}
                               placeholder="Item description"
                             />
@@ -4371,7 +4362,7 @@ const WebsiteEdit: React.FC = () => {
                     <select
                       value={selectedBrand}
                       onChange={(e) => setSelectedBrand(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 bg-white text-black"
                     >
                       <option value="">Select a brand to edit</option>
                       {brands.brands.map((brand, index) => (
@@ -4423,7 +4414,7 @@ const WebsiteEdit: React.FC = () => {
                                       b.id === brand.id ? { ...b, name: e.target.value } : b
                                     )
                                   })}
-                                  className="w-full px-2 py-1.5 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white text-black"
+                                  className="w-full px-2 py-1.5 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 bg-white text-black"
                                   placeholder="Microsoft"
                                 />
                               </div>
@@ -4473,7 +4464,7 @@ const WebsiteEdit: React.FC = () => {
                                       }
                                     }
                                   }}
-                                  className="w-full px-2 py-1.5 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white text-black"
+                                  className="w-full px-2 py-1.5 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 bg-white text-black"
                                 />
                                 {brand.logoUrl && (
                                   <p className="text-xs text-gray-500 mt-1">
@@ -4494,7 +4485,7 @@ const WebsiteEdit: React.FC = () => {
                                         b.id === brand.id ? { ...b, width: parseInt(e.target.value) || 120 } : b
                                       )
                                     })}
-                                    className="w-full px-2 py-1.5 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white text-black"
+                                    className="w-full px-2 py-1.5 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 bg-white text-black"
                                     min="50"
                                     max="500"
                                   />
@@ -4511,7 +4502,7 @@ const WebsiteEdit: React.FC = () => {
                                         b.id === brand.id ? { ...b, height: parseInt(e.target.value) || 60 } : b
                                       )
                                     })}
-                                    className="w-full px-2 py-1.5 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white text-black"
+                                    className="w-full px-2 py-1.5 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 bg-white text-black"
                                     min="30"
                                     max="200"
                                   />
@@ -4617,7 +4608,7 @@ const WebsiteEdit: React.FC = () => {
                       <select
                         value={selectedFaqItem}
                         onChange={(e) => setSelectedFaqItem(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 bg-white text-black"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 mb-4 bg-white text-black"
                       >
                         {faq.items.map((item, index) => (
                           <option key={item.id} value={item.id}>
@@ -4661,7 +4652,7 @@ const WebsiteEdit: React.FC = () => {
                                       i.id === selectedFaqItem ? { ...i, question: e.target.value } : i
                                     )
                                   }))}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 bg-white text-black"
                                   placeholder="FAQ question"
                                 />
                               </div>
@@ -4677,7 +4668,7 @@ const WebsiteEdit: React.FC = () => {
                                       i.id === selectedFaqItem ? { ...i, answer: e.target.value } : i
                                     )
                                   }))}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 bg-white text-black"
                                   rows={4}
                                   placeholder="FAQ answer"
                                 />
@@ -4839,7 +4830,7 @@ const WebsiteEdit: React.FC = () => {
                                         })
                                       }
                                     }}
-                                    className="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 bg-white text-black"
+                                    className="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 bg-white text-black"
                                   />
                                   <p className="text-xs text-gray-400 mt-1">Supported formats: JPG, PNG, WebP (Max 4MB)</p>
                                 </div>
@@ -4957,7 +4948,7 @@ const WebsiteEdit: React.FC = () => {
                             })
                           }
                         }}
-                        className="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 bg-white text-black"
+                        className="w-full text-xs text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 bg-white text-black"
                       />
                     </div>
                   </div>
@@ -5043,35 +5034,35 @@ const WebsiteEdit: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Phone Number</label>
-            <input type="text" value={contact.phone} onChange={(e) => setContact(prev => ({ ...prev, phone: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" placeholder="+91-62813-92007" />
+            <input type="text" value={contact.phone} onChange={(e) => setContact(prev => ({ ...prev, phone: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-black bg-white" placeholder="+91-62813-92007" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
-            <input type="text" value={contact.email} onChange={(e) => setContact(prev => ({ ...prev, email: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" placeholder="hello@travloger.in" />
+            <input type="text" value={contact.email} onChange={(e) => setContact(prev => ({ ...prev, email: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-black bg-white" placeholder="hello@travloger.in" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Address</label>
-            <input type="text" value={contact.address} onChange={(e) => setContact(prev => ({ ...prev, address: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" placeholder="ABC road, Hyderabad, Telangana" />
+            <input type="text" value={contact.address} onChange={(e) => setContact(prev => ({ ...prev, address: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-black bg-white" placeholder="ABC road, Hyderabad, Telangana" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">WhatsApp Number</label>
-            <input type="text" value={contact.whatsapp || ''} onChange={(e) => setContact(prev => ({ ...prev, whatsapp: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" placeholder="+919876543210" />
+            <input type="text" value={contact.whatsapp || ''} onChange={(e) => setContact(prev => ({ ...prev, whatsapp: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-black bg-white" placeholder="+919876543210" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Twitter URL</label>
-            <input type="url" value={contact.twitterUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, twitterUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" placeholder="https://twitter.com/travloger" />
+            <input type="url" value={contact.twitterUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, twitterUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-black bg-white" placeholder="https://twitter.com/travloger" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Facebook URL</label>
-            <input type="url" value={contact.facebookUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, facebookUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" placeholder="https://facebook.com/travloger" />
+            <input type="url" value={contact.facebookUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, facebookUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-black bg-white" placeholder="https://facebook.com/travloger" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Instagram URL</label>
-            <input type="url" value={contact.instagramUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, instagramUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" placeholder="https://instagram.com/travloger" />
+            <input type="url" value={contact.instagramUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, instagramUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-black bg-white" placeholder="https://instagram.com/travloger" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">YouTube URL</label>
-            <input type="url" value={contact.youtubeUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, youtubeUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" placeholder="https://youtube.com/@travloger" />
+            <input type="url" value={contact.youtubeUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, youtubeUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 text-black bg-white" placeholder="https://youtube.com/@travloger" />
           </div>
         </div>
       </div>
