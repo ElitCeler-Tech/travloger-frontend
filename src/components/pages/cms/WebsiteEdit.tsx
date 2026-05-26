@@ -1228,13 +1228,21 @@ const WebsiteEdit: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="text-sm font-semibold text-gray-900">{loc.name}</h3>
-                      <p className="text-[11px] text-gray-400 mt-0.5">{loc.updated_at ? `Modified ${new Date(loc.updated_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}` : 'No edits yet'}</p>
+                      <p className="text-[11px] text-teal-600 mt-0.5">campaign.travloger.in/{loc.slug}</p>
+                      <p className="text-[10px] text-gray-400 mt-0.5">{loc.updated_at ? `Modified ${new Date(loc.updated_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}` : 'No edits yet'}</p>
                     </div>
                     <span className="text-gray-400 group-hover:text-slate-800 group-hover:translate-x-0.5 transition-all text-lg">→</span>
                   </div>
                 </div>
               </button>
               <div className="px-4 pb-3 flex gap-2">
+                <button
+                  onClick={(e) => { e.stopPropagation(); navigator.clipboard.writeText(`https://campaign.travloger.in/${loc.slug}`); }}
+                  className="flex-1 text-xs text-gray-500 hover:text-teal-600 border border-gray-200 hover:border-teal-300 rounded-lg px-2 py-1.5 transition-colors"
+                  title="Copy link"
+                >
+                  🔗 Copy Link
+                </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); setDuplicateSource(loc.slug); setDuplicateName(''); setDuplicateSlug(''); setDuplicateError(''); setShowDuplicateModal(true) }}
                   className="flex-1 text-xs text-gray-500 hover:text-blue-600 border border-gray-200 hover:border-blue-300 rounded-lg px-2 py-1.5 transition-colors"
