@@ -69,9 +69,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       )}
 
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-60 bg-white border-r border-gray-200 flex flex-col transform transition-transform duration-200 lg:translate-x-0 lg:static ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 w-60 bg-slate-900 flex flex-col transform transition-transform duration-200 lg:translate-x-0 lg:static ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         {/* Logo */}
-        <div className="h-16 flex items-center justify-between px-5 border-b border-gray-200 bg-slate-900">
+        <div className="h-16 flex items-center justify-between px-5 border-b border-slate-800">
           <Link to="/" className="flex items-center gap-2">
             <Image src={logo} alt="Travloger" width={120} height={28} priority className="brightness-0 invert" />
           </Link>
@@ -84,7 +84,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <nav className="flex-1 overflow-y-auto py-4 px-3">
           {navItems.map((group) => (
             <div key={group.section} className="mb-5">
-              <p className="px-3 mb-1.5 text-[10px] font-bold tracking-[0.15em] text-gray-400 uppercase">{group.section}</p>
+              <p className="px-3 mb-1.5 text-[10px] font-bold tracking-[0.15em] text-slate-500 uppercase">{group.section}</p>
               {group.items.map((item) => {
                 const isActive = item.href === '/' ? location.pathname === '/' : location.pathname.startsWith(item.href)
                 return (
@@ -94,11 +94,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     onClick={() => setSidebarOpen(false)}
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-colors mb-0.5 ${
                       isActive
-                        ? 'bg-blue-50 text-blue-700'
-                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                        ? 'bg-slate-800 text-white'
+                        : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'
                     }`}
                   >
-                    <item.icon className={`h-[18px] w-[18px] ${isActive ? 'text-blue-600' : 'text-gray-400'}`} />
+                    <item.icon className={`h-[18px] w-[18px] ${isActive ? 'text-teal-400' : 'text-slate-500'}`} />
                     {item.name}
                   </Link>
                 )
@@ -108,19 +108,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </nav>
 
         {/* User */}
-        <div className="border-t border-gray-200 p-4">
+        <div className="border-t border-slate-800 p-4">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-full bg-blue-600 flex items-center justify-center shrink-0">
+            <div className="h-9 w-9 rounded-full bg-teal-600 flex items-center justify-center shrink-0">
               <span className="text-white text-sm font-semibold">{user?.name?.charAt(0).toUpperCase() || 'U'}</span>
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-gray-900 truncate">{user?.name || 'User'}</p>
-              <p className="text-xs text-gray-500 capitalize truncate">{user?.role || 'Admin'}</p>
+              <p className="text-sm font-semibold text-white truncate">{user?.name || 'User'}</p>
+              <p className="text-xs text-slate-400 capitalize truncate">{user?.role || 'Admin'}</p>
             </div>
           </div>
           <button
             onClick={() => setShowLogoutModal(true)}
-            className="w-full mt-3 text-left px-3 py-2 text-sm text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            className="w-full mt-3 text-left px-3 py-2 text-sm text-slate-400 hover:text-red-400 hover:bg-slate-800 rounded-lg transition-colors"
           >
             Sign out
           </button>
