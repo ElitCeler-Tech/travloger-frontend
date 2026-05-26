@@ -171,6 +171,9 @@ interface ContactContent {
   address: string
   formBackgroundImageUrl?: string
   formBackgroundImageUrlMobile?: string
+  formTitle?: string
+  formSubtitle?: string
+  formButtonText?: string
   whatsapp?: string
   expertButtonText?: string
   twitterUrl?: string
@@ -1816,6 +1819,24 @@ const WebsiteEdit: React.FC = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Instagram URL</label>
                 <input type="url" value={contact.instagramUrl || ''} onChange={(e) => setContact(prev => ({ ...prev, instagramUrl: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white" placeholder="https://instagram.com/travloger" />
+              </div>
+
+              <div className="md:col-span-2 space-y-4">
+                <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Enquiry Form Text</label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Form Title</label>
+                    <input type="text" value={contact.formTitle || ''} onChange={(e) => setContact(prev => ({ ...prev, formTitle: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white" placeholder="Let's Make It Happen!" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Form Subtitle</label>
+                    <input type="text" value={contact.formSubtitle || ''} onChange={(e) => setContact(prev => ({ ...prev, formSubtitle: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white" placeholder="We'll call you with a perfect plan." />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Form Button Text</label>
+                    <input type="text" value={contact.formButtonText || ''} onChange={(e) => setContact(prev => ({ ...prev, formButtonText: e.target.value }))} className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-black bg-white" placeholder="Get My Custom Plan" />
+                  </div>
+                </div>
               </div>
 
               <div className="md:col-span-2 space-y-4">
