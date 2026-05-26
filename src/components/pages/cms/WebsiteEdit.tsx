@@ -1245,7 +1245,7 @@ const WebsiteEdit: React.FC = () => {
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); setDuplicateSource(loc.slug); setDuplicateName(''); setDuplicateSlug(''); setDuplicateError(''); setShowDuplicateModal(true) }}
-                  className="flex-1 text-xs text-gray-500 hover:text-blue-600 border border-gray-200 hover:border-blue-300 rounded-lg px-2 py-1.5 transition-colors"
+                  className="flex-1 text-xs text-gray-500 hover:text-slate-700 border border-gray-200 hover:border-slate-300 rounded-lg px-2 py-1.5 transition-colors"
                 >
                   ⧉ Duplicate
                 </button>
@@ -2398,7 +2398,7 @@ const WebsiteEdit: React.FC = () => {
                                   setTripOptions({ ...tripOptions, customTrips: newTrips });
                                   setSelectedCustomTrip(newTrip.id);
                                 }}
-                                className="flex items-center gap-1 px-2 py-1 text-xs font-medium text-blue-600 hover:bg-blue-50 rounded border border-blue-200 ml-2"
+                                className="flex items-center gap-1 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50 rounded border border-slate-200 ml-2"
                               >
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" /></svg>
                                 Duplicate
@@ -2713,7 +2713,7 @@ const WebsiteEdit: React.FC = () => {
                                           }
                                         }}
                                         disabled={dayIndex === 0}
-                                        className="p-1 text-gray-400 hover:text-blue-600 disabled:opacity-20"
+                                        className="p-1 text-gray-400 hover:text-slate-700 disabled:opacity-20"
                                       >
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
                                       </button>
@@ -2739,7 +2739,7 @@ const WebsiteEdit: React.FC = () => {
                                           }
                                         }}
                                         disabled={dayIndex === (trip.detailedItinerary?.briefItinerary?.length || 0) - 1}
-                                        className="p-1 text-gray-400 hover:text-blue-600 disabled:opacity-20"
+                                        className="p-1 text-gray-400 hover:text-slate-700 disabled:opacity-20"
                                       >
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                                       </button>
@@ -2783,7 +2783,7 @@ const WebsiteEdit: React.FC = () => {
                                     }
                                     setTripOptions({ ...tripOptions, customTrips: newTrips })
                                   }}
-                                  className="text-blue-600 hover:text-blue-800 text-sm"
+                                  className="text-slate-600 hover:text-slate-800 text-sm"
                                 >
                                   + Add Day
                                 </button>
@@ -2853,7 +2853,7 @@ const WebsiteEdit: React.FC = () => {
                                     }
                                     setTripOptions({ ...tripOptions, customTrips: newTrips })
                                   }}
-                                  className="text-blue-600 hover:text-blue-800 text-sm"
+                                  className="text-slate-600 hover:text-slate-800 text-sm"
                                 >
                                   + Add Attraction
                                 </button>
@@ -2882,7 +2882,7 @@ const WebsiteEdit: React.FC = () => {
                                       }
                                       setTripOptions({ ...tripOptions, customTrips: newTrips })
                                     }}
-                                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                    className="w-4 h-4 text-slate-600 border-gray-300 rounded focus:ring-slate-500"
                                   />
                                   <span>Show Inclusions Section</span>
                                 </label>
@@ -2950,7 +2950,7 @@ const WebsiteEdit: React.FC = () => {
                                     }
                                     setTripOptions({ ...tripOptions, customTrips: newTrips })
                                   }}
-                                  className="text-blue-600 hover:text-blue-800 text-sm"
+                                  className="text-slate-600 hover:text-slate-800 text-sm"
                                 >
                                   + Add Inclusion
                                 </button>
@@ -3003,7 +3003,7 @@ const WebsiteEdit: React.FC = () => {
                                           newTrips[tripIndex] = { ...trip, features: newFeatures }
                                           setTripOptions({ ...tripOptions, customTrips: newTrips })
                                         }}
-                                        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                        className="h-4 w-4 rounded border-gray-300 text-slate-600 focus:ring-slate-500"
                                       />
                                       <span className="text-xs text-gray-700 whitespace-nowrap font-medium">Included</span>
                                     </label>
@@ -3029,7 +3029,7 @@ const WebsiteEdit: React.FC = () => {
                                     newTrips[tripIndex] = { ...trip, features: newFeatures }
                                     setTripOptions({ ...tripOptions, customTrips: newTrips })
                                   }}
-                                  className="text-blue-600 hover:text-blue-800 text-sm"
+                                  className="text-slate-600 hover:text-slate-800 text-sm"
                                 >
                                   + Add Feature Tag
                                 </button>
@@ -3164,7 +3164,7 @@ const WebsiteEdit: React.FC = () => {
                                   setTripOptions({ ...tripOptions, groupTrips: newTrips });
                                   setSelectedGroupTrip(newTrip.id);
                                 }}
-                                className="flex items-center gap-1 px-2 py-1 text-xs font-medium text-blue-600 hover:bg-blue-50 rounded border border-blue-200 ml-2"
+                                className="flex items-center gap-1 px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-50 rounded border border-slate-200 ml-2"
                               >
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" /></svg>
                                 Duplicate
@@ -3479,7 +3479,7 @@ const WebsiteEdit: React.FC = () => {
                                           }
                                         }}
                                         disabled={dayIndex === 0}
-                                        className="p-1 text-gray-400 hover:text-blue-600 disabled:opacity-20"
+                                        className="p-1 text-gray-400 hover:text-slate-700 disabled:opacity-20"
                                       >
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
                                       </button>
@@ -3505,7 +3505,7 @@ const WebsiteEdit: React.FC = () => {
                                           }
                                         }}
                                         disabled={dayIndex === (trip.detailedItinerary?.briefItinerary?.length || 0) - 1}
-                                        className="p-1 text-gray-400 hover:text-blue-600 disabled:opacity-20"
+                                        className="p-1 text-gray-400 hover:text-slate-700 disabled:opacity-20"
                                       >
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                                       </button>
@@ -3549,7 +3549,7 @@ const WebsiteEdit: React.FC = () => {
                                     }
                                     setTripOptions({ ...tripOptions, groupTrips: newTrips })
                                   }}
-                                  className="text-blue-600 hover:text-blue-800 text-sm"
+                                  className="text-slate-600 hover:text-slate-800 text-sm"
                                 >
                                   + Add Day
                                 </button>
@@ -3619,7 +3619,7 @@ const WebsiteEdit: React.FC = () => {
                                     }
                                     setTripOptions({ ...tripOptions, groupTrips: newTrips })
                                   }}
-                                  className="text-blue-600 hover:text-blue-800 text-sm"
+                                  className="text-slate-600 hover:text-slate-800 text-sm"
                                 >
                                   + Add Attraction
                                 </button>
@@ -3648,7 +3648,7 @@ const WebsiteEdit: React.FC = () => {
                                       }
                                       setTripOptions({ ...tripOptions, groupTrips: newTrips })
                                     }}
-                                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                    className="w-4 h-4 text-slate-600 border-gray-300 rounded focus:ring-slate-500"
                                   />
                                   <span>Show Inclusions Section</span>
                                 </label>
@@ -3713,7 +3713,7 @@ const WebsiteEdit: React.FC = () => {
                                     }
                                     setTripOptions({ ...tripOptions, groupTrips: newTrips })
                                   }}
-                                  className="text-blue-600 hover:text-blue-800 text-sm"
+                                  className="text-slate-600 hover:text-slate-800 text-sm"
                                 >
                                   + Add Inclusion
                                 </button>
@@ -3766,7 +3766,7 @@ const WebsiteEdit: React.FC = () => {
                                           newTrips[tripIndex] = { ...trip, features: newFeatures }
                                           setTripOptions({ ...tripOptions, groupTrips: newTrips })
                                         }}
-                                        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                        className="h-4 w-4 rounded border-gray-300 text-slate-600 focus:ring-slate-500"
                                       />
                                       <span className="text-xs text-gray-700 whitespace-nowrap font-medium">Included</span>
                                     </label>
@@ -3792,7 +3792,7 @@ const WebsiteEdit: React.FC = () => {
                                     newTrips[tripIndex] = { ...trip, features: newFeatures }
                                     setTripOptions({ ...tripOptions, groupTrips: newTrips })
                                   }}
-                                  className="text-blue-600 hover:text-blue-800 text-sm"
+                                  className="text-slate-600 hover:text-slate-800 text-sm"
                                 >
                                   + Add Feature Tag
                                 </button>
@@ -4752,7 +4752,7 @@ const WebsiteEdit: React.FC = () => {
                         }))
                         setSelectedHighlight(newHighlight.id)
                       }}
-                      className="px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-md transition-colors"
+                      className="px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-md transition-colors"
                     >
                       + Add Highlight
                     </button>
@@ -4763,7 +4763,7 @@ const WebsiteEdit: React.FC = () => {
                       <button
                         key={highlight.id}
                         onClick={() => setSelectedHighlight(highlight.id)}
-                        className={`flex-shrink-0 relative w-16 h-16 rounded-lg overflow-hidden border-2 ${selectedHighlight === highlight.id ? 'border-blue-500' : 'border-transparent'}`}
+                        className={`flex-shrink-0 relative w-16 h-16 rounded-lg overflow-hidden border-2 ${selectedHighlight === highlight.id ? 'border-slate-500' : 'border-transparent'}`}
                       >
                         <Image
                           src={highlight.src}
@@ -4968,7 +4968,7 @@ const WebsiteEdit: React.FC = () => {
           <p className="text-xs text-gray-500">Manage Indian & International trip cards in footer</p>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={() => setFooterLocations(p => ({ ...p, enabled: !p.enabled }))} className={`relative w-12 h-7 rounded-full transition-colors ${footerLocations.enabled ? 'bg-blue-500' : 'bg-gray-300'}`}>
+          <button onClick={() => setFooterLocations(p => ({ ...p, enabled: !p.enabled }))} className={`relative w-12 h-7 rounded-full transition-colors ${footerLocations.enabled ? 'bg-teal-500' : 'bg-gray-300'}`}>
             <span className={`absolute top-1 w-5 h-5 rounded-full bg-white shadow transition-transform ${footerLocations.enabled ? 'left-6' : 'left-1'}`} />
           </button>
           <button onClick={() => saveSection('FooterLocations', { footerLocations })} disabled={saving} className="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded-lg hover:bg-slate-700 disabled:opacity-50">{saving ? 'Saving...' : 'Save'}</button>
@@ -4979,15 +4979,15 @@ const WebsiteEdit: React.FC = () => {
         <div>
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-semibold text-gray-800">Indian Trips</h3>
-            <button onClick={() => setFooterLocations(p => ({ ...p, indian: [...p.indian, { name: '', image: '', enabled: true }] }))} className="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-lg font-medium">+ Add</button>
+            <button onClick={() => setFooterLocations(p => ({ ...p, indian: [...p.indian, { name: '', image: '', enabled: true }] }))} className="text-xs bg-slate-50 text-slate-600 px-3 py-1 rounded-lg font-medium">+ Add</button>
           </div>
           <div className="space-y-2">
             {footerLocations.indian.map((loc, i) => (
               <div key={i} className="flex items-center gap-2 p-2 border border-gray-100 rounded-lg">
                 <button onClick={() => { const u = [...footerLocations.indian]; u[i].enabled = !u[i].enabled; setFooterLocations(p => ({ ...p, indian: u })); }} className={`w-8 h-5 rounded-full shrink-0 ${loc.enabled ? 'bg-green-500' : 'bg-gray-300'}`}><span className={`block w-3.5 h-3.5 rounded-full bg-white shadow mx-0.5 transition-transform ${loc.enabled ? 'translate-x-3' : ''}`} /></button>
-                <input type="text" value={loc.name} onChange={e => { const u = [...footerLocations.indian]; u[i].name = e.target.value; setFooterLocations(p => ({ ...p, indian: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-black" placeholder="Location name" />
-                <input type="text" value={loc.image} onChange={e => { const u = [...footerLocations.indian]; u[i].image = e.target.value; setFooterLocations(p => ({ ...p, indian: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-black" placeholder="Image URL" />
-                <label className="shrink-0 px-2 py-1.5 text-xs bg-blue-50 text-blue-600 rounded cursor-pointer hover:bg-blue-100 font-medium">
+                <input type="text" value={loc.name} onChange={e => { const u = [...footerLocations.indian]; u[i].name = e.target.value; setFooterLocations(p => ({ ...p, indian: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-slate-400 text-black" placeholder="Location name" />
+                <input type="text" value={loc.image} onChange={e => { const u = [...footerLocations.indian]; u[i].image = e.target.value; setFooterLocations(p => ({ ...p, indian: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-slate-400 text-black" placeholder="Image URL" />
+                <label className="shrink-0 px-2 py-1.5 text-xs bg-slate-50 text-slate-600 rounded cursor-pointer hover:bg-slate-100 font-medium">
                   Upload
                   <input type="file" accept="image/*" className="hidden" onChange={async (e) => { const file = e.target.files?.[0]; if (!file) return; const fd = new FormData(); fd.append('file', file); fd.append('folder', 'footer'); try { const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://travelogerapi.travloger.in'}/api/upload`, { method: 'POST', body: fd }); const data = await res.json(); if (data.url) { const u = [...footerLocations.indian]; u[i].image = data.url; setFooterLocations(p => ({ ...p, indian: u })); } } catch {} }} />
                 </label>
@@ -5001,15 +5001,15 @@ const WebsiteEdit: React.FC = () => {
         <div>
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-semibold text-gray-800">International Trips</h3>
-            <button onClick={() => setFooterLocations(p => ({ ...p, international: [...p.international, { name: '', image: '', enabled: true }] }))} className="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-lg font-medium">+ Add</button>
+            <button onClick={() => setFooterLocations(p => ({ ...p, international: [...p.international, { name: '', image: '', enabled: true }] }))} className="text-xs bg-slate-50 text-slate-600 px-3 py-1 rounded-lg font-medium">+ Add</button>
           </div>
           <div className="space-y-2">
             {footerLocations.international.map((loc, i) => (
               <div key={i} className="flex items-center gap-2 p-2 border border-gray-100 rounded-lg">
                 <button onClick={() => { const u = [...footerLocations.international]; u[i].enabled = !u[i].enabled; setFooterLocations(p => ({ ...p, international: u })); }} className={`w-8 h-5 rounded-full shrink-0 ${loc.enabled ? 'bg-green-500' : 'bg-gray-300'}`}><span className={`block w-3.5 h-3.5 rounded-full bg-white shadow mx-0.5 transition-transform ${loc.enabled ? 'translate-x-3' : ''}`} /></button>
-                <input type="text" value={loc.name} onChange={e => { const u = [...footerLocations.international]; u[i].name = e.target.value; setFooterLocations(p => ({ ...p, international: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-black" placeholder="Location name" />
-                <input type="text" value={loc.image} onChange={e => { const u = [...footerLocations.international]; u[i].image = e.target.value; setFooterLocations(p => ({ ...p, international: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-black" placeholder="Image URL" />
-                <label className="shrink-0 px-2 py-1.5 text-xs bg-blue-50 text-blue-600 rounded cursor-pointer hover:bg-blue-100 font-medium">
+                <input type="text" value={loc.name} onChange={e => { const u = [...footerLocations.international]; u[i].name = e.target.value; setFooterLocations(p => ({ ...p, international: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-slate-400 text-black" placeholder="Location name" />
+                <input type="text" value={loc.image} onChange={e => { const u = [...footerLocations.international]; u[i].image = e.target.value; setFooterLocations(p => ({ ...p, international: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-slate-400 text-black" placeholder="Image URL" />
+                <label className="shrink-0 px-2 py-1.5 text-xs bg-slate-50 text-slate-600 rounded cursor-pointer hover:bg-slate-100 font-medium">
                   Upload
                   <input type="file" accept="image/*" className="hidden" onChange={async (e) => { const file = e.target.files?.[0]; if (!file) return; const fd = new FormData(); fd.append('file', file); fd.append('folder', 'footer'); try { const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://travelogerapi.travloger.in'}/api/upload`, { method: 'POST', body: fd }); const data = await res.json(); if (data.url) { const u = [...footerLocations.international]; u[i].image = data.url; setFooterLocations(p => ({ ...p, international: u })); } } catch {} }} />
                 </label>
