@@ -1172,11 +1172,11 @@ const WebsiteEdit: React.FC = () => {
     }
 
     return (
-      <div className="space-y-4">
+      <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-gray-900">Choose a Location</h1>
-            <p className="text-sm text-gray-600">Select a location to edit, or duplicate an existing page</p>
+            <h1 className="text-2xl font-bold text-gray-900">Website CMS</h1>
+            <p className="text-sm text-gray-500 mt-1">Select a location to edit its landing page content</p>
           </div>
         </div>
         {/* Search & Date Filter */}
@@ -1187,19 +1187,19 @@ const WebsiteEdit: React.FC = () => {
               value={cmsSearch}
               onChange={(e) => setCmsSearch(e.target.value)}
               placeholder="Search pages..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-800 text-gray-900 bg-white"
             />
           </div>
           <div className="flex gap-1.5">
             {([['all', 'All'], ['7d', '7 days'], ['30d', '30 days'], ['90d', '90 days']] as const).map(([key, label]) => (
               <button key={key} onClick={() => setCmsDateFilter(key)}
-                className={`px-3 py-2 text-xs rounded-md border transition-colors ${cmsDateFilter === key ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`}>
+                className={`px-3 py-2.5 text-xs font-medium rounded-lg border transition-colors ${cmsDateFilter === key ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'}`}>
                 {label}
               </button>
             ))}
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {(() => {
             let filtered = locations
             if (cmsSearch.trim()) {
@@ -1213,37 +1213,41 @@ const WebsiteEdit: React.FC = () => {
             }
             if (filtered.length === 0) return <div className="col-span-full text-center py-8 text-sm text-gray-400">No pages match your filters</div>
             return filtered.map((loc, idx) => (
-            <div key={loc.slug} className="group bg-white border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all rounded-lg p-4">
+            <div key={loc.slug} className="group bg-white border border-gray-200 hover:border-slate-300 hover:shadow-md transition-all rounded-xl overflow-hidden">
               <button onClick={() => setCitySlug(loc.slug)} className="w-full text-left">
-                <div className="h-20 w-full rounded-md mb-3 flex items-center justify-center relative overflow-hidden border border-gray-100 bg-gradient-to-r from-gray-50 to-gray-100">
+                <div className="h-28 w-full relative overflow-hidden bg-gradient-to-r from-gray-100 to-gray-50">
                   {heroThumbs[loc.slug] ? (
-                    <Image src={heroThumbs[loc.slug]} alt={`${loc.name} hero`} fill sizes="(max-width: 640px) 100vw, (max-width:1024px) 50vw, 33vw" priority={idx < 6} fetchPriority={idx < 6 ? 'high' : 'low'} className="object-cover transition-opacity duration-200" quality={85} unoptimized={true} />
+                    <Image src={heroThumbs[loc.slug]} alt={`${loc.name} hero`} fill sizes="(max-width: 640px) 100vw, (max-width:1024px) 50vw, 33vw" priority={idx < 6} fetchPriority={idx < 6 ? 'high' : 'low'} className="object-cover group-hover:scale-105 transition-transform duration-300" quality={85} unoptimized={true} />
                   ) : (
                     <div className="flex items-center justify-center h-full">
-                      <span className="text-gray-500 font-medium text-sm animate-pulse">{loc.name}</span>
+                      <span className="text-gray-400 font-medium text-sm">{loc.name}</span>
                     </div>
                   )}
                 </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-900">{loc.name}</h3>
-                    <p className="text-xs text-gray-500">{loc.updated_at ? `Modified ${new Date(loc.updated_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}` : 'Edit content & images'}</p>
+                <div className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-sm font-semibold text-gray-900">{loc.name}</h3>
+                      <p className="text-[11px] text-gray-400 mt-0.5">{loc.updated_at ? `Modified ${new Date(loc.updated_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}` : 'No edits yet'}</p>
+                    </div>
+                    <span className="text-gray-400 group-hover:text-slate-800 group-hover:translate-x-0.5 transition-all text-lg">→</span>
                   </div>
-                  <span className="text-primary group-hover:translate-x-0.5 transition-transform text-sm">→</span>
                 </div>
               </button>
-              <button
-                onClick={(e) => { e.stopPropagation(); setDuplicateSource(loc.slug); setDuplicateName(''); setDuplicateSlug(''); setDuplicateError(''); setShowDuplicateModal(true) }}
-                className="mt-2 w-full text-xs text-gray-500 hover:text-blue-600 border border-dashed border-gray-300 hover:border-blue-400 rounded px-2 py-1 transition-colors"
-              >
-                ⧉ Duplicate this page
-              </button>
-              <button
-                onClick={(e) => { e.stopPropagation(); setRenameSource(loc.slug); setRenameName(loc.name); setRenameSlug(loc.slug); setRenameError(''); setShowRenameModal(true) }}
-                className="mt-1 w-full text-xs text-gray-500 hover:text-orange-600 border border-dashed border-gray-300 hover:border-orange-400 rounded px-2 py-1 transition-colors"
-              >
-                ✎ Rename this page
-              </button>
+              <div className="px-4 pb-3 flex gap-2">
+                <button
+                  onClick={(e) => { e.stopPropagation(); setDuplicateSource(loc.slug); setDuplicateName(''); setDuplicateSlug(''); setDuplicateError(''); setShowDuplicateModal(true) }}
+                  className="flex-1 text-xs text-gray-500 hover:text-blue-600 border border-gray-200 hover:border-blue-300 rounded-lg px-2 py-1.5 transition-colors"
+                >
+                  ⧉ Duplicate
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setRenameSource(loc.slug); setRenameName(loc.name); setRenameSlug(loc.slug); setRenameError(''); setShowRenameModal(true) }}
+                  className="flex-1 text-xs text-gray-500 hover:text-orange-600 border border-gray-200 hover:border-orange-300 rounded-lg px-2 py-1.5 transition-colors"
+                >
+                  ✎ Rename
+                </button>
+              </div>
             </div>
           ))
           })()}
