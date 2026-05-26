@@ -272,154 +272,112 @@ const Queries: React.FC = () => {
               getFilteredQueries().map((query) => (
                 <div key={query.id} className="bg-white border border-gray-200 rounded overflow-hidden">
                   {/* Main Card Content */}
-                  <div className="p-3">
-                    {/* Single Row Layout */}
-                    <div className="flex items-center gap-4">
-                      {/* Left Section - Checkbox, ID, Status, Requirement */}
-                      <div className="flex items-center gap-2 min-w-[180px]">
-                        <input
-                          type="checkbox"
-                          checked={selectedQueries.includes(query.id)}
-                          onChange={() => handleQuerySelect(query.id)}
-                          className="h-3.5 w-3.5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                        />
-                        <button 
-                          className="text-blue-600 font-bold text-sm hover:underline"
-                          onClick={() => navigate(`/queries/${query.id}`)}
-                        >
-                          {query.id}
-                        </button>
-                        <Badge className={`text-white text-xs px-1.5 py-0.5 ${
-                          query.status === 'New' ? 'bg-blue-500' :
-                          query.status === 'Hot Lead' ? 'bg-red-600' :
-                          query.status === 'Proposal Sent' ? 'bg-purple-500' :
-                          query.status === 'Follow Up' ? 'bg-yellow-500' :
-                          query.status === 'Confirmed' ? 'bg-green-600' :
-                          query.status === 'No Connect' ? 'bg-gray-500' :
-                          query.status === 'Lost' ? 'bg-red-400' :
-                          query.status === 'Invalid' ? 'bg-gray-400' :
-                          'bg-blue-500'
-                        }`}>
-                          {safeString(query.status, 'New')}
-                        </Badge>
-                        {query.status === 'Hot Lead' && (
-                          <Badge className="bg-red-500 text-white text-xs px-1.5 py-0.5">
-                            HOT
-                          </Badge>
-                        )}
-                        <div className="text-xs">
-                          <div className="text-gray-400 text-[10px]">Requirement</div>
-                          <div className="font-medium text-gray-900">
-                            {safeString(query.requirement, 'Full package')}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Client Information */}
-                      <div className="min-w-[150px]">
-                        <div className="font-semibold text-gray-900 text-xs">
-                          Mr. {safeString(query.name, 'Unknown')} (Client)
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {safeString(query.phone, 'No phone')}
-                        </div>
-                        <div className="text-xs text-gray-500 truncate max-w-[150px]">
-                          {safeString(query.email, 'No email')}
-                        </div>
-                        <div className="text-xs text-gray-400">
-                          {safeString(query.source, 'Unknown')}
-                        </div>
-                      </div>
-
-                      {/* Destination & Travelers */}
-                      <div className="min-w-[120px]">
-                        <div className="text-[10px] text-gray-400 mb-0.5">Destination</div>
-                        <Badge className="bg-teal-600 text-white text-xs px-2 py-0.5 mb-1.5 font-medium">
-                          {safeString(query.destination, 'Unknown')}
-                        </Badge>
-                        <div className="text-[10px] text-gray-400 mb-0.5">Travellers</div>
-                        <div className="text-xs text-gray-800 font-medium">
-                          {query.travelers?.adults || 2} Adult {query.travelers?.children || 0} Child {query.travelers?.infants || 0} Infant
-                        </div>
-                      </div>
-
-                      {/* Dates & Assignment */}
-                      <div className="min-w-[130px]">
-                        <div className="flex items-center text-xs text-gray-800 mb-1">
-                          <Calendar className="h-3 w-3 mr-1 text-gray-400" />
-                          10-11-2025
-                        </div>
-                        <div className="text-xs text-gray-400 ml-4 mb-1">Till 14-11-2025</div>
-                        <div className="text-[10px] text-gray-400">Assigned to</div>
-                        {loadingEmployees ? (
-                          <div className="flex items-center space-x-1 h-5">
-                            <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></div>
-                            <span className="text-xs text-gray-500">Loading...</span>
-                          </div>
-                        ) : (
-                          <Select 
-                            value={query.assigned_employee_name || ''}
-                            onChange={(e) => handleAssignmentUpdate(query.id, (e.target as HTMLSelectElement).value)}
-                            className="h-6 px-2 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-md mt-0.5"
+                  <div className="px-4 py-3">
+                    <div className="flex items-center justify-between">
+                      {/* Left: ID + Status + Client */}
+                      <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={selectedQueries.includes(query.id)}
+                            onChange={() => handleQuerySelect(query.id)}
+                            className="h-3.5 w-3.5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          />
+                          <button 
+                            className="text-blue-600 font-bold text-sm hover:underline"
+                            onClick={() => navigate(`/queries/${query.id}`)}
                           >
-                            <option value="">Assign to...</option>
-                            {employees.map(emp => (
-                              <option key={emp.id} value={emp.name}>
-                                {emp.name}
-                              </option>
-                            ))}
-                          </Select>
-                        )}
-                      </div>
+                            {query.id}
+                          </button>
+                          <Badge className={`text-white text-xs px-1.5 py-0.5 ${
+                            query.status === 'New' ? 'bg-blue-500' :
+                            query.status === 'Hot Lead' ? 'bg-red-600' :
+                            query.status === 'Proposal Sent' ? 'bg-purple-500' :
+                            query.status === 'Follow Up' ? 'bg-yellow-500' :
+                            query.status === 'Confirmed' ? 'bg-green-600' :
+                            query.status === 'No Connect' ? 'bg-gray-500' :
+                            query.status === 'Lost' ? 'bg-red-400' :
+                            query.status === 'Invalid' ? 'bg-gray-400' :
+                            'bg-blue-500'
+                          }`}>
+                            {safeString(query.status, 'New')}
+                          </Badge>
+                          {query.status === 'Hot Lead' && (
+                            <Badge className="bg-red-500 text-white text-xs px-1.5 py-0.5">HOT</Badge>
+                          )}
+                        </div>
 
-                      {/* Tasks & Notes */}
-                      <div className="min-w-[100px]">
-                        <div className="text-xs text-gray-800 mb-1">
-                          {safeString(query.tasks, 'No Task')}
-                        </div>
-                        <div className="flex items-center text-xs text-orange-600 mb-1">
-                          <div className="w-2 h-2 bg-orange-500 rounded-full mr-1"></div>
-                          No Notes
-                        </div>
-                        <div className="flex items-center text-xs text-gray-400">
-                          <Clock className="h-3 w-3 mr-1" />
-                          Created
-                        </div>
-                        <div className="text-xs text-gray-700 ml-4">{new Date(query.created_at).toLocaleDateString()}</div>
-                      </div>
-
-                      {/* Action Icons & Last Updated */}
-                      <div className="min-w-[130px]">
-                        <div className="flex items-center space-x-1 bg-gray-50 border border-gray-200 rounded-lg p-1 mb-1">
-                          <button className="p-0.5 hover:bg-gray-100 rounded">
-                            <Eye className="h-3 w-3 text-gray-600" />
-                          </button>
-                          <button className="p-0.5 hover:bg-gray-100 rounded">
-                            <MessageCircle className="h-3 w-3 text-green-600" />
-                          </button>
-                          <button className="p-0.5 hover:bg-gray-100 rounded">
-                            <Mail className="h-3 w-3 text-blue-600" />
-                          </button>
-                          <button className="p-0.5 hover:bg-gray-100 rounded">
-                            <Edit className="h-3 w-3 text-purple-600" />
-                          </button>
-                        </div>
-                        <div className="flex items-center text-xs text-gray-500">
-                          <Clock className="h-3 w-3 mr-1 text-gray-400" />
-                          Last Updated
-                        </div>
-                        <div className="text-xs text-gray-900 ml-4">
-                          {new Date(query.last_updated || query.created_at).toLocaleDateString()} - {new Date(query.last_updated || query.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                        {/* Client */}
+                        <div>
+                          <div className="font-semibold text-sm text-gray-900">Mr. {safeString(query.name, 'Unknown')} (Client)</div>
+                          <div className="text-xs text-gray-500">{safeString(query.phone, '')} · {safeString(query.email, '')} · {safeString(query.source, '')}</div>
                         </div>
                       </div>
 
-                      {/* VIEW PROPOSAL */}
-                      <div className="min-w-[140px]">
-                        <button className="w-full bg-slate-800 text-white text-xs font-semibold py-2 px-3 rounded-lg hover:bg-slate-700 flex items-center justify-center">
-                          <Eye className="h-3 w-3 mr-1" />
+                      {/* Right: Destination + Date + Actions */}
+                      <div className="flex items-center gap-6">
+                        {/* Destination */}
+                        <div className="text-center">
+                          <Badge className="bg-teal-600 text-white text-xs px-2.5 py-1 font-medium">
+                            {safeString(query.destination, 'Unknown')}
+                          </Badge>
+                          <div className="text-[10px] text-gray-400 mt-1">{query.travelers?.adults || 2}A · {query.travelers?.children || 0}C · {query.travelers?.infants || 0}I</div>
+                        </div>
+
+                        {/* Date */}
+                        <div className="text-xs text-gray-600">
+                          <div className="flex items-center gap-1"><Calendar className="h-3 w-3 text-gray-400" />10-11-2025</div>
+                          <div className="text-gray-400 mt-0.5">Till 14-11-2025</div>
+                        </div>
+
+                        {/* Assign */}
+                        <div>
+                          {loadingEmployees ? (
+                            <span className="text-xs text-gray-400">Loading...</span>
+                          ) : (
+                            <Select 
+                              value={query.assigned_employee_name || ''}
+                              onChange={(e) => handleAssignmentUpdate(query.id, (e.target as HTMLSelectElement).value)}
+                              className="h-7 px-2 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-md"
+                            >
+                              <option value="">Assign to...</option>
+                              {employees.map(emp => (
+                                <option key={emp.id} value={emp.name}>{emp.name}</option>
+                              ))}
+                            </Select>
+                          )}
+                        </div>
+
+                        {/* Notes */}
+                        <div className="text-xs">
+                          <div className="text-gray-700">{safeString(query.tasks, 'No Task')}</div>
+                          <div className="flex items-center text-orange-500 mt-0.5">
+                            <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mr-1"></div>
+                            No Notes
+                          </div>
+                        </div>
+
+                        {/* Action Icons */}
+                        <div className="flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-lg p-1.5">
+                          <button className="p-1 hover:bg-gray-200 rounded">
+                            <Eye className="h-3.5 w-3.5 text-gray-600" />
+                          </button>
+                          <button className="p-1 hover:bg-gray-200 rounded">
+                            <MessageCircle className="h-3.5 w-3.5 text-green-600" />
+                          </button>
+                          <button className="p-1 hover:bg-gray-200 rounded">
+                            <Mail className="h-3.5 w-3.5 text-blue-600" />
+                          </button>
+                          <button className="p-1 hover:bg-gray-200 rounded">
+                            <Edit className="h-3.5 w-3.5 text-purple-600" />
+                          </button>
+                        </div>
+
+                        {/* VIEW PROPOSAL */}
+                        <button className="bg-slate-800 text-white text-xs font-semibold py-2 px-4 rounded-lg hover:bg-slate-700 flex items-center">
+                          <Eye className="h-3 w-3 mr-1.5" />
                           VIEW PROPOSAL ({query.proposals})
                         </button>
-                        
                       </div>
                     </div>
                   </div>
