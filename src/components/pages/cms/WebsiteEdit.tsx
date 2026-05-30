@@ -648,6 +648,9 @@ const WebsiteEdit: React.FC = () => {
           formBackgroundImageUrl: '',
           formBackgroundImageUrlMobile: ''
         })
+        if (data.contact?.footerLocations) {
+          setFooterLocations(data.contact.footerLocations)
+        }
         setAccommodation(data.accommodation ?? {
           heading: "What You See Is Where You'll Stay. Literally.",
           stockImage: '',
@@ -4971,7 +4974,7 @@ const WebsiteEdit: React.FC = () => {
           <button onClick={() => setFooterLocations(p => ({ ...p, enabled: !p.enabled }))} className={`relative w-12 h-7 rounded-full transition-colors ${footerLocations.enabled ? 'bg-teal-500' : 'bg-gray-300'}`}>
             <span className={`absolute top-1 w-5 h-5 rounded-full bg-white shadow transition-transform ${footerLocations.enabled ? 'left-6' : 'left-1'}`} />
           </button>
-          <button onClick={() => saveSection('FooterLocations', { footerLocations })} disabled={saving} className="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded-lg hover:bg-slate-700 disabled:opacity-50">{saving ? 'Saving...' : 'Save'}</button>
+          <button onClick={() => saveSection('FooterLocations', { contact: { ...contact, footerLocations } })} disabled={saving} className="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded-lg hover:bg-slate-700 disabled:opacity-50">{saving ? 'Saving...' : 'Save'}</button>
         </div>
       </div>
       <div className="p-4 space-y-6">
