@@ -1505,18 +1505,6 @@ const WebsiteEdit: React.FC = () => {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                  Highlight Text <span className="text-xs text-gray-400">(words highlighted in teal with brush underline)</span>
-                </label>
-                <input
-                  type="text"
-                  value={hero.highlightText || ''}
-                  onChange={(e) => setHero(prev => ({ ...prev, highlightText: e.target.value }))}
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 text-black bg-white"
-                  placeholder="Explore Kashmir"
-                />
-              </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">
