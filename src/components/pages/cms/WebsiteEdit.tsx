@@ -4985,7 +4985,10 @@ const WebsiteEdit: React.FC = () => {
             {footerLocations.indian.map((loc, i) => (
               <div key={i} className="flex items-center gap-2 p-2 border border-gray-100 rounded-lg">
                 <button onClick={() => { const u = [...footerLocations.indian]; u[i].enabled = !u[i].enabled; setFooterLocations(p => ({ ...p, indian: u })); }} className={`w-8 h-5 rounded-full shrink-0 ${loc.enabled ? 'bg-green-500' : 'bg-gray-300'}`}><span className={`block w-3.5 h-3.5 rounded-full bg-white shadow mx-0.5 transition-transform ${loc.enabled ? 'translate-x-3' : ''}`} /></button>
-                <input type="text" value={loc.name} onChange={e => { const u = [...footerLocations.indian]; u[i].name = e.target.value; setFooterLocations(p => ({ ...p, indian: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-slate-400 text-black" placeholder="Location name" />
+                <select value={loc.name} onChange={e => { const u = [...footerLocations.indian]; u[i].name = e.target.value; setFooterLocations(p => ({ ...p, indian: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-slate-400 text-black bg-white">
+                  <option value="">Select location</option>
+                  {locations.map(l => <option key={l.slug} value={l.name.toUpperCase()}>{l.name}</option>)}
+                </select>
                 <input type="text" value={loc.image} onChange={e => { const u = [...footerLocations.indian]; u[i].image = e.target.value; setFooterLocations(p => ({ ...p, indian: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-slate-400 text-black" placeholder="Image URL" />
                 <label className="shrink-0 px-2 py-1.5 text-xs bg-slate-50 text-slate-600 rounded cursor-pointer hover:bg-slate-100 font-medium">
                   Upload
@@ -5007,7 +5010,10 @@ const WebsiteEdit: React.FC = () => {
             {footerLocations.international.map((loc, i) => (
               <div key={i} className="flex items-center gap-2 p-2 border border-gray-100 rounded-lg">
                 <button onClick={() => { const u = [...footerLocations.international]; u[i].enabled = !u[i].enabled; setFooterLocations(p => ({ ...p, international: u })); }} className={`w-8 h-5 rounded-full shrink-0 ${loc.enabled ? 'bg-green-500' : 'bg-gray-300'}`}><span className={`block w-3.5 h-3.5 rounded-full bg-white shadow mx-0.5 transition-transform ${loc.enabled ? 'translate-x-3' : ''}`} /></button>
-                <input type="text" value={loc.name} onChange={e => { const u = [...footerLocations.international]; u[i].name = e.target.value; setFooterLocations(p => ({ ...p, international: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-slate-400 text-black" placeholder="Location name" />
+                <select value={loc.name} onChange={e => { const u = [...footerLocations.international]; u[i].name = e.target.value; setFooterLocations(p => ({ ...p, international: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-slate-400 text-black bg-white">
+                  <option value="">Select location</option>
+                  {locations.map(l => <option key={l.slug} value={l.name.toUpperCase()}>{l.name}</option>)}
+                </select>
                 <input type="text" value={loc.image} onChange={e => { const u = [...footerLocations.international]; u[i].image = e.target.value; setFooterLocations(p => ({ ...p, international: u })); }} className="flex-1 px-2 py-1.5 text-sm border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-slate-400 text-black" placeholder="Image URL" />
                 <label className="shrink-0 px-2 py-1.5 text-xs bg-slate-50 text-slate-600 rounded cursor-pointer hover:bg-slate-100 font-medium">
                   Upload
